@@ -2,12 +2,18 @@ class Layout
   class Col
     extend Forwardable
     def_delegators :@clients, :empty?, :include?
+    def_delegator :@clients, :current, :current_client
+    def_delegator :current_client, :==, :current_client?
 
-    attr_reader :geo
+    attr_reader :geo, :clients
 
     def initialize(geo)
       @geo      = geo
       @clients  = Container.new
+    end
+
+    def to_s
+      "COL geo: #{@geo}"
     end
 
     def ==(other)
