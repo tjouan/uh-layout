@@ -17,9 +17,8 @@ module Holo
     describe '#<<' do
       before { layout << client }
 
-      it 'assigns suggested geo to given client' do
-        expect(client)
-          .to have_received(:geo=).with(layout.suggest_geo_for :window)
+      it 'adds given client to current col' do
+        expect(layout.current_col).to include client
       end
 
       it 'moveresizes given client' do
@@ -36,8 +35,9 @@ module Holo
     end
 
     describe '#suggest_geo_for' do
-      it 'returns a geo' do
-        expect(layout.suggest_geo_for :window).to be_a Geo
+      it 'returns current col suggested geo' do
+        expect(layout.suggest_geo_for :window)
+          .to eq layout.current_col.suggest_geo_for :window
       end
     end
   end

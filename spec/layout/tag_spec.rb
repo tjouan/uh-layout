@@ -19,11 +19,5 @@ class Layout
         expect(tag).not_to eq described_class.new(1, geo)
       end
     end
-
-    describe '#suggest_geo_for' do
-      it 'returns the assigned geo' do
-        expect(tag.suggest_geo_for :window).to eq geo
-      end
-    end
   end
 end

@@ -1,5 +1,8 @@
 class Layout
   class Tag
+    extend Forwardable
+    def_delegator :@cols, :current, :current_col
+
     attr_reader :id, :cols
 
     def initialize(id, geo)
@@ -10,10 +13,6 @@ class Layout
 
     def ==(other)
       @id == other.id
-    end
-
-    def suggest_geo_for(window)
-      @geo
     end
   end
 end
