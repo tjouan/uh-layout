@@ -1,7 +1,9 @@
 class Layout
   class Container
+    include Enumerable
+
     extend Forwardable
-    def_delegators :@entries, :<<, :empty?, :include?
+    def_delegators :@entries, :<<, :each, :empty?
 
     attr_reader :entries
 
