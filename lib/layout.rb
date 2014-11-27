@@ -2,6 +2,7 @@ class Layout
   require 'forwardable'
   require 'layout/container'
   require 'layout/screen'
+  require 'layout/tag'
 
   include Holo
 

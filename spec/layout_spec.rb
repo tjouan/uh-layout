@@ -34,5 +34,11 @@ module Holo
         expect(client).to have_received :focus
       end
     end
+
+    describe '#suggest_geo_for' do
+      it 'returns a geo' do
+        expect(layout.suggest_geo_for :window).to be_a Geo
+      end
+    end
   end
 end

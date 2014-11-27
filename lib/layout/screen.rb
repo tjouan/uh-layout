@@ -1,18 +1,19 @@
 class Layout
   class Screen
-    attr_reader :id
+    extend Forwardable
+    def_delegator :@tags, :current, :current_tag
+    def_delegators :current_tag, :suggest_geo_for
+
+    attr_reader :id, :tags
 
     def initialize(id, geo)
       @id   = id
       @geo  = geo
+      @tags = Container.new([Tag.new(1, geo)])
     end
 
     def ==(other)
       @id == other.id
-    end
-
-    def suggest_geo_for(window)
-      @geo
     end
   end
 end
