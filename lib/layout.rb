@@ -1,12 +1,22 @@
 class Layout
+  require 'forwardable'
+  require 'layout/container'
+  require 'layout/screen'
+
   include Holo
 
-  def suggest_geo_for(window)
-    Geo.new(0, 0, 320, 240)
+  extend Forwardable
+  def_delegator :@screens, :current, :current_screen
+  def_delegator :current_screen, :suggest_geo_for
+
+  attr_reader :screens
+
+  def screens=(screens)
+    @screens = Container.new(screens.map { |id, geo| Screen.new(id, geo) })
   end
 
   def <<(client)
-    client.geo = Geo.new(0, 0, 320, 240)
+    client.geo = suggest_geo_for client.window
     client.moveresize
     client.show
     client.focus
