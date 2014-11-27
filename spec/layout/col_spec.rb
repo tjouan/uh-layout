@@ -2,10 +2,16 @@ require 'layout'
 
 class Layout
   describe Col do
+    RSpec::Matchers.define_negated_matcher :not_be, :be
+
     let(:geo)       { Geo.new(0, 0, 640, 480) }
     let(:other_geo) { Geo.new(640, 0, 320, 240) }
     let(:client)    { instance_spy WM::Client }
     subject(:col)   { described_class.new(geo) }
+
+    it 'has a copy to given geo' do
+      expect(col.geo).to eq(geo).and not_be geo
+    end
 
     it 'has no client assigned' do
       expect(col).to be_empty

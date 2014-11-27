@@ -8,7 +8,7 @@ class Layout
     attr_reader :geo, :clients
 
     def initialize(geo)
-      @geo      = geo
+      @geo      = geo.dup
       @clients  = Container.new
     end
 
