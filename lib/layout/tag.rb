@@ -1,10 +1,11 @@
 class Layout
   class Tag
-    attr_reader :id
+    attr_reader :id, :cols
 
     def initialize(id, geo)
       @id   = id
       @geo  = geo
+      @cols = Container.new([Col.new(geo.dup)])
     end
 
     def ==(other)

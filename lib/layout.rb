@@ -1,6 +1,7 @@
 class Layout
   require 'forwardable'
   require 'layout/container'
+  require 'layout/col'
   require 'layout/screen'
   require 'layout/tag'
 

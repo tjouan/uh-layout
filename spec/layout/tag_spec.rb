@@ -6,6 +6,10 @@ class Layout
     let(:other_geo) { Geo.new(640, 0, 320, 240) }
     subject(:tag)   { described_class.new(0, geo) }
 
+    it 'has one default col assigned' do
+      expect(tag.cols.entries).to eq [Col.new(geo)]
+    end
+
     describe '#==' do
       it 'equals another tag with same id' do
         expect(tag).to eq described_class.new(0, other_geo)
