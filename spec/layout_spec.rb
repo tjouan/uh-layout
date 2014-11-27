@@ -18,7 +18,8 @@ module Holo
       before { layout << client }
 
       it 'assigns suggested geo to given client' do
-        expect(client).to have_received(:geo=).with(layout.suggest_geo_for :window)
+        expect(client)
+          .to have_received(:geo=).with(layout.suggest_geo_for :window)
       end
 
       it 'moveresizes given client' do
