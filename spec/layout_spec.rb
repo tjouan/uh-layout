@@ -104,6 +104,23 @@ module Holo
       end
     end
 
+    describe 'handle_client_swap' do
+      before do
+        layout << other_client
+        layout << client
+      end
+
+      it 'swaps current client with the other client' do
+        layout.handle_client_swap :pred
+        expect(layout.current_col.clients.entries).to eq [client, other_client]
+      end
+
+      it 'does not change current client' do
+        expect { layout.handle_client_swap :pred }
+          .not_to change { layout.current_client }
+      end
+    end
+
     describe 'handle_kill_current' do
       before do
         layout << client

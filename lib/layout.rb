@@ -62,6 +62,10 @@ class Layout
     focus_current_client
   end
 
+  def handle_client_swap(direction)
+    current_col.clients.set direction
+  end
+
   def handle_kill_current
     current_client.kill
   end

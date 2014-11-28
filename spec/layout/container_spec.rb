@@ -79,4 +79,35 @@ describe Layout::Container do
       expect(container.current).to be :bar
     end
   end
+
+  describe '#set' do
+    let(:entries) { %i[foo bar baz] }
+
+    it 'swaps current entry with consecutive one in given direction' do
+      container.set :next
+      expect(container.entries).to eq %i[bar foo baz]
+    end
+
+    it 'does not change current entry' do
+      expect { container.set :next }.not_to change { container.current }
+    end
+
+    context 'when direction is out of range' do
+      it 'rotates the entries' do
+        container.set :pred
+        expect(container.entries).to eq %i[bar baz foo]
+      end
+
+      it 'does not change current entry' do
+        expect { container.set :pred }.not_to change { container.current }
+      end
+    end
+  end
+
+  describe '#swap' do
+    it 'swaps entries matched by given indexes' do
+      container.swap 0, 1
+      expect(container.entries).to eq %i[bar foo]
+    end
+  end
 end
