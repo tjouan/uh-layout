@@ -6,11 +6,14 @@ module Holo
     let(:client)      { instance_spy WM::Client }
     subject(:layout)  { described_class.new }
 
-    before { layout.screens = { 0 => geo } }
+    before { layout.screens = { 0 => geo, 1 => geo } }
 
     describe '#screens=' do
       it 'assigns given screens as Screen objects in a Container' do
-        expect(layout.screens.entries).to eq [Layout::Screen.new(0, geo)]
+        expect(layout.screens.entries).to eq [
+          Layout::Screen.new(0, geo),
+          Layout::Screen.new(1, geo),
+        ]
       end
     end
 
@@ -49,6 +52,13 @@ module Holo
       it 'returns current col suggested geo' do
         expect(layout.suggest_geo_for :window)
           .to eq layout.current_col.suggest_geo_for :window
+      end
+    end
+
+    describe 'handle_screen_sel' do
+      it 'selects consecutive screen in given direction' do
+        expect { layout.handle_screen_sel :next }
+          .to change { layout.current_screen.id }.from(0).to(1)
       end
     end
 
