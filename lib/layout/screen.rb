@@ -8,7 +8,7 @@ class Layout
 
     def initialize(id, geo)
       @id   = id
-      @geo  = geo
+      @geo  = geo.freeze
       @tags = Container.new([Tag.new(1, geo)])
     end
 
