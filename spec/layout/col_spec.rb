@@ -28,9 +28,14 @@ class Layout
     end
 
     describe '#<<' do
+      before { col << client }
+
       it 'assigns suggested geo to given client' do
-        col << client
         expect(client).to have_received(:geo=).with(col.suggest_geo_for :window)
+      end
+
+      it 'adds given client' do
+        expect(col.clients).to include client
       end
     end
 
