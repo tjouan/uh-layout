@@ -79,6 +79,12 @@ module Holo
         expect { layout.handle_screen_sel :next }
           .to change { layout.current_screen.id }.from(0).to(1)
       end
+
+      it 'focus current client' do
+        layout << client
+        expect(client).to receive :focus
+        2.times { layout.handle_screen_sel :next }
+      end
     end
 
     describe 'handle_kill_current' do

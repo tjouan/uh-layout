@@ -54,6 +54,7 @@ class Layout
 
   def handle_screen_sel(direction)
     screens.sel direction
+    focus_current_client
   end
 
   def handle_kill_current
