@@ -13,7 +13,7 @@ describe Layout::Container do
   describe '#current' do
     context 'when container has multiple entries' do
       it 'returns the first entry' do
-        expect(container.current).to eq :foo
+        expect(container.current).to be :foo
       end
     end
 
@@ -52,7 +52,7 @@ describe Layout::Container do
 
       it 'assigns previous entry as the current one' do
         container.remove :bar
-        expect(container.current).to eq :foo
+        expect(container.current).to be :foo
       end
     end
 
@@ -69,7 +69,7 @@ describe Layout::Container do
   describe '#sel' do
     it 'sets consecutive entry in given direction as the current one' do
       container.sel :next
-      expect(container.current).to eq :bar
+      expect(container.current).to be :bar
     end
   end
 end
