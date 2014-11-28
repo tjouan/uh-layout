@@ -49,6 +49,7 @@ class Layout
 
   def remove(client)
     current_col.remove client
+    focus_current_client
   end
 
   def handle_screen_sel(direction)
@@ -57,5 +58,12 @@ class Layout
 
   def handle_kill_current
     current_client.kill
+  end
+
+
+  private
+
+  def focus_current_client
+    current_client and current_client.focus
   end
 end

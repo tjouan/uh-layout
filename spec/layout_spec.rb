@@ -47,12 +47,23 @@ module Holo
 
     describe '#remove' do
       before do
+        layout << other_client
         layout << client
-        layout.remove client
       end
 
       it 'removes given client from current col' do
+        layout.remove client
         expect(layout.current_col).not_to include client
+      end
+
+      it 'assigns a new current client' do
+        layout.remove client
+        expect(layout.current_client).to be
+      end
+
+      it 'focus the new current client' do
+        expect(other_client).to receive :focus
+        layout.remove client
       end
     end
 
