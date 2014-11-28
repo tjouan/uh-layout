@@ -88,8 +88,6 @@ module Holo
     end
 
     describe 'handle_client_sel' do
-      let(:other_client) { instance_spy WM::Client }
-
       before do
         layout << client
         layout << other_client
