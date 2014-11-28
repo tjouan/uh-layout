@@ -57,6 +57,11 @@ class Layout
     focus_current_client
   end
 
+  def handle_client_sel(direction)
+    current_col.clients.sel direction
+    focus_current_client
+  end
+
   def handle_kill_current
     current_client.kill
   end

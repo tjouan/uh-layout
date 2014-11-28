@@ -87,6 +87,25 @@ module Holo
       end
     end
 
+    describe 'handle_client_sel' do
+      let(:other_client) { instance_spy WM::Client }
+
+      before do
+        layout << client
+        layout << other_client
+      end
+
+      it 'selects consecutive screen in given direction' do
+        expect { layout.handle_client_sel :pred }
+          .to change { layout.current_client }.from(other_client).to(client)
+      end
+
+      it 'focuses current client' do
+        expect(client).to receive :focus
+        layout.handle_client_sel :pred
+      end
+    end
+
     describe 'handle_kill_current' do
       before do
         layout << client
