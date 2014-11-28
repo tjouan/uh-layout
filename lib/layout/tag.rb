@@ -8,7 +8,7 @@ class Layout
 
     def initialize(id, geo)
       @id   = id
-      @geo  = geo
+      @geo  = geo.freeze
       @cols = Container.new([Col.new(geo.dup)])
     end
 
