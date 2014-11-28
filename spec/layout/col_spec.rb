@@ -27,6 +27,15 @@ class Layout
       end
     end
 
+    describe '#current_client=' do
+      it 'sets given client as the current one' do
+        col << client
+        col << instance_spy(WM::Client)
+        col.current_client = client
+        expect(col.current_client).to be client
+      end
+    end
+
     describe '#<<' do
       before { col << client }
 

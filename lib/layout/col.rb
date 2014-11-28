@@ -3,6 +3,7 @@ class Layout
     extend Forwardable
     def_delegators :@clients, :empty?, :include?, :remove
     def_delegator :@clients, :current, :current_client
+    def_delegator :@clients, :current=, :current_client=
     def_delegator :current_client, :==, :current_client?
 
     attr_reader :geo, :clients

@@ -2,9 +2,10 @@ require 'layout'
 
 module Holo
   describe Layout do
-    let(:geo)         { Geo.new(0, 0, 640, 480) }
-    let(:client)      { instance_spy WM::Client }
-    subject(:layout)  { described_class.new }
+    let(:geo)           { Geo.new(0, 0, 640, 480) }
+    let(:client)        { instance_spy WM::Client }
+    let(:other_client)  { instance_spy WM::Client }
+    subject(:layout)    { described_class.new }
 
     before { layout.screens = { 0 => geo, 1 => geo } }
 
@@ -18,10 +19,17 @@ module Holo
     end
 
     describe '#<<' do
-      before { layout << client }
+      before do
+        layout << other_client
+        layout << client
+      end
 
       it 'adds given client to current col' do
         expect(layout.current_col).to include client
+      end
+
+      it 'sets given client as the current one in current col' do
+        expect(layout.current_col.current_client).to be client
       end
 
       it 'moveresizes given client' do

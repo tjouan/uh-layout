@@ -41,6 +41,7 @@ class Layout
 
   def <<(client)
     current_col << client
+    current_col.current_client = client
     client.moveresize
     client.show
     client.focus
