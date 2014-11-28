@@ -93,7 +93,7 @@ module Holo
         layout << other_client
       end
 
-      it 'selects consecutive screen in given direction' do
+      it 'selects current col consecutive client in given direction' do
         expect { layout.handle_client_sel :pred }
           .to change { layout.current_client }.from(other_client).to(client)
       end
