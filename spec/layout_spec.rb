@@ -51,5 +51,16 @@ module Holo
           .to eq layout.current_col.suggest_geo_for :window
       end
     end
+
+    describe 'handle_kill_current' do
+      before do
+        layout << client
+        layout.handle_kill_current
+      end
+
+      it 'kills current_client' do
+        expect(client).to have_received :kill
+      end
+    end
   end
 end

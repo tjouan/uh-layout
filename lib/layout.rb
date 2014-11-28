@@ -12,7 +12,7 @@ class Layout
   def_delegator   :current_screen, :==, :current_screen?
   def_delegators  :current_screen, :current_tag
   def_delegators  :current_tag, :current_col
-  def_delegators  :current_col, :suggest_geo_for
+  def_delegators  :current_col, :current_client, :suggest_geo_for
 
   attr_reader :screens
 
@@ -52,5 +52,9 @@ class Layout
 
   def handle_screen_sel(direction)
     screens.sel direction
+  end
+
+  def handle_kill_current
+    current_client.kill
   end
 end
