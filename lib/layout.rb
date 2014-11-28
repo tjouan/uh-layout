@@ -47,6 +47,7 @@ class Layout
   end
 
   def remove(client)
+    current_col.remove client
   end
 
   def handle_screen_sel(direction)

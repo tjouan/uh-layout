@@ -34,6 +34,17 @@ module Holo
       end
     end
 
+    describe '#remove' do
+      before do
+        layout << client
+        layout.remove client
+      end
+
+      it 'removes given client from current col' do
+        expect(layout.current_col).not_to include client
+      end
+    end
+
     describe '#suggest_geo_for' do
       it 'returns current col suggested geo' do
         expect(layout.suggest_geo_for :window)

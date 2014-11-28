@@ -39,6 +39,17 @@ class Layout
       end
     end
 
+    describe '#remove' do
+      before do
+        col << client
+        col.remove client
+      end
+
+      it 'removes given client' do
+        expect(col).not_to include client
+      end
+    end
+
     describe '#suggest_geo_for' do
       it 'returns the assigned geo' do
         expect(col.suggest_geo_for :window).to eq geo
