@@ -48,4 +48,8 @@ class Layout
 
   def remove(client)
   end
+
+  def handle_screen_sel(direction)
+    screens.sel direction
+  end
 end

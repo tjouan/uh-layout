@@ -15,5 +15,9 @@ class Layout
     def current
       @entries[@current_index]
     end
+
+    def sel(direction)
+      @current_index = @current_index.send(direction) % @entries.size
+    end
   end
 end
