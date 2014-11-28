@@ -42,6 +42,13 @@ describe Layout::Container do
     end
   end
 
+  describe '#<<' do
+    it 'adds given entry' do
+      container << :baz
+      expect(container).to include :baz
+    end
+  end
+
   describe '#remove' do
     it 'removes given argument from entries' do
       expect(container.remove :foo).not_to include :foo
