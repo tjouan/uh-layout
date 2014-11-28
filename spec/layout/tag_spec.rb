@@ -7,7 +7,7 @@ class Layout
     subject(:tag)   { described_class.new(0, geo) }
 
     it 'has one default col assigned' do
-      expect(tag.cols.entries).to eq [Col.new(geo)]
+      expect(tag.cols).to include Col.new(geo)
     end
 
     describe '#==' do

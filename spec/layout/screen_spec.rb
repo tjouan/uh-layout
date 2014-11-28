@@ -6,8 +6,8 @@ class Layout
     let(:other_geo)   { Geo.new(640, 0, 320, 240) }
     subject(:screen)  { described_class.new(0, geo) }
 
-    it 'has one default tag assigned' do
-      expect(screen.tags.entries).to eq [Tag.new(1, geo)]
+    it 'has one default tag with id 1 assigned' do
+      expect(screen.tags).to include Tag.new(1, geo)
     end
 
     describe '#==' do
