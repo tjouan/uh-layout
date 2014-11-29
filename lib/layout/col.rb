@@ -20,6 +20,7 @@ class Layout
     def <<(client)
       client.geo = suggest_geo_for client.window
       @clients << client
+      self
     end
 
     def suggest_geo_for(window)

@@ -36,6 +36,10 @@ class Layout
       it 'adds given client' do
         expect(col.clients).to include client
       end
+
+      it 'returns self' do
+        expect(col << client).to be col
+      end
     end
 
     describe '#remove' do
