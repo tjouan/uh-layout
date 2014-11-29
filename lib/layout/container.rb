@@ -26,6 +26,11 @@ class Layout
       self
     end
 
+    def get(direction)
+      index = @current_index.send(direction)
+      index >= 0 ? self[index] : nil
+    end
+
     def sel(direction)
       @current_index = @current_index.send(direction) % @entries.size
     end

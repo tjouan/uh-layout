@@ -73,6 +73,16 @@ describe Layout::Container do
     end
   end
 
+  describe '#get' do
+    it 'gets consecutive entry in given direction' do
+      expect(container.get :succ).to be :bar
+    end
+
+    it 'returns nil when no consecutive entry exists' do
+      expect(container.get :pred).to be nil
+    end
+  end
+
   describe '#sel' do
     it 'sets consecutive entry in given direction as the current one' do
       container.sel :next
