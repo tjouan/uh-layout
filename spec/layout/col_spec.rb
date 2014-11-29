@@ -17,16 +17,6 @@ class Layout
       expect(col).to be_empty
     end
 
-    describe '#==' do
-      it 'equals another col with same geo' do
-        expect(col).to eq described_class.new(geo)
-      end
-
-      it 'does not equal another col with different geo' do
-        expect(col).not_to eq described_class.new(other_geo)
-      end
-    end
-
     describe '#current_client=' do
       it 'sets given client as the current one' do
         col << client

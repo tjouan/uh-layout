@@ -17,10 +17,6 @@ class Layout
       "COL geo: #{@geo}"
     end
 
-    def ==(other)
-      @geo == other.geo
-    end
-
     def <<(client)
       client.geo = suggest_geo_for client.window
       @clients << client
