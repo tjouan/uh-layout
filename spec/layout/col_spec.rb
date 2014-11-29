@@ -17,6 +17,109 @@ class Layout
       expect(col).to be_empty
     end
 
+    describe '.set!' do
+      let(:cols) { Container.new([col]) }
+
+      shared_examples 'client move' do |expected_col_index = 1|
+        it 'removes current client from origin col' do
+          expect(col).not_to include client
+        end
+
+        it 'adds current client in a new col' do
+          expect(cols[expected_col_index]).to include client
+        end
+      end
+
+      shared_examples 'client stays current' do
+        it 'preserves current client as the current one' do
+          expect(cols.current.current_client).to be client
+        end
+      end
+
+      shared_examples 'col no create' do |expected_size|
+        it 'does not create a col' do
+          expect(cols.size).to eq expected_size
+        end
+      end
+
+      shared_examples 'cols update current' do |expected_current_col_index|
+        it 'sets the destination col as the current one' do
+          expect(cols.current).to be cols[expected_current_col_index]
+        end
+      end
+
+      context 'when one col with one client is given' do
+        before do
+          col << client
+          described_class.set! cols, :succ
+        end
+
+        include_examples 'client stays current'
+        include_examples 'col no create', 1
+      end
+
+      context 'when one col with many clients is given' do
+        before do
+          col << client << client.dup
+          described_class.set! cols, :succ
+        end
+
+        include_examples 'client move'
+        include_examples 'client stays current'
+        include_examples 'cols update current', 1
+      end
+
+      context 'when two cols are given' do
+        let(:cols) { Container.new([col, described_class.new(geo)]) }
+
+        before { cols[1] << client.dup }
+
+        context 'when origin col has many clients' do
+          before do
+            col << client << client.dup
+            described_class.set! cols, :succ
+          end
+
+          include_examples 'client move'
+          include_examples 'client stays current'
+          include_examples 'col no create', 2
+          include_examples 'cols update current', 1
+        end
+
+        context 'when origin col has one client' do
+          before do
+            col << client
+            described_class.set! cols, :succ
+          end
+
+          include_examples 'client move', 0
+          include_examples 'client stays current'
+
+          it 'purges the empty col' do
+            expect(cols.size).to eq 1
+          end
+        end
+      end
+    end
+
+    describe '.arrange!' do
+      let(:cols) { Container.new([col, described_class.new(geo)]) }
+
+      before { described_class.arrange! cols, geo, col_width: 300 }
+
+      it 'decreases first col width as the optimal col width' do
+        expect(cols[0].geo.width).to eq 300
+      end
+
+      it 'moves second col aside the first col' do
+        expect(cols[1].geo.x).to eq 300
+      end
+
+      it 'increases last col width to occupy remaining width' do
+        expect(cols[1].geo.width).to eq 340
+      end
+    end
+
     describe '#current_client=' do
       it 'sets given client as the current one' do
         col << client

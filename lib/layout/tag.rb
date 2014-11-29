@@ -3,8 +3,9 @@ class Layout
     extend Forwardable
     def_delegator :@cols, :current, :current_col
     def_delegator :current_col, :==, :current_col?
+    def_delegator :clients, :each, :each_client
 
-    attr_reader :id, :cols
+    attr_reader :id, :geo, :cols
 
     def initialize(id, geo)
       @id   = id

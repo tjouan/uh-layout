@@ -67,6 +67,12 @@ class Layout
     current_col.clients.set direction
   end
 
+  def handle_client_col_set(direction)
+    Col.set! current_tag.cols, direction
+    Col.arrange! current_tag.cols, current_tag.geo
+    current_tag.each_client &:moveresize
+  end
+
   def handle_kill_current
     current_client.kill
   end

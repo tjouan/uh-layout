@@ -125,6 +125,34 @@ module Holo
       end
     end
 
+    describe 'handle_client_col_set' do
+      before { layout << other_client << client }
+
+      it 'sends :set! message to Col with current tag cols and direction' do
+        expect(Layout::Col)
+          .to receive(:set!).with layout.current_tag.cols, :next
+        layout.handle_client_col_set :next
+      end
+
+      it 'sends :arrange! message to Col with current tag cols' do
+        expect(Layout::Col).to receive(:arrange!)
+          .with layout.current_tag.cols, layout.current_tag.geo
+        layout.handle_client_col_set :next
+      end
+
+      it 'moveresizes current tag clients' do
+        layout.current_tag.clients.each do |client|
+          expect(client).to receive :moveresize
+        end
+        layout.handle_client_col_set :next
+      end
+
+      it 'does not change current client' do
+        expect { layout.handle_client_col_set :next }
+          .not_to change { layout.current_client }
+      end
+    end
+
     describe 'handle_kill_current' do
       before do
         layout << client
