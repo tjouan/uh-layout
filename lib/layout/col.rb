@@ -15,7 +15,7 @@ class Layout
 
       def arrange!(cols, geo, col_width: OPTIMAL_WIDTH)
         cols.each_with_index do |col, i|
-          col.geo.x     = col_width * i
+          col.geo.x     = col_width * i + geo.x
           col.geo.width = col_width
         end
         cols.last.geo.width = geo.width - cols.last.geo.x

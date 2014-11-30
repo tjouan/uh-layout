@@ -105,19 +105,27 @@ class Layout
     describe '.arrange!' do
       let(:cols) { Container.new([col, described_class.new(geo)]) }
 
-      before { described_class.arrange! cols, geo, col_width: 300 }
+      before do
+        geo.x = 20
+        described_class.arrange! cols, geo, col_width: 300
+      end
 
       it 'decreases first col width as the optimal col width' do
         expect(cols[0].geo.width).to eq 300
       end
 
+      it 'offsets each col with given geo' do
+        expect(cols[0].geo.x).to eq 20
+      end
+
       it 'moves second col aside the first col' do
-        expect(cols[1].geo.x).to eq 300
+        expect(cols[1].geo.x).to eq 320
       end
 
       it 'increases last col width to occupy remaining width' do
-        expect(cols[1].geo.width).to eq 340
+        expect(cols[1].geo.width).to eq 320
       end
+
     end
 
     describe '#current_client=' do
