@@ -9,7 +9,6 @@ class Layout
 
   extend Forwardable
   def_delegator   :@screens, :current, :current_screen
-  def_delegator   :current_screen, :==, :current_screen?
   def_delegators  :current_screen, :current_tag
   def_delegators  :current_tag, :current_col
   def_delegators  :current_col, :current_client, :suggest_geo_for
