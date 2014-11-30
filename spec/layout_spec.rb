@@ -43,6 +43,10 @@ module Holo
       it 'focuses given client' do
         expect(client).to have_received :focus
       end
+
+      it 'returns self' do
+        expect(layout << client).to be layout
+      end
     end
 
     describe '#remove' do

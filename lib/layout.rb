@@ -45,6 +45,7 @@ class Layout
     client.moveresize
     client.show
     client.focus
+    self
   end
 
   def remove(client)
