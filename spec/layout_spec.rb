@@ -51,7 +51,6 @@ module Holo
 
     describe '#remove' do
       before do
-        layout << other_client
         layout << client
       end
 
@@ -61,11 +60,13 @@ module Holo
       end
 
       it 'assigns a new current client' do
+        layout << other_client
         layout.remove client
         expect(layout.current_client).to be
       end
 
       it 'focus the new current client' do
+        layout << other_client
         expect(other_client).to receive :focus
         layout.remove client
       end

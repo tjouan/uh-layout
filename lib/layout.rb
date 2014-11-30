@@ -50,17 +50,17 @@ class Layout
 
   def remove(client)
     current_col.remove client
-    focus_current_client
+    current_client.focus if current_client
   end
 
   def handle_screen_sel(direction)
     screens.sel direction
-    focus_current_client
+    current_client.focus if current_client
   end
 
   def handle_client_sel(direction)
     current_col.clients.sel direction
-    focus_current_client
+    current_client.focus
   end
 
   def handle_client_swap(direction)
@@ -75,12 +75,5 @@ class Layout
 
   def handle_kill_current
     current_client.kill
-  end
-
-
-  private
-
-  def focus_current_client
-    current_client and current_client.focus
   end
 end
