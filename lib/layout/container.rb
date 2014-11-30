@@ -12,6 +12,8 @@ class Layout
       @current_index  = 0
     end
 
+    alias to_ary entries
+
     def current
       @entries[@current_index]
     end

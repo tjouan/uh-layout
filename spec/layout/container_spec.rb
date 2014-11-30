@@ -10,6 +10,12 @@ describe Layout::Container do
     end
   end
 
+  describe '#to_ary' do
+    it 'supports implicit conversion to array' do
+      expect([] + container).to eq %i[foo bar]
+    end
+  end
+
   describe '#current' do
     context 'when container has multiple entries' do
       it 'returns the first entry' do
