@@ -85,10 +85,27 @@ module Holo
           .to change { layout.current_screen.id }.from(0).to(1)
       end
 
-      it 'focus current client' do
+      it 'focus selected screen current client' do
         layout << client
         expect(client).to receive :focus
         2.times { layout.handle_screen_sel :next }
+      end
+    end
+
+    describe '#handle_col_sel' do
+      before do
+        layout << other_client << client
+        layout.handle_client_col_set :next
+      end
+
+      it 'selects current tag consecutive col in given direction' do
+        layout.handle_col_sel :pred
+        expect(layout.current_tag.cols[0]).to be layout.current_col
+      end
+
+      it 'focus selected col current client' do
+        expect(other_client).to receive :focus
+        layout.handle_col_sel :pred
       end
     end
 

@@ -58,6 +58,11 @@ class Layout
     current_client.focus if current_client
   end
 
+  def handle_col_sel(direction)
+    current_tag.cols.sel direction
+    current_client.focus
+  end
+
   def handle_client_sel(direction)
     current_col.clients.sel direction
     current_client.focus
