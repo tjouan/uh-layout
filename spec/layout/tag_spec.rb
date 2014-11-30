@@ -19,5 +19,14 @@ class Layout
         expect(tag).not_to eq described_class.new(1, geo)
       end
     end
+
+    describe '#clients' do
+      it 'returns all clients contained in assigned cols' do
+        some_client   = instance_spy WM::Client
+        other_client  = instance_spy WM::Client
+        tag.current_col << some_client << other_client
+        expect(tag.clients).to eq [some_client, other_client]
+      end
+    end
   end
 end

@@ -19,5 +19,9 @@ class Layout
     def ==(other)
       @id == other.id
     end
+
+    def clients
+      @cols.inject([]) { |m, col| m + col.clients }
+    end
   end
 end
