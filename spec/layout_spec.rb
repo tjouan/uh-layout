@@ -92,7 +92,7 @@ module Holo
       end
     end
 
-    describe 'handle_client_sel' do
+    describe '#handle_client_sel' do
       before do
         layout << client
         layout << other_client
@@ -109,7 +109,7 @@ module Holo
       end
     end
 
-    describe 'handle_client_swap' do
+    describe '#handle_client_swap' do
       before do
         layout << other_client
         layout << client
@@ -126,7 +126,7 @@ module Holo
       end
     end
 
-    describe 'handle_client_col_set' do
+    describe '#handle_client_col_set' do
       before { layout << other_client << client }
 
       it 'sends :set! message to Col with current tag cols and direction' do
@@ -154,7 +154,7 @@ module Holo
       end
     end
 
-    describe 'handle_kill_current' do
+    describe '#handle_kill_current' do
       before do
         layout << client
         layout.handle_kill_current
