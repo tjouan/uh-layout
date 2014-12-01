@@ -49,8 +49,20 @@ class Layout
   end
 
   def remove(client)
-    current_col.remove client
+    screens.each do |screen|
+      screen.tags.each do |tag|
+        tag.cols.each { |col| col.remove client if col.include? client }
+      end
+    end
     current_client.focus if current_client
+  end
+
+  def include?(client)
+    screens.any? do |screen|
+      screen.tags.any? do |tag|
+        tag.cols.any? { |col| col.include? client }
+      end
+    end
   end
 
   def handle_screen_sel(direction)

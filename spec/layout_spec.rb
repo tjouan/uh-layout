@@ -50,25 +50,50 @@ module Holo
     end
 
     describe '#remove' do
-      before do
+      before { layout << client }
+
+      it 'removes given client from the layout' do
+        layout.remove client
+        expect(layout).not_to include client
+      end
+
+      context 'when removed client is the current one' do
+        before { layout << other_client }
+
+        it 'assigns a new current client' do
+          layout << other_client
+          layout.remove client
+          expect(layout.current_client).to be
+        end
+
+        it 'focus the new current client' do
+          layout << other_client
+          expect(other_client).to receive :focus
+          layout.remove client
+        end
+      end
+
+      context 'when removed client is not in current col' do
+        before do
+          layout << other_client
+          layout.handle_client_col_set :next
+        end
+
+        it 'removes given client from the layout' do
+          layout.remove client
+          expect(layout).not_to include client
+        end
+      end
+    end
+
+    describe '#include?' do
+      it 'returns false when layout does not include given client' do
+        expect(layout.include? client).to be false
+      end
+
+      it 'returns true when layout includes given client' do
         layout << client
-      end
-
-      it 'removes given client from current col' do
-        layout.remove client
-        expect(layout.current_col).not_to include client
-      end
-
-      it 'assigns a new current client' do
-        layout << other_client
-        layout.remove client
-        expect(layout.current_client).to be
-      end
-
-      it 'focus the new current client' do
-        layout << other_client
-        expect(other_client).to receive :focus
-        layout.remove client
+        expect(layout.include? client).to be true
       end
     end
 
