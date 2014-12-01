@@ -24,6 +24,7 @@ class Layout
     end
 
     def remove(entry)
+      fail ArgumentError, 'unknown entry' unless include? entry
       @entries.delete_at @entries.index entry
       @current_index -= 1
       self

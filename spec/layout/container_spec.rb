@@ -77,6 +77,12 @@ describe Layout::Container do
         expect(container.current).to be nil
       end
     end
+
+    context 'when given entry is not included' do
+      it 'raises an ArgumentError' do
+        expect { container.remove :unknown_entry }.to raise_error ArgumentError
+      end
+    end
   end
 
   describe '#get' do
