@@ -1,16 +1,16 @@
 class Layout
   class Tag
     extend Forwardable
-    def_delegator :@cols, :current, :current_col
-    def_delegator :current_col, :==, :current_col?
+    def_delegator :@columns, :current, :current_column
+    def_delegator :current_column, :==, :current_column?
     def_delegator :clients, :each, :each_client
 
-    attr_reader :id, :geo, :cols
+    attr_reader :id, :geo, :columns
 
     def initialize(id, geo)
-      @id   = id
-      @geo  = geo.freeze
-      @cols = Container.new([Col.new(geo.dup)])
+      @id       = id
+      @geo      = geo.freeze
+      @columns  = Container.new([Column.new(geo.dup)])
     end
 
     def to_s
@@ -22,7 +22,7 @@ class Layout
     end
 
     def clients
-      @cols.inject([]) { |m, col| m + col.clients }
+      @columns.inject([]) { |m, column| m + column.clients }
     end
   end
 end

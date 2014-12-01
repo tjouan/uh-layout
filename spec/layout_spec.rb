@@ -24,12 +24,12 @@ module Holo
         layout << client
       end
 
-      it 'adds given client to current col' do
-        expect(layout.current_col).to include client
+      it 'adds given client to current column' do
+        expect(layout.current_column).to include client
       end
 
-      it 'sets given client as the current one in current col' do
-        expect(layout.current_col.current_client).to be client
+      it 'sets given client as the current one in current column' do
+        expect(layout.current_column.current_client).to be client
       end
 
       it 'moveresizes given client' do
@@ -73,10 +73,10 @@ module Holo
         end
       end
 
-      context 'when removed client is not in current col' do
+      context 'when removed client is not in current column' do
         before do
           layout << other_client
-          layout.handle_client_col_set :next
+          layout.handle_client_column_set :next
         end
 
         it 'removes given client from the layout' do
@@ -98,9 +98,9 @@ module Holo
     end
 
     describe '#suggest_geo_for' do
-      it 'returns current col suggested geo' do
+      it 'returns current column suggested geo' do
         expect(layout.suggest_geo_for :window)
-          .to eq layout.current_col.suggest_geo_for :window
+          .to eq layout.current_column.suggest_geo_for :window
       end
     end
 
@@ -117,20 +117,20 @@ module Holo
       end
     end
 
-    describe '#handle_col_sel' do
+    describe '#handle_column_sel' do
       before do
         layout << other_client << client
-        layout.handle_client_col_set :next
+        layout.handle_client_column_set :next
       end
 
-      it 'selects current tag consecutive col in given direction' do
-        layout.handle_col_sel :pred
-        expect(layout.current_tag.cols[0]).to be layout.current_col
+      it 'selects current tag consecutive column in given direction' do
+        layout.handle_column_sel :pred
+        expect(layout.current_tag.columns[0]).to be layout.current_column
       end
 
-      it 'focus selected col current client' do
+      it 'focus selected column current client' do
         expect(other_client).to receive :focus
-        layout.handle_col_sel :pred
+        layout.handle_column_sel :pred
       end
     end
 
@@ -140,7 +140,7 @@ module Holo
         layout << other_client
       end
 
-      it 'selects current col consecutive client in given direction' do
+      it 'selects current column consecutive client in given direction' do
         expect { layout.handle_client_sel :pred }
           .to change { layout.current_client }.from(other_client).to(client)
       end
@@ -159,7 +159,8 @@ module Holo
 
       it 'swaps current client with the other client' do
         layout.handle_client_swap :pred
-        expect(layout.current_col.clients.entries).to eq [client, other_client]
+        expect(layout.current_column.clients.entries)
+          .to eq [client, other_client]
       end
 
       it 'does not change current client' do
@@ -168,30 +169,30 @@ module Holo
       end
     end
 
-    describe '#handle_client_col_set' do
+    describe '#handle_client_column_set' do
       before { layout << other_client << client }
 
-      it 'sends :set! message to Col with current tag cols and direction' do
-        expect(Layout::Col)
-          .to receive(:set!).with layout.current_tag.cols, :next
-        layout.handle_client_col_set :next
+      it 'sends :set! message to Column with current tag columns and direction' do
+        expect(Layout::Column)
+          .to receive(:set!).with layout.current_tag.columns, :next
+        layout.handle_client_column_set :next
       end
 
-      it 'sends :arrange! message to Col with current tag cols' do
-        expect(Layout::Col).to receive(:arrange!)
-          .with layout.current_tag.cols, layout.current_tag.geo
-        layout.handle_client_col_set :next
+      it 'sends :arrange! message to Column with current tag columns' do
+        expect(Layout::Column).to receive(:arrange!)
+          .with layout.current_tag.columns, layout.current_tag.geo
+        layout.handle_client_column_set :next
       end
 
       it 'moveresizes current tag clients' do
         layout.current_tag.clients.each do |client|
           expect(client).to receive :moveresize
         end
-        layout.handle_client_col_set :next
+        layout.handle_client_column_set :next
       end
 
       it 'does not change current client' do
-        expect { layout.handle_client_col_set :next }
+        expect { layout.handle_client_column_set :next }
           .not_to change { layout.current_client }
       end
     end

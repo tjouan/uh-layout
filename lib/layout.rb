@@ -1,7 +1,7 @@
 class Layout
   require 'forwardable'
   require 'layout/container'
-  require 'layout/col'
+  require 'layout/column'
   require 'layout/screen'
   require 'layout/tag'
 
@@ -11,8 +11,8 @@ class Layout
   def_delegator   :@screens, :current, :current_screen
   def_delegator   :current_screen, :==, :current_screen?
   def_delegators  :current_screen, :current_tag
-  def_delegators  :current_tag, :current_col
-  def_delegators  :current_col, :current_client, :suggest_geo_for
+  def_delegators  :current_tag, :current_column
+  def_delegators  :current_column, :current_client, :suggest_geo_for
 
   attr_reader :screens
 
@@ -25,11 +25,11 @@ class Layout
       m << "%s%s\n" % [current_screen?(screen) ? '*' : ' ', screen]
       screen.tags.each do |tag|
         m << "  %s%s\n" % [screen.current_tag?(tag) ? '*' : ' ', tag]
-        tag.cols.each do |col|
-          m << "    %s%s\n" % [tag.current_col?(col) ? '*' : ' ', col]
-          col.clients.each do |client|
+        tag.columns.each do |column|
+          m << "    %s%s\n" % [tag.current_column?(column) ? '*' : ' ', column]
+          column.clients.each do |client|
             m << "      %s%s\n" % [
-              col.current_client?(client) ? '*' : ' ',
+              column.current_client?(client) ? '*' : ' ',
               client
             ]
           end
@@ -40,8 +40,8 @@ class Layout
   end
 
   def <<(client)
-    current_col << client
-    current_col.current_client = client
+    current_column << client
+    current_column.current_client = client
     client.moveresize
     client.show
     client.focus
@@ -51,7 +51,9 @@ class Layout
   def remove(client)
     screens.each do |screen|
       screen.tags.each do |tag|
-        tag.cols.each { |col| col.remove client if col.include? client }
+        tag.columns.each do |column|
+          column.remove client if column.include? client
+        end
       end
     end
     current_client.focus if current_client
@@ -60,7 +62,7 @@ class Layout
   def include?(client)
     screens.any? do |screen|
       screen.tags.any? do |tag|
-        tag.cols.any? { |col| col.include? client }
+        tag.columns.any? { |column| column.include? client }
       end
     end
   end
@@ -70,23 +72,23 @@ class Layout
     current_client.focus if current_client
   end
 
-  def handle_col_sel(direction)
-    current_tag.cols.sel direction
+  def handle_column_sel(direction)
+    current_tag.columns.sel direction
     current_client.focus
   end
 
   def handle_client_sel(direction)
-    current_col.clients.sel direction
+    current_column.clients.sel direction
     current_client.focus
   end
 
   def handle_client_swap(direction)
-    current_col.clients.set direction
+    current_column.clients.set direction
   end
 
-  def handle_client_col_set(direction)
-    Col.set! current_tag.cols, direction
-    Col.arrange! current_tag.cols, current_tag.geo
+  def handle_client_column_set(direction)
+    Column.set! current_tag.columns, direction
+    Column.arrange! current_tag.columns, current_tag.geo
     current_tag.each_client &:moveresize
   end
 
