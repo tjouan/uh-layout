@@ -172,13 +172,13 @@ module Holo
     describe '#handle_client_column_set' do
       before { layout << other_client << client }
 
-      it 'sends :set! message to Column with current tag columns and direction' do
+      it 'sends set! message to Column with current tag columns and direction' do
         expect(Layout::Column)
           .to receive(:set!).with layout.current_tag.columns, :next
         layout.handle_client_column_set :next
       end
 
-      it 'sends :arrange! message to Column with current tag columns' do
+      it 'sends arrange! message to Column with current tag columns' do
         expect(Layout::Column).to receive(:arrange!)
           .with layout.current_tag.columns, layout.current_tag.geo
         layout.handle_client_column_set :next
