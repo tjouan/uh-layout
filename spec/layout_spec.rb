@@ -61,13 +61,11 @@ module Holo
         before { layout << other_client }
 
         it 'assigns a new current client' do
-          layout << other_client
           layout.remove client
           expect(layout.current_client).to be
         end
 
-        it 'focus the new current client' do
-          layout << other_client
+        it 'focuses the new current client' do
           expect(other_client).to receive :focus
           layout.remove client
         end
@@ -75,13 +73,14 @@ module Holo
 
       context 'when removed client is not in current column' do
         before do
-          layout << other_client
-          layout.handle_client_column_set :next
+          layout.current_tag.columns << Layout::Column.new(geo).tap do |o|
+            o << other_client
+          end
         end
 
         it 'removes given client from the layout' do
-          layout.remove client
-          expect(layout).not_to include client
+          layout.remove other_client
+          expect(layout).not_to include other_client
         end
       end
     end
