@@ -119,18 +119,20 @@ module Holo
 
     describe '#handle_column_sel' do
       before do
-        layout << other_client << client
-        layout.handle_client_column_set :next
+        layout << client
+        layout.current_tag.columns << Layout::Column.new(geo).tap do |o|
+          o << other_client
+        end
       end
 
-      it 'selects current tag consecutive column in given direction' do
-        layout.handle_column_sel :pred
-        expect(layout.current_tag.columns[0]).to be layout.current_column
+      it 'selects column consecutive to current one in given direction' do
+        layout.handle_column_sel :next
+        expect(layout.current_column).to be layout.current_tag.columns[1]
       end
 
-      it 'focus selected column current client' do
+      it 'focuses the current client of selected column' do
         expect(other_client).to receive :focus
-        layout.handle_column_sel :pred
+        layout.handle_column_sel :next
       end
     end
 
