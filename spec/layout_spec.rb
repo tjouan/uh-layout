@@ -105,14 +105,14 @@ module Holo
 
     describe 'handle_screen_sel' do
       it 'selects consecutive screen in given direction' do
-        expect { layout.handle_screen_sel :next }
+        expect { layout.handle_screen_sel :succ }
           .to change { layout.current_screen.id }.from(0).to(1)
       end
 
       it 'focus selected screen current client' do
         layout << client
         expect(client).to receive :focus
-        2.times { layout.handle_screen_sel :next }
+        2.times { layout.handle_screen_sel :succ }
       end
     end
 
@@ -125,13 +125,13 @@ module Holo
       end
 
       it 'selects column consecutive to current one in given direction' do
-        layout.handle_column_sel :next
+        layout.handle_column_sel :succ
         expect(layout.current_column).to be layout.current_tag.columns[1]
       end
 
       it 'focuses the current client of selected column' do
         expect(other_client).to receive :focus
-        layout.handle_column_sel :next
+        layout.handle_column_sel :succ
       end
     end
 
