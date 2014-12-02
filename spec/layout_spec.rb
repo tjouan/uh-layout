@@ -96,6 +96,17 @@ module Holo
       end
     end
 
+    describe '#arranger_for_current_tag' do
+      it 'returns an arranger for current tag columns and geo' do
+        expect(layout.arranger_for_current_tag)
+          .to respond_to(:arrange)
+          .and have_attributes(
+            columns:  layout.current_tag.columns,
+            geo:      layout.current_tag.geo
+          )
+      end
+    end
+
     describe '#suggest_geo_for' do
       it 'returns current column suggested geo' do
         expect(layout.suggest_geo_for :window)
@@ -171,29 +182,29 @@ module Holo
     end
 
     describe '#handle_client_column_set' do
+      let(:arranger) { instance_spy Layout::Column::Arranger }
+
       before { layout << other_client << client }
 
-      it 'sends set! message to Column with current tag columns and direction' do
-        expect(Layout::Column)
-          .to receive(:set!).with layout.current_tag.columns, :next
-        layout.handle_client_column_set :next
+      it 'moves current client with column arranger' do
+        expect(arranger).to receive(:move_current_client).with(:succ)
+        layout.handle_client_column_set :succ, arranger: arranger
       end
 
-      it 'sends arrange! message to Column with current tag columns' do
-        expect(Layout::Column).to receive(:arrange!)
-          .with layout.current_tag.columns, layout.current_tag.geo
-        layout.handle_client_column_set :next
+      it 'arranges columns with column arranger' do
+        expect(arranger).to receive :arrange
+        layout.handle_client_column_set :succ, arranger: arranger
       end
 
       it 'moveresizes current tag clients' do
         layout.current_tag.clients.each do |client|
           expect(client).to receive :moveresize
         end
-        layout.handle_client_column_set :next
+        layout.handle_client_column_set :succ
       end
 
       it 'does not change current client' do
-        expect { layout.handle_client_column_set :next }
+        expect { layout.handle_client_column_set :succ }
           .not_to change { layout.current_client }
       end
     end

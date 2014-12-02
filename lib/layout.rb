@@ -2,6 +2,7 @@ class Layout
   require 'forwardable'
   require 'layout/container'
   require 'layout/column'
+  require 'layout/column/arranger'
   require 'layout/screen'
   require 'layout/tag'
 
@@ -67,6 +68,10 @@ class Layout
     end
   end
 
+  def arranger_for_current_tag
+    Column::Arranger.new(current_tag.columns, current_tag.geo)
+  end
+
   def handle_screen_sel(direction)
     screens.sel direction
     current_client.focus if current_client
@@ -86,9 +91,8 @@ class Layout
     current_column.clients.set direction
   end
 
-  def handle_client_column_set(direction)
-    Column.set! current_tag.columns, direction
-    Column.arrange! current_tag.columns, current_tag.geo
+  def handle_client_column_set(direction, arranger: arranger_for_current_tag)
+    arranger.move_current_client(direction).arrange
     current_tag.each_client &:moveresize
   end
 
