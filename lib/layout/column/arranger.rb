@@ -11,7 +11,7 @@ class Layout
       end
 
       def move_current_client(direction)
-        return self if @columns.size <= 1 && @columns.current.clients.size <= 1
+        return self unless @columns.current.current_client
         @columns.current.remove client = @columns.current.current_client
         dest_column = get_or_create direction
         dest_column << client

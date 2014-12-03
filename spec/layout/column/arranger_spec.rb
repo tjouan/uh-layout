@@ -28,10 +28,10 @@ class Layout
         end
       end
 
-      shared_examples 'does not change columns' do
+      shared_examples 'does not change columns count' do
         it 'does not change colums' do
           expect { arranger.move_current_client :succ }
-            .not_to change { columns.entries }
+            .not_to change { columns.size }
         end
       end
 
@@ -50,7 +50,7 @@ class Layout
         before { column << client }
 
         include_examples 'preserves current client'
-        include_examples 'does not change columns'
+        include_examples 'does not change columns count'
       end
 
       context 'given one column with many clients' do
@@ -71,7 +71,7 @@ class Layout
 
           include_examples 'moves client'
           include_examples 'preserves current client'
-          include_examples 'does not change columns'
+          include_examples 'does not change columns count'
           include_examples 'updates current column'
         end
 
