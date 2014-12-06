@@ -5,11 +5,18 @@ class Layout
   describe Column::Arranger do
     let(:geo)           { Geo.new(0, 0, 640, 480) }
     let(:client)        { instance_spy WM::Client }
+    let(:column_width)  { 300 }
     let(:column)        { Column.new(geo) }
     let(:columns)       { Container.new([column]) }
-    subject(:arranger)  { described_class.new columns, geo }
+    subject(:arranger)  { described_class.new columns, geo,
+                            column_width: column_width }
 
     describe '#move_current_client' do
+      # FIXME: we should define *all* shared examples in only one definition,
+      # and call this in every context.
+      # it should always be the same, we can test that we add in the candidate
+      # column, we can compare indexes where destination client is.
+      # for columns count maybe we can pass as parameter
       shared_examples 'moves client' do |expected_column_index = 1|
         it 'removes current client from origin column' do
           arranger.move_current_client :succ
@@ -89,12 +96,54 @@ class Layout
       end
     end
 
+    describe '#get_or_create_column' do
+      let(:columns) { Container.new([column, Column.new(geo)]) }
+
+      it 'returns the consecutive column in given direction' do
+        expect(arranger.get_or_create_column :succ).to be columns[1]
+      end
+
+      context 'when current column is last in given direction' do
+        before { columns.current = columns[1] }
+
+        context 'when max columns count is not reached' do
+          before { geo.width = 4096 }
+
+          it 'creates a new column' do
+            expect(arranger.get_or_create_column :succ).to be columns[2]
+          end
+        end
+
+        context 'when max columns count is reached' do
+          it 'returns the consecutive column in given direction' do
+            expect(arranger.get_or_create_column :succ).to be columns[0]
+          end
+        end
+      end
+    end
+
+    describe '#max_columns_count?' do
+      context 'when a new column fits in current geo' do
+        it 'returns false' do
+          expect(arranger.max_columns_count?).to be false
+        end
+      end
+
+      context 'when current geo can not contain more column' do
+        let(:columns) { Container.new([column, Column.new(geo)]) }
+
+        it 'returns true' do
+          expect(arranger.max_columns_count?).to be true
+        end
+      end
+    end
+
     describe '#arrange' do
       let(:columns) { Container.new([column, Column.new(geo)]) }
 
       before do
         geo.x = 20
-        arranger.arrange column_width: 300
+        arranger.arrange
       end
 
       it 'decreases first column width as the optimal column width' do
