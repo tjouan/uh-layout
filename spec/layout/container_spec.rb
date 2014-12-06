@@ -86,12 +86,23 @@ describe Layout::Container do
   end
 
   describe '#get' do
-    it 'gets consecutive entry in given direction' do
+    it 'returns consecutive entry in given direction' do
       expect(container.get :succ).to be :bar
     end
 
     it 'returns nil when no consecutive entry exists' do
       expect(container.get :pred).to be nil
+    end
+
+    context 'with cycle option' do
+      it 'returns consecutive entry, cycling before first one' do
+        expect(container.get :pred, cycle: true).to be :bar
+      end
+
+      it 'returns consecutive entry, cycling after last one' do
+        container.current = :bar
+        expect(container.get :succ, cycle: true).to be :foo
+      end
     end
   end
 
