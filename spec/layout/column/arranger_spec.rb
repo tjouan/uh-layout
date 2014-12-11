@@ -12,40 +12,29 @@ class Layout
                             column_width: column_width }
 
     describe '#move_current_client' do
-      # FIXME: we should define *all* shared examples in only one definition,
-      # and call this in every context.
-      # it should always be the same, we can test that we add in the candidate
-      # column, we can compare indexes where destination client is.
-      # for columns count maybe we can pass as parameter
-      shared_examples 'moves client' do |expected_column_index = 1|
+      shared_examples 'moves current client' do |expected_column_index|
         it 'removes current client from origin column' do
           arranger.move_current_client :succ
           expect(column).not_to include client
         end
 
-        it 'adds current client in the next column' do
+        it 'adds current client in the destination column' do
           arranger.move_current_client :succ
           expect(columns[expected_column_index]).to include client
         end
-      end
 
-      shared_examples 'preserves current client' do
-        it 'preserves current client as the current one' do
-          expect(columns.current.current_client).to be client
-        end
-      end
-
-      shared_examples 'does not change columns count' do
-        it 'does not change colums' do
-          expect { arranger.move_current_client :succ }
-            .not_to change { columns.size }
-        end
-      end
-
-      shared_examples 'updates current column' do |expected_current_column_index = 1|
-        it 'sets the destination column as the current one' do
+        it 'updates destination column as the current one' do
           arranger.move_current_client :succ
-          expect(columns.current).to be columns[expected_current_column_index]
+          expect(columns.current).to be columns[expected_column_index]
+        end
+
+        it 'preserves current client as the current one' do
+          expect { arranger.move_current_client :succ }
+            .not_to change { columns.current.current_client }
+        end
+
+        it 'does not leave empty columns' do
+          expect(columns.none? &:empty?).to be true
         end
       end
 
@@ -56,16 +45,13 @@ class Layout
       context 'given one column with one client' do
         before { column << client }
 
-        include_examples 'preserves current client'
-        include_examples 'does not change columns count'
+        include_examples 'moves current client', 0
       end
 
       context 'given one column with many clients' do
         before { column << client << client.dup }
 
-        include_examples 'moves client'
-        include_examples 'preserves current client'
-        include_examples 'updates current column'
+        include_examples 'moves current client', 1
       end
 
       context 'given two columns' do
@@ -76,22 +62,13 @@ class Layout
         context 'when origin column has many clients' do
           before { column << client << client.dup }
 
-          include_examples 'moves client'
-          include_examples 'preserves current client'
-          include_examples 'does not change columns count'
-          include_examples 'updates current column'
+          include_examples 'moves current client', 1
         end
 
         context 'when origin column has one client' do
           before { column << client }
 
-          include_examples 'moves client', 0
-          include_examples 'preserves current client'
-
-          it 'purges the empty column' do
-            arranger.move_current_client :succ
-            expect(columns.size).to eq 1
-          end
+          include_examples 'moves current client', 0
         end
       end
     end
