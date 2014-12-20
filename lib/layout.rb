@@ -92,7 +92,7 @@ class Layout
   end
 
   def handle_client_column_set(direction, arranger: arranger_for_current_tag)
-    arranger.move_current_client(direction).arrange
+    arranger.move_current_client(direction).update_geos
     current_tag.each_client &:moveresize
   end
 

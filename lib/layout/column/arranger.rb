@@ -36,7 +36,7 @@ class Layout
         (geo.width / (@columns.size + 1)) < @column_width
       end
 
-      def arrange
+      def update_geos
         @columns.each_with_index do |column, i|
           column.geo.x      = @column_width * i + geo.x
           column.geo.width  = @column_width

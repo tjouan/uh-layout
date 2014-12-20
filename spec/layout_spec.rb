@@ -99,7 +99,7 @@ module Holo
     describe '#arranger_for_current_tag' do
       it 'returns an arranger for current tag columns and geo' do
         expect(layout.arranger_for_current_tag)
-          .to respond_to(:arrange)
+          .to respond_to(:update_geos)
           .and have_attributes(
             columns:  layout.current_tag.columns,
             geo:      layout.current_tag.geo
@@ -192,7 +192,7 @@ module Holo
       end
 
       it 'arranges columns with column arranger' do
-        expect(arranger).to receive :arrange
+        expect(arranger).to receive :update_geos
         layout.handle_client_column_set :succ, arranger: arranger
       end
 

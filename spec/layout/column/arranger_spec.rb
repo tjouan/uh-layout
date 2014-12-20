@@ -115,12 +115,12 @@ class Layout
       end
     end
 
-    describe '#arrange' do
+    describe '#update_geos' do
       let(:columns) { Container.new([column, Column.new(geo)]) }
 
       before do
         geo.x = 20
-        arranger.arrange
+        arranger.update_geos
       end
 
       it 'decreases first column width as the optimal column width' do
