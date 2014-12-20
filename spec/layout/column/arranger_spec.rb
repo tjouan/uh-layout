@@ -1,7 +1,6 @@
 require 'layout'
 
 class Layout
-  # FIXME: add test for not adding more columns than can fit in geo
   describe Column::Arranger do
     let(:geo)           { Geo.new(0, 0, 640, 480) }
     let(:client)        { instance_spy WM::Client }
