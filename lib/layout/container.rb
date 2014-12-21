@@ -30,6 +30,10 @@ class Layout
       self
     end
 
+    def remove_if
+      @entries.each { |e| remove e if yield e }
+    end
+
     def get(direction, cycle: false)
       index = @current_index.send(direction)
       if cycle

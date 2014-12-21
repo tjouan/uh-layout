@@ -85,6 +85,13 @@ describe Layout::Container do
     end
   end
 
+  describe '#remove_if' do
+    it 'removes entries for which given block returns true' do
+      container.remove_if { |e| e == :foo }
+      expect(container.entries).to eq [:bar]
+    end
+  end
+
   describe '#get' do
     it 'returns consecutive entry in given direction' do
       expect(container.get :succ).to be :bar
