@@ -47,15 +47,6 @@ class Layout
         end
         @columns.last.geo.width = geo.width - columns.last.geo.x
       end
-
-
-      private
-
-      def get_or_create(direction)
-        @columns.get(direction) or Column.new(@geo).tap do |o|
-          @columns << o
-        end
-      end
     end
   end
 end
