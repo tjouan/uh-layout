@@ -11,13 +11,17 @@ class Layout
         @column_width = column_width
       end
 
+      def purge
+        @columns.remove_if &:empty?
+      end
+
       def move_current_client(direction)
         return self unless @columns.current.current_client
         @columns.current.remove client = @columns.current.current_client
         dest_column = get_or_create_column direction
         dest_column << client
         dest_column.current_client = client
-        @columns.delete_if &:empty?
+        purge
         @columns.current = dest_column
         self
       end

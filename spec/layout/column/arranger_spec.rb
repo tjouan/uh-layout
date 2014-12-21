@@ -10,6 +10,13 @@ class Layout
     subject(:arranger)  { described_class.new columns, geo,
                             column_width: column_width }
 
+    describe '#purge' do
+      it 'removes empty columns' do
+        arranger.purge
+        expect(columns).to be_empty
+      end
+    end
+
     describe '#move_current_client' do
       shared_examples 'moves current client' do |expected_column_index|
         it 'removes current client from origin column' do
