@@ -13,7 +13,7 @@ module Holo
       it 'assigns given screens as Screen objects in a Container' do
         expect(layout.screens.entries).to eq [
           Layout::Screen.new(0, geo),
-          Layout::Screen.new(1, geo),
+          Layout::Screen.new(1, geo)
         ]
       end
     end
@@ -50,38 +50,31 @@ module Holo
     end
 
     describe '#remove' do
-      before { layout << client }
+      before { layout << client << other_client }
 
       it 'removes given client from the layout' do
         layout.remove client
         expect(layout).not_to include client
       end
 
-      context 'when removed client is the current one' do
-        before { layout << other_client }
-
-        it 'assigns a new current client' do
-          layout.remove client
-          expect(layout.current_client).to be
-        end
-
-        it 'focuses the new current client' do
-          expect(other_client).to receive :focus
-          layout.remove client
-        end
+      it 'assigns a new current client' do
+        layout.remove client
+        expect(layout.current_client).to be
       end
 
-      context 'when removed client is not in current column' do
-        before do
-          layout.current_tag.columns << Layout::Column.new(geo).tap do |o|
-            o << other_client
-          end
-        end
+      it 'focuses the new current client' do
+        expect(other_client).to receive :focus
+        layout.remove client
+      end
 
-        it 'removes given client from the layout' do
-          layout.remove other_client
-          expect(layout).not_to include other_client
-        end
+      it 'redraws columns with an arranger' do
+        expect_any_instance_of(Layout::Column::Arranger).to receive :redraw
+        layout.remove client
+      end
+
+      it 'moveresizes remaining clients' do
+        expect(other_client).to receive :moveresize
+        layout.remove client
       end
     end
 

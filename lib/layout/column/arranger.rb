@@ -11,6 +11,12 @@ class Layout
         @column_width = column_width
       end
 
+      def redraw
+        purge
+        update_geos
+        yield if block_given?
+      end
+
       def purge
         @columns.remove_if &:empty?
       end

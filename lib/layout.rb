@@ -57,7 +57,12 @@ class Layout
     screens.each do |screen|
       screen.tags.each do |tag|
         tag.columns.each do |column|
-          column.remove client if column.include? client
+          if column.include? client
+            column.remove client
+            Column::Arranger.new(tag.columns, tag.geo).redraw do
+              tag.each_client &:moveresize
+            end
+          end
         end
       end
     end

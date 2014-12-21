@@ -10,6 +10,22 @@ class Layout
     subject(:arranger)  { described_class.new columns, geo,
                             column_width: column_width }
 
+    describe '#redraw' do
+      it 'purges columns' do
+        expect(arranger).to receive :purge
+        arranger.redraw
+      end
+
+      it 'updates columns geo' do
+        expect(arranger).to receive :update_geos
+        arranger.redraw
+      end
+
+      it 'yields given block' do
+        expect { |b| arranger.redraw &b }.to yield_control
+      end
+    end
+
     describe '#purge' do
       it 'removes empty columns' do
         arranger.purge
