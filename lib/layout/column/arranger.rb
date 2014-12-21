@@ -41,6 +41,7 @@ class Layout
       end
 
       def update_geos
+        return if @columns.empty?
         @columns.each_with_index do |column, i|
           column.geo.x      = @column_width * i + geo.x
           column.geo.width  = @column_width

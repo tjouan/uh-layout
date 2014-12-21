@@ -124,25 +124,34 @@ class Layout
     describe '#update_geos' do
       let(:columns) { Container.new([column, Column.new(geo)]) }
 
-      before do
-        geo.x = 20
-        arranger.update_geos
-      end
+      before { geo.x = 20 }
 
       it 'decreases first column width as the optimal column width' do
+        arranger.update_geos
         expect(columns[0].geo.width).to eq 300
       end
 
       it 'offsets each column with given geo' do
+        arranger.update_geos
         expect(columns[0].geo.x).to eq 20
       end
 
       it 'moves second column aside the first column' do
+        arranger.update_geos
         expect(columns[1].geo.x).to eq 320
       end
 
       it 'increases last column width to occupy remaining width' do
+        arranger.update_geos
         expect(columns[1].geo.width).to eq 320
+      end
+
+      context 'without columns' do
+        let(:columns) { Container.new([]) }
+
+        it 'does not raise any error' do
+          expect { arranger.update_geos }.not_to raise_error
+        end
       end
     end
   end
