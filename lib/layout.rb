@@ -13,7 +13,7 @@ class Layout
   def_delegator   :current_screen, :==, :current_screen?
   def_delegators  :current_screen, :current_tag
   def_delegators  :current_tag, :current_column
-  def_delegators  :current_column, :current_client, :suggest_geo_for
+  def_delegators  :current_column, :suggest_geo_for
 
   attr_reader :screens
 
@@ -38,6 +38,10 @@ class Layout
       end
       m
     end
+  end
+
+  def current_client
+    current_column and current_column.current_client
   end
 
   def <<(client)
