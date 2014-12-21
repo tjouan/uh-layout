@@ -19,10 +19,7 @@ module Holo
     end
 
     describe '#<<' do
-      before do
-        layout << other_client
-        layout << client
-      end
+      before { layout << other_client << client }
 
       it 'adds given client to current column' do
         expect(layout.current_column).to include client
@@ -140,10 +137,7 @@ module Holo
     end
 
     describe '#handle_client_sel' do
-      before do
-        layout << client
-        layout << other_client
-      end
+      before { layout << client << other_client }
 
       it 'selects current column consecutive client in given direction' do
         expect { layout.handle_client_sel :pred }
@@ -157,10 +151,7 @@ module Holo
     end
 
     describe '#handle_client_swap' do
-      before do
-        layout << other_client
-        layout << client
-      end
+      before { layout << other_client << client }
 
       it 'swaps current client with the other client' do
         layout.handle_client_swap :pred
