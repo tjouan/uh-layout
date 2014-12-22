@@ -4,7 +4,7 @@ class Layout
     def_delegator :@tags, :current, :current_tag
     def_delegator :current_tag, :==, :current_tag?
 
-    attr_reader :id, :tags
+    attr_reader :id, :tags, :geo
 
     def initialize(id, geo)
       @id   = id
@@ -14,10 +14,6 @@ class Layout
 
     def to_s
       "SCREEN ##{@id}, geo: #{@geo}"
-    end
-
-    def ==(other)
-      @id == other.id
     end
   end
 end

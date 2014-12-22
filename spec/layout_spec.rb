@@ -11,9 +11,9 @@ module Holo
 
     describe '#screens=' do
       it 'assigns given screens as Screen objects in a Container' do
-        expect(layout.screens.entries).to eq [
-          Layout::Screen.new(0, geo),
-          Layout::Screen.new(1, geo)
+        expect(layout.screens.entries).to match [
+          an_object_having_attributes(id: 0, geo: geo),
+          an_object_having_attributes(id: 1, geo: geo)
         ]
       end
     end
