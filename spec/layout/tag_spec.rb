@@ -6,10 +6,6 @@ class Layout
     let(:other_geo) { Geo.new(640, 0, 320, 240) }
     subject(:tag)   { described_class.new(0, geo) }
 
-    it 'has one default column assigned' do
-      expect(tag.columns).to include an_instance_of Column
-    end
-
     describe '#==' do
       it 'equals another tag with same id' do
         expect(tag).to eq described_class.new(0, other_geo)
@@ -22,8 +18,9 @@ class Layout
 
     describe '#clients' do
       it 'returns all clients contained in assigned columns' do
-        some_client   = instance_spy WM::Client
-        other_client  = instance_spy WM::Client
+        some_client = instance_spy WM::Client
+        other_client = instance_spy WM::Client
+        tag.columns << Column.new(tag.geo)
         tag.current_column << some_client << other_client
         expect(tag.clients).to eq [some_client, other_client]
       end

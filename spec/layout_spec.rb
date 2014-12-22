@@ -98,9 +98,18 @@ module Holo
     end
 
     describe '#suggest_geo_for' do
-      it 'returns current column suggested geo' do
+      it 'returns current tag suggested geo' do
         expect(layout.suggest_geo_for :window)
-          .to eq layout.current_column.suggest_geo_for :window
+          .to eq layout.current_tag.suggest_geo_for :window
+      end
+
+      context 'when current tag has a column' do
+        before { layout.current_tag.columns << Layout::Column.new(geo) }
+
+        it 'returns current column suggested geo' do
+          expect(layout.suggest_geo_for :window)
+            .to eq layout.current_column.suggest_geo_for :window
+        end
       end
     end
 

@@ -13,7 +13,6 @@ class Layout
   def_delegator   :current_screen, :==, :current_screen?
   def_delegators  :current_screen, :current_tag
   def_delegators  :current_tag, :current_column
-  def_delegators  :current_column, :suggest_geo_for
 
   attr_reader :screens
 
@@ -45,7 +44,7 @@ class Layout
   end
 
   def <<(client)
-    current_column << client
+    current_column_or_create << client
     current_column.current_client = client
     client.moveresize
     client.show
@@ -67,6 +66,10 @@ class Layout
       end
     end
     current_client.focus if current_client
+  end
+
+  def suggest_geo_for(window)
+    (current_column or current_tag).suggest_geo_for window
   end
 
   def include?(client)
@@ -107,5 +110,15 @@ class Layout
 
   def handle_kill_current
     current_client.kill
+  end
+
+
+  private
+
+  def current_column_or_create
+    current_column or Column.new(current_tag.geo).tap do |column|
+      current_tag.columns << column
+      current_tag.current_column = column
+    end
   end
 end
