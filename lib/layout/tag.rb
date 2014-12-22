@@ -18,10 +18,6 @@ class Layout
       "TAG ##{@id}, geo: #{@geo}"
     end
 
-    def ==(other)
-      @id == other.id
-    end
-
     def clients
       @columns.inject([]) { |m, column| m + column.clients }
     end

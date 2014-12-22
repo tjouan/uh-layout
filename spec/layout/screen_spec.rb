@@ -7,7 +7,7 @@ class Layout
     subject(:screen)  { described_class.new(0, geo) }
 
     it 'has one default tag with id 1 assigned' do
-      expect(screen.tags).to include Tag.new(1, geo)
+      expect(screen.tags).to include an_object_having_attributes(id: 1)
     end
 
     describe '#==' do
