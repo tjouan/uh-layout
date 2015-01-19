@@ -1,5 +1,6 @@
 class Layout
   require 'forwardable'
+  require 'layout/bar'
   require 'layout/container'
   require 'layout/column'
   require 'layout/column/arranger'
@@ -14,7 +15,11 @@ class Layout
   def_delegators  :current_screen, :current_tag
   def_delegators  :current_tag, :current_column
 
-  attr_reader :screens
+  attr_reader :screens, :widgets
+
+  def initialize
+    @widgets = []
+  end
 
   def screens=(screens)
     @screens = Container.new(screens.map { |id, geo| Screen.new(id, geo) })
@@ -49,6 +54,7 @@ class Layout
     client.moveresize
     client.show
     client.focus
+    update_widgets
     self
   end
 
@@ -66,6 +72,7 @@ class Layout
       end
     end
     current_client.focus if current_client
+    update_widgets
   end
 
   def suggest_geo_for(window)
@@ -84,28 +91,38 @@ class Layout
     Column::Arranger.new(current_tag.columns, current_tag.geo)
   end
 
+  def update_widgets
+    @widgets.each &:update
+    @widgets.each &:redraw
+  end
+
   def handle_screen_sel(direction)
     screens.sel direction
     current_client.focus if current_client
+    update_widgets
   end
 
   def handle_column_sel(direction)
     current_tag.columns.sel direction
     current_client.focus
+    update_widgets
   end
 
   def handle_client_sel(direction)
     current_column.clients.sel direction
     current_client.focus
+    update_widgets
   end
 
   def handle_client_swap(direction)
     current_column.clients.set direction
+    update_widgets
   end
 
   def handle_client_column_set(direction, arranger: arranger_for_current_tag)
     arranger.move_current_client(direction).update_geos
     current_tag.each_client &:moveresize
+    update_widgets
   end
 
   def handle_kill_current

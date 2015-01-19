@@ -10,7 +10,7 @@ class Layout
 
     def initialize(id, geo)
       @id       = id
-      @geo      = geo.freeze
+      @geo      = geo
       @columns  = Container.new
     end
 

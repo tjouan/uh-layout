@@ -5,7 +5,7 @@ class Layout
     extend Forwardable
     def_delegators :@entries, :<<, :[], :each, :empty?, :first, :last, :size
 
-    attr_reader :entries
+    attr_reader :entries, :current_index
 
     def initialize(entries = [])
       @entries        = entries

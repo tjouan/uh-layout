@@ -5,9 +5,11 @@ module Holo
     let(:geo)           { Geo.new(0, 0, 640, 480) }
     let(:client)        { instance_spy WM::Client }
     let(:other_client)  { instance_spy WM::Client }
+    let(:widget)        { double('widget').as_null_object }
     subject(:layout)    { described_class.new }
 
     before { layout.screens = { 0 => geo, 1 => geo } }
+    before { layout.widgets << widget  }
 
     describe '#screens=' do
       it 'assigns given screens as Screen objects in a Container' do
@@ -41,6 +43,10 @@ module Holo
         expect(client).to have_received :focus
       end
 
+      it 'updates widgets' do
+        expect(widget).to have_received(:update).exactly(2).times
+      end
+
       it 'returns self' do
         expect(layout << client).to be layout
       end
@@ -71,6 +77,11 @@ module Holo
 
       it 'moveresizes remaining clients' do
         expect(other_client).to receive :moveresize
+        layout.remove client
+      end
+
+      it 'updates widgets' do
+        expect(widget).to receive :update
         layout.remove client
       end
     end
@@ -124,6 +135,11 @@ module Holo
         expect(client).to receive :focus
         2.times { layout.handle_screen_sel :succ }
       end
+
+      it 'updates widgets' do
+        expect(widget).to receive :update
+        layout.handle_screen_sel :succ
+      end
     end
 
     describe '#handle_column_sel' do
@@ -143,6 +159,11 @@ module Holo
         expect(other_client).to receive :focus
         layout.handle_column_sel :succ
       end
+
+      it 'updates widgets' do
+        expect(widget).to receive :update
+        layout.handle_column_sel :succ
+      end
     end
 
     describe '#handle_client_sel' do
@@ -155,6 +176,11 @@ module Holo
 
       it 'focuses current client' do
         expect(client).to receive :focus
+        layout.handle_client_sel :pred
+      end
+
+      it 'updates widgets' do
+        expect(widget).to receive :update
         layout.handle_client_sel :pred
       end
     end
@@ -171,6 +197,11 @@ module Holo
       it 'does not change current client' do
         expect { layout.handle_client_swap :pred }
           .not_to change { layout.current_client }
+      end
+
+      it 'updates widgets' do
+        expect(widget).to receive :update
+        layout.handle_client_swap :pred
       end
     end
 
@@ -199,6 +230,11 @@ module Holo
       it 'does not change current client' do
         expect { layout.handle_client_column_set :succ }
           .not_to change { layout.current_client }
+      end
+
+      it 'updates widgets' do
+        expect(widget).to receive :update
+        layout.handle_client_column_set :succ
       end
     end
 
