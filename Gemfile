@@ -3,9 +3,10 @@ source 'https://rubygems.org'
 group :development, :test do
   gem 'pry'
   gem 'rake'
-  gem 'rake-compiler'
   gem 'rspec'
-  gem 'guard-rspec',              require: false
-  gem 'listen',                   require: false
-  gem 'celluloid',  '0.16.0.pre', require: false
+
+  gem 'listen',         path: "#{ENV['HOME']}/src/sys/listen"
+  gem 'guard-rspec',    require: false
+  gem 'guard-cucumber', require: false
+  gem 'rb-kqueue',      require: false
 end
