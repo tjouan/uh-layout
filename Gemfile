@@ -6,7 +6,7 @@ group :development, :test do
   gem 'rspec'
 
   gem 'listen',         path: "#{ENV['HOME']}/src/sys/listen"
+  gem 'rb-kqueue',      require: false
   gem 'guard-rspec',    require: false
   gem 'guard-cucumber', require: false
-  gem 'rb-kqueue',      require: false
 end
