@@ -1,12 +1,13 @@
-class Layout
-  require 'forwardable'
-  require 'layout/bar'
-  require 'layout/container'
-  require 'layout/column'
-  require 'layout/column/arranger'
-  require 'layout/screen'
-  require 'layout/tag'
+require 'forwardable'
 
+require_relative 'layout/bar'
+require_relative 'layout/container'
+require_relative 'layout/column'
+require_relative 'layout/column/arranger'
+require_relative 'layout/screen'
+require_relative 'layout/tag'
+
+class Layout
   include Holo
 
   extend Forwardable
