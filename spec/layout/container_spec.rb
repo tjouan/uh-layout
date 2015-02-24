@@ -61,15 +61,18 @@ describe Layout::Container do
     end
 
     context 'when given entry is the current one' do
-      before { container.current = :bar }
+      before { container.remove :foo }
 
       it 'assigns previous entry as the current one' do
-        container.remove :bar
-        expect(container.current).to be :foo
+        expect(container.current).to be :bar
+      end
+
+      it 'prevents having a negative index' do
+        expect(container.current_index).not_to eq -1
       end
     end
 
-    context 'when given entry is the last one' do
+    context 'when given entry is the only one' do
       let(:entries) { [:foo] }
 
       it 'has no more current entry' do
