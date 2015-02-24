@@ -10,6 +10,10 @@ class Layout
       expect(screen.tags).to include an_object_having_attributes id: 1
     end
 
+    it 'has one default tag with screen geo assigned' do
+      expect(screen.tags.first.geo).to be screen.geo
+    end
+
     describe '#height=' do
       it 'changes the height' do
         expect { screen.height = 42 }.to change { screen.height }.to 42
