@@ -108,8 +108,13 @@ class Layout
         context 'when max columns count is not reached' do
           before { geo.width = 4096 }
 
-          it 'creates a new column' do
+          it 'appends a new column' do
             expect(arranger.get_or_create_column :succ).to be columns[2]
+          end
+
+          it 'prepends a new column' do
+            columns.current = columns[0]
+            expect(arranger.get_or_create_column :pred).to be columns[0]
           end
         end
 

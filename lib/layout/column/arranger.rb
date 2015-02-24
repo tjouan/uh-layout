@@ -38,7 +38,12 @@ class Layout
         elsif max_columns_count?
           @columns.get direction, cycle: true
         else
-          Column.new(@geo).tap { |o| @columns << o }
+          Column.new(@geo).tap do |o|
+            case direction
+            when :pred then @columns.unshift o
+            when :succ then @columns << o
+            end
+          end
         end
       end
 

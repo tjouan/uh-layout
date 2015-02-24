@@ -3,7 +3,7 @@ class Layout
     include Enumerable
 
     extend Forwardable
-    def_delegators :@entries, :<<, :[], :each, :empty?, :first, :last, :size
+    def_delegators :@entries, :<<, :[], :each, :empty?, :first, :last, :size, :unshift
 
     attr_reader :entries, :current_index
 
