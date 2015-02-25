@@ -15,5 +15,33 @@ class Layout
         expect(tag.clients).to eq [some_client, other_client]
       end
     end
+
+    describe '#current_column_or_create' do
+      context 'when tag has no column' do
+        it 'creates a new column' do
+          expect { tag.current_column_or_create }
+            .to change { tag.columns.size }.from(0).to(1)
+        end
+
+        it 'returns the new column' do
+          expect(tag.current_column_or_create).to eq tag.columns.current
+        end
+      end
+
+      context 'when tag has a column' do
+        let(:column) { Column.new(geo) }
+
+        before { tag.columns << column }
+
+        it 'does not create any column' do
+          expect { tag.current_column_or_create }
+            .not_to change { tag.columns.size }
+        end
+
+        it 'returns the current column' do
+          expect(tag.current_column_or_create).to be column
+        end
+      end
+    end
   end
 end

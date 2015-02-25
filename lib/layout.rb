@@ -48,7 +48,7 @@ class Layout
   end
 
   def <<(client)
-    current_column_or_create << client
+    current_tag.current_column_or_create << client
     current_column.current_client = client
     client.moveresize
     current_column.update_clients_visibility
@@ -75,9 +75,7 @@ class Layout
 
   def include?(client)
     screens.any? do |screen|
-      screen.tags.any? do |tag|
-        tag.columns.any? { |column| column.include? client }
-      end
+      screen.tags.any? { |tag| tag.include? client }
     end
   end
 
@@ -101,6 +99,28 @@ class Layout
     remove client = current_client
     screens.sel direction
     push client
+  end
+
+  def handle_tag_sel(tag_id)
+    return unless current_tag.id != tag_id
+    current_tag.hide
+    current_screen.tags.current = find_tag_or_create tag_id
+    current_tag.columns.each &:update_clients_visibility
+    current_client.focus if current_client
+    update_widgets
+  end
+
+  def handle_tag_set(tag_id)
+    return unless current_client && current_tag.id != tag_id
+    remove client = current_client
+    client.hide
+    tag = find_tag_or_create tag_id
+    tag.current_column_or_create << client
+    Column::Arranger.new(tag.columns, tag.geo).redraw do
+      tag.each_client &:moveresize
+    end
+    current_client.focus if current_client
+    update_widgets
   end
 
   def handle_column_sel(direction)
@@ -139,13 +159,6 @@ class Layout
 
   private
 
-  def current_column_or_create
-    current_column or Column.new(current_tag.geo).tap do |column|
-      current_tag.columns << column
-      current_tag.current_column = column
-    end
-  end
-
   def find_client(client)
     screens.each do |screen|
       screen.tags.each do |tag|
@@ -155,6 +168,12 @@ class Layout
           end
         end
       end
+    end
+  end
+
+  def find_tag_or_create(tag_id)
+    current_screen.tags.find { |e| e.id == tag_id } or Tag.new(tag_id, current_screen.geo).tap do |tag|
+      current_screen.tags << tag
     end
   end
 end

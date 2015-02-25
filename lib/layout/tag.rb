@@ -22,8 +22,22 @@ class Layout
       @columns.inject([]) { |m, column| m + column.clients }
     end
 
+    def include?(client)
+      @columns.any? { |column| column.include? client }
+    end
+
+    def current_column_or_create
+      current_column or Column.new(@geo).tap do |column|
+        @columns << column
+      end
+    end
+
     def suggest_geo
       @geo
+    end
+
+    def hide
+      clients.each &:hide
     end
   end
 end

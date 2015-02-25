@@ -184,6 +184,76 @@ describe Layout do
     end
   end
 
+  describe 'handle_tag_sel' do
+    before { layout << client }
+
+    it 'hides clients on previously selected tag' do
+      layout.handle_tag_sel 2
+      expect(client).to be_hidden
+    end
+
+    it 'sets the selected tag as the current one' do
+      layout.handle_tag_sel 2
+      expect(layout.current_tag.id).to eq 2
+    end
+
+    it 'shows selected tag clients' do
+      layout.handle_tag_sel 2
+      expect(client).to receive :show
+      layout.handle_tag_sel 1
+    end
+
+    it 'focuses selected tag current client' do
+      layout.handle_tag_sel 2
+      expect(client).to receive :focus
+      layout.handle_tag_sel 1
+    end
+
+    it 'updates widgets' do
+      expect(widget).to receive :update
+      layout.handle_tag_sel 2
+    end
+  end
+
+  describe 'handle_tag_set' do
+    context 'without client' do
+      it 'does not raise any error' do
+        expect { layout.handle_tag_set 2 }.not_to raise_error
+      end
+    end
+
+    context 'with a client' do
+      before { layout << other_client << client }
+
+      it 'removes current client from origin tag' do
+        origin_tag = layout.current_tag
+        layout.handle_tag_set 2
+        expect(origin_tag).not_to include client
+      end
+
+      it 'hides current client' do
+        expect(client).to receive :hide
+        layout.handle_tag_set 2
+      end
+
+      it 'adds current client to given tag' do
+        layout.handle_tag_set 2
+        dest_tag = layout.current_screen.tags.find { |e| e.id == 2 }
+        expect(dest_tag).to include client
+      end
+
+      it 'arranges columns on given tag' do
+        expect(client).to receive :moveresize
+        layout.handle_tag_set 2
+      end
+
+      it 'updates widgets' do
+        expect(widget).to receive :update
+        layout.handle_tag_set 2
+      end
+    end
+  end
+
   describe '#handle_column_sel' do
     context 'without client' do
       it 'does not raise any error' do
