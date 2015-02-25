@@ -51,7 +51,7 @@ class Layout
     current_column_or_create << client
     current_column.current_client = client
     client.moveresize
-    client.show
+    current_column.update_clients_visibility
     client.focus
     update_widgets
     self
@@ -59,18 +59,12 @@ class Layout
   alias push <<
 
   def remove(client)
-    screens.each do |screen|
-      screen.tags.each do |tag|
-        tag.columns.each do |column|
-          if column.include? client
-            column.remove client
-            Column::Arranger.new(tag.columns, tag.geo).redraw do
-              tag.each_client &:moveresize
-            end
-          end
-        end
-      end
+    screen, tag, column = find_client client
+    column.remove client
+    Column::Arranger.new(tag.columns, tag.geo).redraw do
+      tag.each_client &:moveresize
     end
+    column.update_clients_visibility
     current_client.focus if current_client
     update_widgets
   end
@@ -119,6 +113,7 @@ class Layout
   def handle_client_sel(direction)
     return unless current_client
     current_column.clients.sel direction
+    current_column.update_clients_visibility
     current_client.focus
     update_widgets
   end
@@ -133,6 +128,7 @@ class Layout
     return unless current_client
     arranger.move_current_client(direction).update_geos
     current_tag.each_client &:moveresize
+    current_tag.columns.each &:update_clients_visibility
     update_widgets
   end
 
@@ -147,6 +143,18 @@ class Layout
     current_column or Column.new(current_tag.geo).tap do |column|
       current_tag.columns << column
       current_tag.current_column = column
+    end
+  end
+
+  def find_client(client)
+    screens.each do |screen|
+      screen.tags.each do |tag|
+        tag.columns.each do |column|
+          if column.include? client
+            return screen, tag, column
+          end
+        end
+      end
     end
   end
 end

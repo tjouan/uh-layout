@@ -2,8 +2,8 @@ require 'layout'
 
 describe Layout do
   let(:geo)           { Holo::Geo.new(0, 0, 640, 480) }
-  let(:client)        { instance_spy Holo::WM::Client }
-  let(:other_client)  { instance_spy Holo::WM::Client }
+  let(:client)        { Holo::WM::Client.new(instance_spy Holo::Window) }
+  let(:other_client)  { Holo::WM::Client.new(instance_spy Holo::Window) }
   let(:widget)        { double('widget').as_null_object }
   subject(:layout)    { described_class.new }
 
@@ -20,30 +20,41 @@ describe Layout do
   end
 
   describe '#<<' do
-    before { layout << other_client << client }
+    before { layout << other_client }
 
     it 'adds given client to current column' do
+      layout << client
       expect(layout.current_column).to include client
     end
 
     it 'sets given client as the current one in current column' do
+      layout << client
       expect(layout.current_column.current_client).to be client
     end
 
     it 'moveresizes given client' do
-      expect(client).to have_received :moveresize
+      expect(client).to receive :moveresize
+      layout << client
+    end
+
+    it 'hides other clients in current column' do
+      expect(other_client).to receive :hide
+      layout << client
     end
 
     it 'shows given client' do
-      expect(client).to have_received :show
+      expect(client).to receive :show
+      layout << client
     end
 
     it 'focuses given client' do
-      expect(client).to have_received :focus
+      expect(client).to receive :focus
+      layout << client
     end
 
     it 'updates widgets' do
-      expect(widget).to have_received(:update).exactly(2).times
+      expect(widget).to receive :update
+      layout << client
     end
 
     it 'returns self' do
@@ -62,6 +73,11 @@ describe Layout do
     it 'assigns a new current client' do
       layout.remove client
       expect(layout.current_client).to be
+    end
+
+    it 'shows the new current client' do
+      expect(other_client).to receive :show
+      layout.remove client
     end
 
     it 'focuses the new current client' do
@@ -220,6 +236,11 @@ describe Layout do
         layout.handle_client_sel :pred
       end
 
+      it 'updates column clients visibility' do
+        expect(layout.current_column).to receive :update_clients_visibility
+        layout.handle_client_sel :pred
+      end
+
       it 'updates widgets' do
         expect(widget).to receive :update
         layout.handle_client_sel :pred
@@ -284,6 +305,13 @@ describe Layout do
         layout.handle_client_column_set :succ
       end
 
+      it 'updates columns clients visibility' do
+        layout.current_tag.columns.each do |column|
+          expect(column).to receive :update_clients_visibility
+        end
+        layout.handle_client_column_set :succ
+      end
+
       it 'does not change current client' do
         expect { layout.handle_client_column_set :succ }
           .not_to change { layout.current_client }
@@ -307,8 +335,8 @@ describe Layout do
       before { layout << client }
 
       it 'kills current client' do
+        expect(client).to receive :kill
         layout.handle_kill_current
-        expect(client).to have_received :kill
       end
     end
   end

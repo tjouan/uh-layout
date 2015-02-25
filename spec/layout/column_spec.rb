@@ -38,5 +38,22 @@ class Layout
         expect(column.suggest_geo).to eq geo
       end
     end
+
+    describe '#update_clients_visibility' do
+      let(:other_client) { Holo::WM::Client.new(instance_spy Holo::Window) }
+
+      before { column << client.show << other_client.show }
+
+      it 'hides clients except the current one' do
+        expect(other_client).to receive :hide
+        expect(client).not_to receive :hide
+        column.update_clients_visibility
+      end
+
+      it 'shows current client' do
+        expect(client).to receive :show
+        column.update_clients_visibility
+      end
+    end
   end
 end

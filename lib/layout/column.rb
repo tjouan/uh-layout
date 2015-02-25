@@ -26,5 +26,12 @@ class Layout
     def suggest_geo
       @geo
     end
+
+    def update_clients_visibility
+      @clients.each do |client|
+        client.hide unless client.hidden? || @clients.current == client
+      end
+      @clients.current.show if @clients.current
+    end
   end
 end
