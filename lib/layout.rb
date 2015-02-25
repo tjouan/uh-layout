@@ -58,6 +58,7 @@ class Layout
     update_widgets
     self
   end
+  alias push <<
 
   def remove(client)
     screens.each do |screen|
@@ -101,6 +102,12 @@ class Layout
     screens.sel direction
     current_client.focus if current_client
     update_widgets
+  end
+
+  def handle_screen_set(direction)
+    remove client = current_client
+    screens.sel direction
+    push client
   end
 
   def handle_column_sel(direction)

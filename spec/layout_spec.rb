@@ -142,6 +142,25 @@ module Holo
       end
     end
 
+    describe 'handle_screen_set' do
+      before { layout << client }
+
+      it 'removes current client from origin screen' do
+        layout.handle_screen_set :succ
+        expect(layout.screens[0].tags.flat_map(&:clients)).not_to include client
+      end
+
+      it 'adds current client to consecutive screen in given direction' do
+        layout.handle_screen_set :succ
+        expect(layout.screens[1].tags.flat_map(&:clients)).to include client
+      end
+
+      it 'selects consecutive screen in given direction' do
+        expect { layout.handle_screen_set :succ }
+          .to change { layout.current_screen.id }.from(0).to(1)
+      end
+    end
+
     describe '#handle_column_sel' do
       before do
         layout << client
