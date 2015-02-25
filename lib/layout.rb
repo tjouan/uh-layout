@@ -105,36 +105,41 @@ class Layout
   end
 
   def handle_screen_set(direction)
+    return unless current_client
     remove client = current_client
     screens.sel direction
     push client
   end
 
   def handle_column_sel(direction)
+    return unless current_tag.columns.any?
     current_tag.columns.sel direction
     current_client.focus
     update_widgets
   end
 
   def handle_client_sel(direction)
+    return unless current_client
     current_column.clients.sel direction
     current_client.focus
     update_widgets
   end
 
   def handle_client_swap(direction)
+    return unless current_client
     current_column.clients.set direction
     update_widgets
   end
 
   def handle_client_column_set(direction, arranger: arranger_for_current_tag)
+    return unless current_client
     arranger.move_current_client(direction).update_geos
     current_tag.each_client &:moveresize
     update_widgets
   end
 
   def handle_kill_current
-    current_client.kill
+    current_client and current_client.kill
   end
 
 

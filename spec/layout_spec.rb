@@ -159,112 +159,158 @@ module Holo
         expect { layout.handle_screen_set :succ }
           .to change { layout.current_screen.id }.from(0).to(1)
       end
+
+      context 'without client' do
+        before { layout.remove client }
+
+        it 'does not raise any error' do
+          expect { layout.handle_screen_set :succ }.not_to raise_error
+        end
+      end
     end
 
     describe '#handle_column_sel' do
-      before do
-        layout << client
-        layout.current_tag.columns << Layout::Column.new(geo).tap do |o|
-          o << other_client
+      context 'without client' do
+        it 'does not raise any error' do
+          expect { layout.handle_column_sel :succ }.not_to raise_error
         end
       end
 
-      it 'selects column consecutive to current one in given direction' do
-        layout.handle_column_sel :succ
-        expect(layout.current_column).to be layout.current_tag.columns[1]
-      end
+      context 'with two clients in two columns' do
+        before do
+          layout << client
+          layout.current_tag.columns << Layout::Column.new(geo).tap do |o|
+            o << other_client
+          end
+        end
 
-      it 'focuses the current client of selected column' do
-        expect(other_client).to receive :focus
-        layout.handle_column_sel :succ
-      end
+        it 'selects the column consecutive to current one in given direction' do
+          layout.handle_column_sel :succ
+          expect(layout.current_column).to be layout.current_tag.columns[1]
+        end
 
-      it 'updates widgets' do
-        expect(widget).to receive :update
-        layout.handle_column_sel :succ
+        it 'focuses the current client of selected column' do
+          expect(other_client).to receive :focus
+          layout.handle_column_sel :succ
+        end
+
+        it 'updates widgets' do
+          expect(widget).to receive :update
+          layout.handle_column_sel :succ
+        end
       end
     end
 
     describe '#handle_client_sel' do
-      before { layout << client << other_client }
-
-      it 'selects current column consecutive client in given direction' do
-        expect { layout.handle_client_sel :pred }
-          .to change { layout.current_client }.from(other_client).to(client)
+      context 'without client' do
+        it 'does not raise any error' do
+          expect { layout.handle_client_sel :succ }.not_to raise_error
+        end
       end
 
-      it 'focuses current client' do
-        expect(client).to receive :focus
-        layout.handle_client_sel :pred
-      end
+      context 'with one column and two clients' do
+        before { layout << client << other_client }
 
-      it 'updates widgets' do
-        expect(widget).to receive :update
-        layout.handle_client_sel :pred
+        it 'selects current column consecutive client in given direction' do
+          expect { layout.handle_client_sel :pred }
+            .to change { layout.current_client }.from(other_client).to(client)
+        end
+
+        it 'focuses current client' do
+          expect(client).to receive :focus
+          layout.handle_client_sel :pred
+        end
+
+        it 'updates widgets' do
+          expect(widget).to receive :update
+          layout.handle_client_sel :pred
+        end
       end
     end
 
     describe '#handle_client_swap' do
-      before { layout << other_client << client }
-
-      it 'swaps current client with the other client' do
-        layout.handle_client_swap :pred
-        expect(layout.current_column.clients.entries)
-          .to eq [client, other_client]
+      context 'without client' do
+        it 'does not raise any error' do
+          expect { layout.handle_client_swap :pred }.not_to raise_error
+        end
       end
 
-      it 'does not change current client' do
-        expect { layout.handle_client_swap :pred }
-          .not_to change { layout.current_client }
-      end
+      context 'with one column and two clients' do
+        before { layout << other_client << client }
 
-      it 'updates widgets' do
-        expect(widget).to receive :update
-        layout.handle_client_swap :pred
+        it 'swaps current client with the other client' do
+          layout.handle_client_swap :pred
+          expect(layout.current_column.clients.entries)
+            .to eq [client, other_client]
+        end
+
+        it 'does not change current client' do
+          expect { layout.handle_client_swap :pred }
+            .not_to change { layout.current_client }
+        end
+
+        it 'updates widgets' do
+          expect(widget).to receive :update
+          layout.handle_client_swap :pred
+        end
       end
     end
 
     describe '#handle_client_column_set' do
-      let(:arranger) { instance_spy Layout::Column::Arranger }
-
-      before { layout << other_client << client }
-
-      it 'moves current client with column arranger' do
-        expect(arranger).to receive(:move_current_client).with(:succ)
-        layout.handle_client_column_set :succ, arranger: arranger
-      end
-
-      it 'arranges columns with column arranger' do
-        expect(arranger).to receive :update_geos
-        layout.handle_client_column_set :succ, arranger: arranger
-      end
-
-      it 'moveresizes current tag clients' do
-        layout.current_tag.clients.each do |client|
-          expect(client).to receive :moveresize
+      context 'without client' do
+        it 'does not raise any error' do
+          expect { layout.handle_client_column_set :succ }.not_to raise_error
         end
-        layout.handle_client_column_set :succ
       end
 
-      it 'does not change current client' do
-        expect { layout.handle_client_column_set :succ }
-          .not_to change { layout.current_client }
-      end
+      context 'with one column and two clients' do
+        let(:arranger) { instance_spy Layout::Column::Arranger }
 
-      it 'updates widgets' do
-        expect(widget).to receive :update
-        layout.handle_client_column_set :succ
+        before { layout << other_client << client }
+
+        it 'moves current client with column arranger' do
+          expect(arranger).to receive(:move_current_client).with(:succ)
+          layout.handle_client_column_set :succ, arranger: arranger
+        end
+
+        it 'arranges columns with column arranger' do
+          expect(arranger).to receive :update_geos
+          layout.handle_client_column_set :succ, arranger: arranger
+        end
+
+        it 'moveresizes current tag clients' do
+          layout.current_tag.clients.each do |client|
+            expect(client).to receive :moveresize
+          end
+          layout.handle_client_column_set :succ
+        end
+
+        it 'does not change current client' do
+          expect { layout.handle_client_column_set :succ }
+            .not_to change { layout.current_client }
+        end
+
+        it 'updates widgets' do
+          expect(widget).to receive :update
+          layout.handle_client_column_set :succ
+        end
       end
     end
 
     describe '#handle_kill_current' do
-      before do
-        layout << client
-        layout.handle_kill_current
+      context 'without client' do
+        it 'does not raise any error' do
+          expect { layout.handle_kill_current }.not_to raise_error
+        end
       end
 
-      it 'kills current_client' do
-        expect(client).to have_received :kill
+      context 'with a client' do
+        before { layout << client }
+
+        it 'kills current client' do
+          layout.handle_kill_current
+          expect(client).to have_received :kill
+        end
       end
     end
   end
