@@ -33,17 +33,6 @@ class Layout
       end
     end
 
-    describe '#remove' do
-      before do
-        column << client
-        column.remove client
-      end
-
-      it 'removes given client' do
-        expect(column).not_to include client
-      end
-    end
-
     describe '#suggest_geo' do
       it 'returns the assigned geo' do
         expect(column.suggest_geo).to eq geo
