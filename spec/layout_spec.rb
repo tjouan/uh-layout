@@ -9,7 +9,7 @@ module Holo
     subject(:layout)    { described_class.new }
 
     before { layout.screens = { 0 => geo, 1 => geo } }
-    before { layout.widgets << widget  }
+    before { layout.widgets << widget }
 
     describe '#screens=' do
       it 'assigns given screens as Screen objects in a Container' do
