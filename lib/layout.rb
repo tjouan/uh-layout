@@ -8,8 +8,6 @@ require_relative 'layout/screen'
 require_relative 'layout/tag'
 
 class Layout
-  include Holo
-
   extend Forwardable
   def_delegator   :@screens, :current, :current_screen
   def_delegator   :current_screen, :==, :current_screen?

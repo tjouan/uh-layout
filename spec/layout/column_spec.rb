@@ -4,9 +4,9 @@ class Layout
   describe Column do
     RSpec::Matchers.define_negated_matcher :not_be, :be
 
-    let(:geo)         { Geo.new(0, 0, 640, 480) }
-    let(:other_geo)   { Geo.new(640, 0, 320, 240) }
-    let(:client)      { instance_spy WM::Client }
+    let(:geo)         { Holo::Geo.new(0, 0, 640, 480) }
+    let(:other_geo)   { Holo::Geo.new(640, 0, 320, 240) }
+    let(:client)      { instance_spy Holo::WM::Client }
     subject(:column)  { described_class.new(geo) }
 
     it 'has a copy to given geo' do
@@ -20,7 +20,7 @@ class Layout
     describe '#current_client=' do
       it 'sets given client as the current one' do
         column << client
-        column << instance_spy(WM::Client)
+        column << instance_spy(Holo::WM::Client)
         column.current_client = client
         expect(column.current_client).to be client
       end

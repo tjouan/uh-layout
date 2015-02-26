@@ -2,8 +2,8 @@ require 'layout'
 
 class Layout
   describe Screen do
-    let(:geo)         { Geo.new(0, 0, 640, 480) }
-    let(:other_geo)   { Geo.new(640, 0, 320, 240) }
+    let(:geo)         { Holo::Geo.new(0, 0, 640, 480) }
+    let(:other_geo)   { Holo::Geo.new(640, 0, 320, 240) }
     subject(:screen)  { described_class.new(0, geo) }
 
     it 'has one default tag with id 1 assigned' do

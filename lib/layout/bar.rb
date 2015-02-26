@@ -67,7 +67,7 @@ class Layout
     def build_geo(layout_geo)
       bar_height = text_line_height * 2 + COLUMN_WIDGET_HEIGHT + 1
 
-      ::Holo::Geo.new(
+      Holo::Geo.new(
         layout_geo.x,
         layout_geo.height - bar_height,
         layout_geo.width,
