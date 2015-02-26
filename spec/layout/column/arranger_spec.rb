@@ -4,7 +4,7 @@ class Layout
   class Column
     describe Arranger do
       let(:geo)           { Holo::Geo.new(0, 0, 640, 480) }
-      let(:client)        { instance_spy Holo::WM::Client }
+      let(:client)        { Holo::WM::Client.new(instance_spy Holo::Window) }
       let(:column_width)  { 300 }
       let(:column)        { Column.new(geo) }
       let(:columns)       { Container.new([column]) }

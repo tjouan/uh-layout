@@ -8,8 +8,8 @@ class Layout
 
     describe '#clients' do
       it 'returns all clients contained in assigned columns' do
-        some_client = instance_spy Holo::WM::Client
-        other_client = instance_spy Holo::WM::Client
+        some_client = Holo::WM::Client.new(instance_spy Holo::Window)
+        other_client = Holo::WM::Client.new(instance_spy Holo::Window)
         tag.columns << Column.new(tag.geo)
         tag.current_column << some_client << other_client
         expect(tag.clients).to eq [some_client, other_client]
