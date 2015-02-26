@@ -18,12 +18,12 @@ class Layout
     end
 
     def <<(client)
-      client.geo = suggest_geo_for client.window
+      client.geo = suggest_geo
       @clients << client
       self
     end
 
-    def suggest_geo_for(window)
+    def suggest_geo
       @geo
     end
   end

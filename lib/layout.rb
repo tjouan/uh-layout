@@ -75,8 +75,8 @@ class Layout
     update_widgets
   end
 
-  def suggest_geo_for(window)
-    (current_column or current_tag).suggest_geo_for window
+  def suggest_geo
+    (current_column or current_tag).suggest_geo
   end
 
   def include?(client)

@@ -6,7 +6,7 @@ class Layout
 
     let(:geo)         { Holo::Geo.new(0, 0, 640, 480) }
     let(:other_geo)   { Holo::Geo.new(640, 0, 320, 240) }
-    let(:client)      { instance_spy Holo::WM::Client }
+    let(:client)      { Holo::WM::Client.new(instance_spy Holo::Window) }
     subject(:column)  { described_class.new(geo) }
 
     it 'has a copy to given geo' do
@@ -30,8 +30,7 @@ class Layout
       before { column << client }
 
       it 'assigns suggested geo to given client' do
-        expect(client)
-          .to have_received(:geo=).with(column.suggest_geo_for :window)
+        expect(client.geo).to eq column.suggest_geo
       end
 
       it 'adds given client' do
@@ -54,9 +53,9 @@ class Layout
       end
     end
 
-    describe '#suggest_geo_for' do
+    describe '#suggest_geo' do
       it 'returns the assigned geo' do
-        expect(column.suggest_geo_for :window).to eq geo
+        expect(column.suggest_geo).to eq geo
       end
     end
   end

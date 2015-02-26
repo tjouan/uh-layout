@@ -22,7 +22,7 @@ class Layout
       @columns.inject([]) { |m, column| m + column.clients }
     end
 
-    def suggest_geo_for(window)
+    def suggest_geo
       @geo
     end
   end
