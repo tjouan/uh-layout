@@ -3,9 +3,8 @@ class Layout
     include Enumerable
 
     extend Forwardable
-    def_delegators :@entries, :<<, :[], :each, :empty?, :first, :last, :size, :unshift
-
-    attr_reader :entries, :current_index
+    def_delegators :@entries, :<<, :[], :each, :empty?, :first, :index,:last,
+      :size, :unshift
 
     def initialize(entries = [])
       @entries        = entries
@@ -25,7 +24,7 @@ class Layout
     def remove(entry)
       fail ArgumentError, 'unknown entry' unless include? entry
       @entries.delete_at @entries.index entry
-      @current_index -= 1 unless @current_index == 0
+      @current_index -= 1
       self
     end
 

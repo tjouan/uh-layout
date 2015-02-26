@@ -12,7 +12,7 @@ describe Layout do
 
   describe '#screens=' do
     it 'assigns given screens as Screen objects in a Container' do
-      expect(layout.screens.entries).to match [
+      expect(layout.screens.to_a).to match [
         an_object_having_attributes(id: 0, geo: geo),
         an_object_having_attributes(id: 1, geo: geo)
       ]
@@ -330,7 +330,7 @@ describe Layout do
 
       it 'swaps current client with the other client' do
         layout.handle_client_swap :pred
-        expect(layout.current_column.clients.entries)
+        expect(layout.current_column.clients.to_a)
           .to eq [client, other_client]
       end
 

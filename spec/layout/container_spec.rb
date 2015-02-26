@@ -70,7 +70,7 @@ class Layout
         end
 
         it 'prevents having a negative index' do
-          expect(container.current_index).not_to eq -1
+          expect(container.index container.current).not_to eq -1
         end
       end
 
@@ -93,7 +93,7 @@ class Layout
     describe '#remove_if' do
       it 'removes entries for which given block returns true' do
         container.remove_if { |e| e == :foo }
-        expect(container.entries).to eq [:bar]
+        expect(container).not_to include :foo
       end
     end
 
@@ -130,7 +130,7 @@ class Layout
 
       it 'swaps current entry with consecutive one in given direction' do
         container.set :next
-        expect(container.entries).to eq %i[bar foo baz]
+        expect(container.to_a).to eq %i[bar foo baz]
       end
 
       it 'does not change current entry' do
@@ -140,7 +140,7 @@ class Layout
       context 'when direction is out of range' do
         it 'rotates the entries' do
           container.set :pred
-          expect(container.entries).to eq %i[bar baz foo]
+          expect(container.to_a).to eq %i[bar baz foo]
         end
 
         it 'does not change current entry' do
@@ -152,7 +152,7 @@ class Layout
     describe '#swap' do
       it 'swaps entries matched by given indexes' do
         container.swap 0, 1
-        expect(container.entries).to eq %i[bar foo]
+        expect(container.to_a).to eq %i[bar foo]
       end
     end
   end

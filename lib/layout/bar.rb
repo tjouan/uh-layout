@@ -115,7 +115,7 @@ class Layout
       text_y =
         column_widget_text_y + @display.font.ascent + TEXT_PADDING
       text = '%d/%d %s' % [
-        column.clients.current_index,
+        column.clients.index(column.current_client),
         column.clients.size,
         column.current_client.to_s
       ]
