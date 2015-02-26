@@ -18,13 +18,9 @@ class Layout
     end
 
     def <<(client)
-      client.geo = suggest_geo
+      client.geo = @geo
       @clients << client
       self
-    end
-
-    def suggest_geo
-      @geo
     end
 
     def update_clients_visibility

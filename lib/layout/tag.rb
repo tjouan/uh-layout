@@ -32,10 +32,6 @@ class Layout
       end
     end
 
-    def suggest_geo
-      @geo
-    end
-
     def hide
       clients.each &:hide
     end

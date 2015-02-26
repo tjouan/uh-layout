@@ -20,8 +20,8 @@ class Layout
     describe '#<<' do
       before { column << client }
 
-      it 'assigns suggested geo to given client' do
-        expect(client.geo).to eq column.suggest_geo
+      it 'assigns column geo to given client' do
+        expect(client.geo).to eq column.geo
       end
 
       it 'adds given client' do
@@ -30,12 +30,6 @@ class Layout
 
       it 'returns self' do
         expect(column << client).to be column
-      end
-    end
-
-    describe '#suggest_geo' do
-      it 'returns the assigned geo' do
-        expect(column.suggest_geo).to eq geo
       end
     end
 

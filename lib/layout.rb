@@ -47,6 +47,10 @@ class Layout
     current_column and current_column.current_client
   end
 
+  def suggest_geo
+    (current_column or current_tag).geo
+  end
+
   def <<(client)
     current_tag.current_column_or_create << client
     current_column.current_client = client
@@ -67,10 +71,6 @@ class Layout
     column.update_clients_visibility
     current_client.focus if current_client
     update_widgets
-  end
-
-  def suggest_geo
-    (current_column or current_tag).suggest_geo
   end
 
   def include?(client)

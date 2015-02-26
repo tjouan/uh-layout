@@ -19,6 +19,22 @@ describe Layout do
     end
   end
 
+  describe '#suggest_geo' do
+    it 'returns current tag geo' do
+      expect(layout.suggest_geo)
+        .to eq layout.current_tag.geo
+    end
+
+    context 'when current tag has a column' do
+      before { layout.current_tag.columns << Layout::Column.new(geo) }
+
+      it 'returns current column geo' do
+        expect(layout.suggest_geo)
+          .to eq layout.current_column.geo
+      end
+    end
+  end
+
   describe '#<<' do
     before { layout << other_client }
 
@@ -120,22 +136,6 @@ describe Layout do
           columns:  layout.current_tag.columns,
           geo:      layout.current_tag.geo
         )
-    end
-  end
-
-  describe '#suggest_geo_for' do
-    it 'returns current tag suggested geo' do
-      expect(layout.suggest_geo)
-        .to eq layout.current_tag.suggest_geo
-    end
-
-    context 'when current tag has a column' do
-      before { layout.current_tag.columns << Layout::Column.new(geo) }
-
-      it 'returns current column suggested geo' do
-        expect(layout.suggest_geo)
-          .to eq layout.current_column.suggest_geo
-      end
     end
   end
 
