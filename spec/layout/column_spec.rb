@@ -17,15 +17,6 @@ class Layout
       expect(column).to be_empty
     end
 
-    describe '#current_client=' do
-      it 'sets given client as the current one' do
-        column << client
-        column << instance_spy(Holo::WM::Client)
-        column.current_client = client
-        expect(column.current_client).to be client
-      end
-    end
-
     describe '#<<' do
       before { column << client }
 
