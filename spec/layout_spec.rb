@@ -7,8 +7,11 @@ describe Layout do
   let(:widget)        { double('widget').as_null_object }
   subject(:layout)    { described_class.new }
 
-  before { layout.screens = { 0 => geo, 1 => geo } }
-  before { layout.widgets << widget }
+  before do
+    layout.screens << Layout::Screen.new(0, geo.dup)
+    layout.screens << Layout::Screen.new(1, geo.dup)
+    layout.widgets << widget
+  end
 
   describe '#screens=' do
     it 'assigns given screens as Screen objects in a Container' do

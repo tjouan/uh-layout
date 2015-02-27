@@ -17,11 +17,8 @@ class Layout
   attr_reader :screens, :widgets
 
   def initialize
-    @widgets = []
-  end
-
-  def screens=(screens)
-    @screens = Container.new(screens.map { |id, geo| Screen.new(id, geo) })
+    @screens  = Container.new
+    @widgets  = []
   end
 
   def to_s
