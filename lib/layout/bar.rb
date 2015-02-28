@@ -1,7 +1,5 @@
 class Layout
   class Bar
-    COLOR                       = 'rgb:d7/00/5f'.freeze
-    COLOR_ALT                   = 'rgb:82/00/3a'.freeze
     COLUMN_WIDGET_MARGIN_TOP    = 0
     COLUMN_WIDGET_HEIGHT        = 2
     COLUMN_WIDGET_PADDING_X     = 1
@@ -15,14 +13,14 @@ class Layout
     attr_reader :geo
     attr_writer :active
 
-    def initialize(display, screen)
+    def initialize(display, screen, color, color_alt)
       @display    = display
       @screen     = screen
       @geo        = build_geo @screen.geo
       @window     = @display.create_subwindow @geo
       @pixmap     = @display.create_pixmap @geo.width, @geo.height
-      @color      = @display.color_by_name COLOR
-      @color_alt  = @display.color_by_name COLOR_ALT
+      @color      = @display.color_by_name color
+      @color_alt  = @display.color_by_name color_alt
       @on_update  = proc { }
     end
 
