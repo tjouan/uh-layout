@@ -13,14 +13,13 @@ class Layout
     attr_reader :geo
     attr_writer :active
 
-    def initialize(display, screen, color, color_alt)
+    def initialize(display, screen, colors)
       @display    = display
       @screen     = screen
       @geo        = build_geo @screen.geo
       @window     = @display.create_subwindow @geo
       @pixmap     = @display.create_pixmap @geo.width, @geo.height
-      @color      = @display.color_by_name color
-      @color_alt  = @display.color_by_name color_alt
+      @colors     = Hash[colors.map { |k, v| [k, @display.color_by_name(v)] }]
       @on_update  = proc { }
     end
 
@@ -74,7 +73,7 @@ class Layout
     end
 
     def active_color
-      active? ? @color : @color_alt
+      active? ? @colors[:sel] : @colors[:hi]
     end
 
     def text_line_height
@@ -94,7 +93,7 @@ class Layout
     end
 
     def draw_background
-      @pixmap.gc_black
+      @pixmap.gc_color @colors[:bg]
       @pixmap.draw_rect 0, 0, geo.width, geo.height
     end
 
@@ -105,11 +104,11 @@ class Layout
     end
 
     def draw_column(column, current)
-      @pixmap.gc_color current ? active_color : @color_alt
+      @pixmap.gc_color current ? active_color : @colors[:hi]
       @pixmap.draw_rect column_offset_x(column) + COLUMN_WIDGET_PADDING_X,
         COLUMN_WIDGET_MARGIN_TOP,
         column.geo.width - COLUMN_WIDGET_PADDING_X, COLUMN_WIDGET_HEIGHT
-      @pixmap.gc_white
+      @pixmap.gc_color @colors[:fg]
       text_y =
         column_widget_text_y + @display.font.ascent + TEXT_PADDING
       text = '%d/%d %s' % [
@@ -134,7 +133,7 @@ class Layout
         @pixmap.draw_rect offset, column_widget_height,
           TAG_WIDGET_WIDTH, text_line_height
       end
-      @pixmap.gc_white
+      @pixmap.gc_color @colors[:fg]
       text_y = column_widget_height + @display.font.ascent + TEXT_PADDING
       @pixmap.draw_string offset + TAG_WIDGET_PADDING, text_y, tag.id.to_s
     end
