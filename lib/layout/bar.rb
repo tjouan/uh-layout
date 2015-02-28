@@ -92,6 +92,15 @@ class Layout
       column.geo.x - @geo.x
     end
 
+    def column_text(column)
+      text = '%d/%d %s (%s)' % [
+        column.clients.index(column.current_client),
+        column.clients.size,
+        column.current_client.name,
+        column.current_client.wclass
+      ]
+    end
+
     def draw_background
       @pixmap.gc_color @colors[:bg]
       @pixmap.draw_rect 0, 0, geo.width, geo.height
@@ -111,13 +120,8 @@ class Layout
       @pixmap.gc_color @colors[:fg]
       text_y =
         column_widget_text_y + @display.font.ascent + TEXT_PADDING
-      text = '%d/%d %s' % [
-        column.clients.index(column.current_client),
-        column.clients.size,
-        column.current_client.to_s
-      ]
       @pixmap.draw_string column_offset_x(column) + TEXT_PADDING,
-        text_y, text
+        text_y, column_text(column)
     end
 
     def draw_tags(tags, current_tag)
