@@ -126,9 +126,17 @@ class Layout
 
     def draw_tags(tags, current_tag)
       tags.sort_by(&:id).inject(0) do |offset, tag|
+        color = if tag == current_tag
+          active_color
+        elsif tag.clients.any?
+          @colors[:hi]
+        else
+          @colors[:bg]
+        end
+
         offset + draw_text(
           tag.id, offset, column_widget_height,
-          @colors[:fg], tag == current_tag ? active_color : @colors[:hi],
+          @colors[:fg], color,
           TAG_PADDING_X
         )
       end
