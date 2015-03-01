@@ -4,7 +4,13 @@ class Layout
   describe Tag do
     let(:geo)       { Holo::Geo.new(0, 0, 640, 480) }
     let(:other_geo) { Holo::Geo.new(640, 0, 320, 240) }
-    subject(:tag)   { described_class.new(0, geo) }
+    subject(:tag)   { described_class.new('1', geo) }
+
+    describe '.new' do
+      it 'raises error unless id converts to string' do
+        expect { described_class.new(1, geo) }.to raise_error(TypeError)
+      end
+    end
 
     describe '#clients' do
       it 'returns all clients contained in assigned columns' do

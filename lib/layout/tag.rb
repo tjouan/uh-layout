@@ -9,7 +9,11 @@ class Layout
     attr_reader :id, :geo, :columns
 
     def initialize(id, geo)
-      @id       = id
+      begin
+        @id = id.to_str
+      rescue NoMethodError
+        fail TypeError, "cannot convert #{id.class} into String"
+      end
       @geo      = geo
       @columns  = Container.new
     end
