@@ -125,7 +125,7 @@ class Layout
     end
 
     def draw_tags(tags, current_tag)
-      tags.inject(0) do |offset, tag|
+      tags.sort_by(&:id).inject(0) do |offset, tag|
         offset + draw_text(
           tag.id, offset, column_widget_height,
           @colors[:fg], tag == current_tag ? active_color : @colors[:hi],
