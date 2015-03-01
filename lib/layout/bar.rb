@@ -1,11 +1,11 @@
 class Layout
   class Bar
-    COLUMN_WIDGET_MARGIN_TOP    = 0
-    COLUMN_WIDGET_HEIGHT        = 2
-    COLUMN_WIDGET_PADDING_X     = 1
-    TAG_WIDGET_PADDING          = 5
-    TAG_WIDGET_WIDTH            = 15
-    TEXT_PADDING                = 1
+    TEXT_PADDING_X    = 1
+    TEXT_PADDING_Y    = 1
+    COLUMN_MARGIN_TOP = 0
+    COLUMN_HEIGHT     = 2
+    COLUMN_PADDING_X  = 1
+    TAG_PADDING_X     = 5
 
     extend Forwardable
     def_delegators :@geo, :width, :height
@@ -62,7 +62,7 @@ class Layout
     end
 
     def build_geo(layout_geo)
-      bar_height = text_line_height * 2 + COLUMN_WIDGET_HEIGHT + 1
+      bar_height = text_line_height * 2 + COLUMN_HEIGHT + 1
 
       Holo::Geo.new(
         layout_geo.x,
@@ -77,11 +77,11 @@ class Layout
     end
 
     def text_line_height
-      @display.font.height + TEXT_PADDING * 2
+      @display.font.height + TEXT_PADDING_Y * 2
     end
 
     def column_widget_text_y
-      COLUMN_WIDGET_MARGIN_TOP + COLUMN_WIDGET_HEIGHT
+      COLUMN_MARGIN_TOP + COLUMN_HEIGHT
     end
 
     def column_widget_height
@@ -114,32 +114,38 @@ class Layout
 
     def draw_column(column, current)
       @pixmap.gc_color current ? active_color : @colors[:hi]
-      @pixmap.draw_rect column_offset_x(column) + COLUMN_WIDGET_PADDING_X,
-        COLUMN_WIDGET_MARGIN_TOP,
-        column.geo.width - COLUMN_WIDGET_PADDING_X, COLUMN_WIDGET_HEIGHT
+      @pixmap.draw_rect column_offset_x(column) + COLUMN_PADDING_X,
+        COLUMN_MARGIN_TOP,
+        column.geo.width - COLUMN_PADDING_X, COLUMN_HEIGHT
       @pixmap.gc_color @colors[:fg]
       text_y =
-        column_widget_text_y + @display.font.ascent + TEXT_PADDING
-      @pixmap.draw_string column_offset_x(column) + TEXT_PADDING,
+        column_widget_text_y + @display.font.ascent + TEXT_PADDING_Y
+      @pixmap.draw_string column_offset_x(column) + TEXT_PADDING_Y,
         text_y, column_text(column)
     end
 
     def draw_tags(tags, current_tag)
-      tags.each_with_index do |t, i|
-        draw_tag t, i, t == current_tag
+      tags.inject(0) do |offset, tag|
+        offset + draw_text(
+          tag.id, offset, column_widget_height,
+          @colors[:fg], tag == current_tag ? active_color : @colors[:hi],
+          TAG_PADDING_X
+        )
       end
     end
 
-    def draw_tag(tag, index, current)
-      offset = index * TAG_WIDGET_WIDTH
-      if current
-        @pixmap.gc_color active_color
-        @pixmap.draw_rect offset, column_widget_height,
-          TAG_WIDGET_WIDTH, text_line_height
+    def draw_text(text, x, y, color_fg = @colors[:fg], color_bg = nil,
+        padding_x = TEXT_PADDING_X)
+      text        = text.to_s
+      text_width  = text.length * @display.font.width + padding_x * 2
+      text_y      = y + @display.font.ascent + TEXT_PADDING_Y
+      if color_bg
+        @pixmap.gc_color color_bg
+        @pixmap.draw_rect x, y, text_width, text_line_height
       end
-      @pixmap.gc_color @colors[:fg]
-      text_y = column_widget_height + @display.font.ascent + TEXT_PADDING
-      @pixmap.draw_string offset + TAG_WIDGET_PADDING, text_y, tag.id.to_s
+      @pixmap.gc_color color_fg
+      @pixmap.draw_string x + padding_x, text_y, text
+      text_width
     end
   end
 end
