@@ -20,5 +20,7 @@ task :console do
   require 'pry'
   require 'holo'
   require 'holo/wm'
+  require_relative 'lib/layout'
+  include Holo
   pry
 end
