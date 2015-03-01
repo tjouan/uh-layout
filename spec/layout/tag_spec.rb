@@ -8,7 +8,7 @@ class Layout
 
     describe '.new' do
       it 'raises error unless id converts to string' do
-        expect { described_class.new(1, geo) }.to raise_error(TypeError)
+        expect { described_class.new(1, geo) }.to raise_error(ArgumentError)
       end
     end
 
