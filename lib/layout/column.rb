@@ -36,7 +36,7 @@ class Layout
       @clients.each do |client|
         client.hide unless client.hidden? || @clients.current == client
       end
-      @clients.current.show if @clients.current
+      @clients.current.show if @clients.current && @clients.current.hidden?
     end
   end
 end

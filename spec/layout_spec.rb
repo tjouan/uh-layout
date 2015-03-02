@@ -117,18 +117,18 @@ describe Layout do
       layout.remove client
     end
 
-    it 'focuses the new current client' do
-      expect(other_client).to receive :focus
-      layout.remove client
-    end
-
-    it 'redraws columns with an arranger' do
-      expect_any_instance_of(Layout::Column::Arranger).to receive :redraw
-      layout.remove client
-    end
-
     it 'arranges clients in removed client tag columns' do
       expect(layout.current_tag.columns).to all receive :arrange_clients
+      layout.remove client
+    end
+
+    it 'shows and hides clients in removed client column' do
+      expect(layout.current_column).to receive :show_hide_clients
+      layout.remove client
+    end
+
+    it 'focuses the new current client' do
+      expect(other_client).to receive :focus
       layout.remove client
     end
 
