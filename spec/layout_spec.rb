@@ -35,6 +35,18 @@ describe Layout do
     end
   end
 
+  describe '#update_widgets' do
+    it 'updates widgets' do
+      expect(layout.widgets).to all receive :update
+      layout.update_widgets
+    end
+
+    it 'redraws widgets' do
+      expect(layout.widgets).to all receive :redraw
+      layout.update_widgets
+    end
+  end
+
   describe '#suggest_geo' do
     it 'returns current tag geo' do
       expect(layout.suggest_geo).to eq layout.current_tag.geo
