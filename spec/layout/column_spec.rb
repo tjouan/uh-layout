@@ -2,10 +2,11 @@ require 'layout'
 
 class Layout
   describe Column do
-    let(:geo)         { build_geo }
-    let(:other_geo)   { build_geo 640, 0, 320, 240 }
-    let(:client)      { build_client }
-    subject(:column)  { described_class.new(geo) }
+    let(:geo)           { build_geo }
+    let(:other_geo)     { build_geo 640, 0, 320, 240 }
+    let(:client)        { build_client }
+    let(:other_client)  { build_client }
+    subject(:column)    { described_class.new(geo) }
 
     it 'has a copy to given geo' do
       expect(column.geo).to eq(geo).and not_be geo
@@ -18,8 +19,8 @@ class Layout
     describe '#<<' do
       before { column << client }
 
-      it 'assigns column geo to given client' do
-        expect(client.geo).to eq column.geo
+      it 'assigns column geo copy to given client' do
+        expect(client.geo).to eq(column.geo).and not_be column.geo
       end
 
       it 'adds given client' do
@@ -28,6 +29,22 @@ class Layout
 
       it 'returns self' do
         expect(column << client).to be column
+      end
+    end
+
+    describe '#arrange_clients' do
+      before { column << client << other_client }
+
+      it 'updates clients geometries' do
+        column.width = 320
+        column.arrange_clients
+        expect(column.clients.map(&:geo)).to all eq column.geo
+      end
+
+      it 'moveresizes clients' do
+        expect(client).to receive :moveresize
+        expect(other_client).to receive :moveresize
+        column.arrange_clients
       end
     end
 

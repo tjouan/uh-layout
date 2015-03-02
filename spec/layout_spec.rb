@@ -74,8 +74,8 @@ describe Layout do
       expect(layout.current_column.current_client).to be client
     end
 
-    it 'moveresizes given client' do
-      expect(client).to receive :moveresize
+    it 'arranges current column clients' do
+      expect(layout.current_column).to receive :arrange_clients
       layout << client
     end
 
@@ -132,8 +132,8 @@ describe Layout do
       layout.remove client
     end
 
-    it 'moveresizes remaining clients' do
-      expect(other_client).to receive :moveresize
+    it 'arranges clients in removed client tag columns' do
+      expect(layout.current_tag.columns).to all receive :arrange_clients
       layout.remove client
     end
 
@@ -246,8 +246,9 @@ describe Layout do
         expect(dest_tag).to include client
       end
 
-      it 'arranges columns on given tag' do
-        expect(client).to receive :moveresize
+      it 'arranges clients in given tag columns' do
+        layout.current_screen.tags << tag = Layout::Tag.new('2', geo)
+        expect(tag.current_column_or_create).to receive :arrange_clients
         layout.handle_tag_set '2'
       end
 
@@ -376,6 +377,11 @@ describe Layout do
         layout.current_tag.clients.each do |client|
           expect(client).to receive :moveresize
         end
+        layout.handle_client_column_set :succ
+      end
+
+      it 'arranges clients in current tag columns' do
+        expect(layout.current_tag.columns).to all receive :arrange_clients
         layout.handle_client_column_set :succ
       end
 

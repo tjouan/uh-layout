@@ -51,7 +51,7 @@ class Layout
   def <<(client)
     current_tag.current_column_or_create << client
     current_column.current_client = client
-    client.moveresize
+    current_column.arrange_clients
     current_column.update_clients_visibility
     client.focus
     update_widgets
@@ -62,9 +62,8 @@ class Layout
   def remove(client)
     screen, tag, column = find_client client
     column.remove client
-    Column::Arranger.new(tag.columns, tag.geo).redraw do
-      tag.each_client &:moveresize
-    end
+    Column::Arranger.new(tag.columns, tag.geo).redraw
+    tag.each_column &:arrange_clients
     column.update_clients_visibility
     current_client.focus if current_client
     update_widgets
@@ -87,7 +86,7 @@ class Layout
     return unless current_tag.id != tag_id
     current_tag.hide
     current_screen.tags.current = find_tag_or_create tag_id
-    current_tag.columns.each &:update_clients_visibility
+    current_tag.each_column &:update_clients_visibility
     current_client.focus if current_client
     update_widgets
   end
@@ -98,9 +97,8 @@ class Layout
     client.hide
     tag = find_tag_or_create tag_id
     tag.current_column_or_create << client
-    Column::Arranger.new(tag.columns, tag.geo).redraw do
-      tag.each_client &:moveresize
-    end
+    Column::Arranger.new(tag.columns, tag.geo).redraw
+    tag.each_column &:arrange_clients
     current_client.focus if current_client
     update_widgets
   end
@@ -129,8 +127,8 @@ class Layout
   def handle_client_column_set(direction, arranger: arranger_for_current_tag)
     return unless current_client
     arranger.move_current_client(direction).update_geos
-    current_tag.each_client &:moveresize
-    current_tag.columns.each &:update_clients_visibility
+    current_tag.each_column &:arrange_clients
+    current_tag.each_column &:update_clients_visibility
     update_widgets
   end
 
@@ -144,7 +142,7 @@ class Layout
   def find_client(client)
     screens.each do |screen|
       screen.tags.each do |tag|
-        tag.columns.each do |column|
+        tag.each_column do |column|
           if column.include? client
             return screen, tag, column
           end

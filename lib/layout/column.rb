@@ -20,9 +20,16 @@ class Layout
     end
 
     def <<(client)
-      client.geo = @geo
+      client.geo = @geo.dup
       @clients << client
       self
+    end
+
+    def arrange_clients
+      @clients.each do |client|
+        client.geo = @geo.dup
+        client.moveresize
+      end
     end
 
     def update_clients_visibility

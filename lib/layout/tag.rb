@@ -5,6 +5,7 @@ class Layout
     extend Forwardable
     def_delegator :@columns, :current, :current_column
     def_delegator :@columns, :current=, :current_column=
+    def_delegator :@columns, :each, :each_column
     def_delegator :current_column, :==, :current_column?
     def_delegator :clients, :each, :each_client
 
