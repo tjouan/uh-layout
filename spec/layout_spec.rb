@@ -79,13 +79,8 @@ describe Layout do
       layout << client
     end
 
-    it 'hides other clients in current column' do
-      expect(other_client).to receive :hide
-      layout << client
-    end
-
-    it 'shows given client' do
-      expect(client).to receive :show
+    it 'shows and hides clients in current column' do
+      expect(layout.current_column).to receive :show_hide_clients
       layout << client
     end
 
@@ -196,9 +191,10 @@ describe Layout do
       expect(layout.current_tag.id).to eq '2'
     end
 
-    it 'shows selected tag clients' do
+    it 'shows and hides clients in selected tag columns' do
       layout.handle_tag_sel '2'
-      expect(client).to receive :show
+      expect(layout.current_screen.tags[0].columns)
+        .to all receive :show_hide_clients
       layout.handle_tag_sel '1'
     end
 
@@ -228,6 +224,11 @@ describe Layout do
         origin_tag = layout.current_tag
         layout.handle_tag_set '2'
         expect(origin_tag).not_to include client
+      end
+
+      it 'shows and hides clients in current column' do
+        expect(layout.current_column).to receive :show_hide_clients
+        layout.handle_tag_set '2'
       end
 
       it 'hides current client' do
@@ -363,16 +364,9 @@ describe Layout do
         layout.handle_client_column_set :succ, arranger: arranger
       end
 
-      it 'arranges columns with column arranger' do
+      it 'updates columns geos with column arranger' do
         expect(arranger).to receive :update_geos
         layout.handle_client_column_set :succ, arranger: arranger
-      end
-
-      it 'moveresizes current tag clients' do
-        layout.current_tag.clients.each do |client|
-          expect(client).to receive :moveresize
-        end
-        layout.handle_client_column_set :succ
       end
 
       it 'arranges clients in current tag columns' do
@@ -380,10 +374,8 @@ describe Layout do
         layout.handle_client_column_set :succ
       end
 
-      it 'updates columns clients visibility' do
-        layout.current_tag.columns.each do |column|
-          expect(column).to receive :show_hide_clients
-        end
+      it 'shows and hides clients in selected tag columns' do
+        expect(layout.current_tag.columns).to all receive :show_hide_clients
         layout.handle_client_column_set :succ
       end
 
