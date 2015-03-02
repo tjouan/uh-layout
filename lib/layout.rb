@@ -4,6 +4,7 @@ require_relative 'layout/bar'
 require_relative 'layout/container'
 require_relative 'layout/column'
 require_relative 'layout/column/arranger'
+require_relative 'layout/dumper'
 require_relative 'layout/screen'
 require_relative 'layout/tag'
 
@@ -22,22 +23,7 @@ class Layout
   end
 
   def to_s
-    screens.inject('') do |m, screen|
-      m << "%s%s\n" % [current_screen?(screen) ? '*' : ' ', screen]
-      screen.tags.each do |tag|
-        m << "  %s%s\n" % [screen.current_tag?(tag) ? '*' : ' ', tag]
-        tag.columns.each do |column|
-          m << "    %s%s\n" % [tag.current_column?(column) ? '*' : ' ', column]
-          column.clients.each do |client|
-            m << "      %s%s\n" % [
-              column.current_client?(client) ? '*' : ' ',
-              client
-            ]
-          end
-        end
-      end
-      m
-    end
+    Dumper.new(self).to_s
   end
 
   def current_client
