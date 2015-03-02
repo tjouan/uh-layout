@@ -53,7 +53,7 @@ describe Layout do
     end
 
     context 'when current tag has a column' do
-      before { layout.current_tag.columns << Layout::Column.new(geo) }
+      before { layout.current_tag.columns << Layout::Column.new(Holo::Geo.new) }
 
       it 'returns current column geo' do
         expect(layout.suggest_geo).to eq layout.current_column.geo

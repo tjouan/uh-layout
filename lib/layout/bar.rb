@@ -7,10 +7,8 @@ class Layout
     COLUMN_PADDING_X  = 1
     TAG_PADDING_X     = 5
 
-    extend Forwardable
-    def_delegators :@geo, :width, :height
+    include GeoAccessors
 
-    attr_reader :geo
     attr_writer :active
 
     def initialize(display, screen, colors)
@@ -18,7 +16,7 @@ class Layout
       @screen     = screen
       @geo        = build_geo @screen.geo
       @window     = @display.create_subwindow @geo
-      @pixmap     = @display.create_pixmap @geo.width, @geo.height
+      @pixmap     = @display.create_pixmap width, height
       @colors     = Hash[colors.map { |k, v| [k, @display.color_by_name(v)] }]
       @on_update  = proc { }
     end
@@ -89,7 +87,7 @@ class Layout
     end
 
     def column_offset_x(column)
-      column.geo.x - @geo.x
+      column.x - x
     end
 
     def column_text(column)
@@ -103,7 +101,7 @@ class Layout
 
     def draw_background
       @pixmap.gc_color @colors[:bg]
-      @pixmap.draw_rect 0, 0, geo.width, geo.height
+      @pixmap.draw_rect 0, 0, width, height
     end
 
     def draw_columns(columns, current_column)
@@ -116,7 +114,7 @@ class Layout
       @pixmap.gc_color current ? active_color : @colors[:hi]
       @pixmap.draw_rect column_offset_x(column) + COLUMN_PADDING_X,
         COLUMN_MARGIN_TOP,
-        column.geo.width - COLUMN_PADDING_X, COLUMN_HEIGHT
+        column.width - COLUMN_PADDING_X, COLUMN_HEIGHT
       @pixmap.gc_color @colors[:fg]
       text_y =
         column_widget_text_y + @display.font.ascent + TEXT_PADDING_Y

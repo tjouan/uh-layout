@@ -48,16 +48,16 @@ class Layout
       end
 
       def max_columns_count?
-        (geo.width / (@columns.size + 1)) < @column_width
+        (@geo.width / (@columns.size + 1)) < @column_width
       end
 
       def update_geos
         return if @columns.empty?
         @columns.each_with_index do |column, i|
-          column.geo.x      = @column_width * i + geo.x
-          column.geo.width  = @column_width
+          column.x      = @column_width * i + @geo.x
+          column.width  = @column_width
         end
-        @columns.last.geo.width = geo.width - columns.last.geo.x
+        @columns.last.width = @geo.width - columns.last.x
       end
     end
   end

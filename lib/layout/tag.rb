@@ -1,5 +1,3 @@
-require_relative '../layout/geo_accessors'
-
 class Layout
   class Tag
     include GeoAccessors
@@ -17,16 +15,12 @@ class Layout
         fail ArgumentError, "expect `id' to be a String, #{id.class} given"
       end
       @id       = id
-      @geo      = geo
+      @geo      = geo.dup
       @columns  = Container.new
     end
 
     def to_s
       "TAG ##{@id}, geo: #{@geo}"
-    end
-
-    def height=(value)
-      @geo.height = value
     end
 
     def clients

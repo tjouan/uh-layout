@@ -1,5 +1,7 @@
 class Layout
   class Column
+    include GeoAccessors
+
     extend Forwardable
     def_delegators :@clients, :empty?, :include?, :remove
     def_delegator :@clients, :current, :current_client

@@ -1,5 +1,6 @@
 require 'forwardable'
 
+require_relative 'layout/geo_accessors'
 require_relative 'layout/bar'
 require_relative 'layout/container'
 require_relative 'layout/column'

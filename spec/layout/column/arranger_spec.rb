@@ -150,22 +150,22 @@ class Layout
 
         it 'decreases first column width as the optimal column width' do
           arranger.update_geos
-          expect(columns[0].geo.width).to eq 300
+          expect(columns[0].width).to eq 300
         end
 
         it 'offsets each column with given geo' do
           arranger.update_geos
-          expect(columns[0].geo.x).to eq 20
+          expect(columns[0].x).to eq 20
         end
 
         it 'moves second column aside the first column' do
           arranger.update_geos
-          expect(columns[1].geo.x).to eq 320
+          expect(columns[1].x).to eq 320
         end
 
         it 'increases last column width to occupy remaining width' do
           arranger.update_geos
-          expect(columns[1].geo.width).to eq 320
+          expect(columns[1].width).to eq 320
         end
 
         context 'without columns' do
