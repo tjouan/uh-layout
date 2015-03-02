@@ -30,6 +30,21 @@ class Layout
     current_column and current_column.current_client
   end
 
+  def include?(client)
+    screens.any? do |screen|
+      screen.tags.any? { |tag| tag.include? client }
+    end
+  end
+
+  def arranger_for_current_tag
+    Column::Arranger.new(current_tag.columns, current_tag.geo)
+  end
+
+  def update_widgets
+    @widgets.each &:update
+    @widgets.each &:redraw
+  end
+
   def suggest_geo
     (current_column or current_tag).geo
   end
@@ -54,21 +69,6 @@ class Layout
     column.update_clients_visibility
     current_client.focus if current_client
     update_widgets
-  end
-
-  def include?(client)
-    screens.any? do |screen|
-      screen.tags.any? { |tag| tag.include? client }
-    end
-  end
-
-  def arranger_for_current_tag
-    Column::Arranger.new(current_tag.columns, current_tag.geo)
-  end
-
-  def update_widgets
-    @widgets.each &:update
-    @widgets.each &:redraw
   end
 
   def handle_screen_sel(direction)

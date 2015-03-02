@@ -13,6 +13,28 @@ describe Layout do
     layout.widgets << widget
   end
 
+  describe '#include?' do
+    it 'returns false when layout does not include given client' do
+      expect(layout.include? client).to be false
+    end
+
+    it 'returns true when layout includes given client' do
+      layout << client
+      expect(layout.include? client).to be true
+    end
+  end
+
+  describe '#arranger_for_current_tag' do
+    it 'returns an arranger for current tag columns and geo' do
+      expect(layout.arranger_for_current_tag)
+        .to respond_to(:update_geos)
+        .and have_attributes(
+          columns:  layout.current_tag.columns,
+          geo:      layout.current_tag.geo
+        )
+    end
+  end
+
   describe '#suggest_geo' do
     it 'returns current tag geo' do
       expect(layout.suggest_geo).to eq layout.current_tag.geo
@@ -106,28 +128,6 @@ describe Layout do
     it 'updates widgets' do
       expect(widget).to receive :update
       layout.remove client
-    end
-  end
-
-  describe '#include?' do
-    it 'returns false when layout does not include given client' do
-      expect(layout.include? client).to be false
-    end
-
-    it 'returns true when layout includes given client' do
-      layout << client
-      expect(layout.include? client).to be true
-    end
-  end
-
-  describe '#arranger_for_current_tag' do
-    it 'returns an arranger for current tag columns and geo' do
-      expect(layout.arranger_for_current_tag)
-        .to respond_to(:update_geos)
-        .and have_attributes(
-          columns:  layout.current_tag.columns,
-          geo:      layout.current_tag.geo
-        )
     end
   end
 
