@@ -15,16 +15,14 @@ describe Layout do
 
   describe '#suggest_geo' do
     it 'returns current tag geo' do
-      expect(layout.suggest_geo)
-        .to eq layout.current_tag.geo
+      expect(layout.suggest_geo).to eq layout.current_tag.geo
     end
 
     context 'when current tag has a column' do
       before { layout.current_tag.columns << Layout::Column.new(geo) }
 
       it 'returns current column geo' do
-        expect(layout.suggest_geo)
-          .to eq layout.current_column.geo
+        expect(layout.suggest_geo).to eq layout.current_column.geo
       end
     end
   end
