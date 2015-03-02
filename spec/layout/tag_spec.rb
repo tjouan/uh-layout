@@ -6,6 +6,7 @@ class Layout
     let(:other_geo)     { build_geo 640, 0, 320, 240 }
     let(:client)        { build_client }
     let(:other_client)  { build_client }
+    let(:column)        { Column.new(geo) }
     subject(:tag)       { described_class.new('1', geo) }
 
     describe '.new' do
@@ -16,7 +17,7 @@ class Layout
 
     describe '#clients' do
       it 'returns all clients contained in assigned columns' do
-        tag.columns << Column.new(tag.geo)
+        tag.columns << column
         tag.current_column << client << other_client
         expect(tag.clients).to eq [client, other_client]
       end
@@ -35,8 +36,6 @@ class Layout
       end
 
       context 'when tag has a column' do
-        let(:column) { Column.new(geo) }
-
         before { tag.columns << column }
 
         it 'does not create any column' do
