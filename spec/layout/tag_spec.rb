@@ -17,8 +17,7 @@ class Layout
 
     describe '#clients' do
       it 'returns all clients contained in assigned columns' do
-        tag.columns << column
-        tag.current_column << client << other_client
+        tag.columns << column.tap { |column| column << client << other_client }
         expect(tag.clients).to eq [client, other_client]
       end
     end
