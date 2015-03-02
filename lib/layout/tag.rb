@@ -1,7 +1,10 @@
+require_relative '../layout/geo_accessors'
+
 class Layout
   class Tag
+    include GeoAccessors
+
     extend Forwardable
-    def_delegators :@geo, :x, :y, :width, :height
     def_delegator :@columns, :current, :current_column
     def_delegator :@columns, :current=, :current_column=
     def_delegator :current_column, :==, :current_column?

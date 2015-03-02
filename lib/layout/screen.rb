@@ -1,7 +1,10 @@
+require_relative '../layout/geo_accessors'
+
 class Layout
   class Screen
+    include GeoAccessors
+
     extend Forwardable
-    def_delegators :@geo, :x, :y, :width, :height
     def_delegator :@tags, :current, :current_tag
     def_delegator :current_tag, :==, :current_tag?
 
