@@ -8,8 +8,8 @@ describe Layout do
   subject(:layout)    { described_class.new }
 
   before do
-    layout.screens << Layout::Screen.new(0, geo.dup)
-    layout.screens << Layout::Screen.new(1, geo.dup)
+    layout.screens << Layout::Screen.new(0, geo)
+    layout.screens << Layout::Screen.new(1, geo)
     layout.widgets << widget
   end
 

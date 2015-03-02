@@ -2,8 +2,6 @@ require 'layout'
 
 class Layout
   describe Column do
-    RSpec::Matchers.define_negated_matcher :not_be, :be
-
     let(:geo)         { Holo::Geo.new(0, 0, 640, 480) }
     let(:other_geo)   { Holo::Geo.new(640, 0, 320, 240) }
     let(:client)      { Holo::WM::Client.new(instance_spy Holo::Window) }

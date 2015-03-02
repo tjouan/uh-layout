@@ -1,6 +1,7 @@
 class Layout
   class Tag
     extend Forwardable
+    def_delegators :@geo, :x, :y, :width, :height
     def_delegator :@columns, :current, :current_column
     def_delegator :@columns, :current=, :current_column=
     def_delegator :current_column, :==, :current_column?
@@ -19,6 +20,10 @@ class Layout
 
     def to_s
       "TAG ##{@id}, geo: #{@geo}"
+    end
+
+    def height=(value)
+      @geo.height = value
     end
 
     def clients

@@ -12,6 +12,12 @@ class Layout
       end
     end
 
+    describe '#height=' do
+      it 'changes tag height' do
+        expect { tag.height = 42 }.to change { tag.height }.to 42
+      end
+    end
+
     describe '#clients' do
       it 'returns all clients contained in assigned columns' do
         some_client = Holo::WM::Client.new(instance_spy Holo::Window)
