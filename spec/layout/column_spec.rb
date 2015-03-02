@@ -42,8 +42,7 @@ class Layout
       end
 
       it 'moveresizes clients' do
-        expect(client).to receive :moveresize
-        expect(other_client).to receive :moveresize
+        expect([client, other_client]).to all receive :moveresize
         column.arrange_clients
       end
     end
