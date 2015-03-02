@@ -13,15 +13,6 @@ describe Layout do
     layout.widgets << widget
   end
 
-  describe '#screens=' do
-    it 'assigns given screens as Screen objects in a Container' do
-      expect(layout.screens.to_a).to match [
-        an_object_having_attributes(id: 0, geo: geo),
-        an_object_having_attributes(id: 1, geo: geo)
-      ]
-    end
-  end
-
   describe '#suggest_geo' do
     it 'returns current tag geo' do
       expect(layout.suggest_geo)
