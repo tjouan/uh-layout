@@ -2,9 +2,11 @@ require 'layout'
 
 class Layout
   describe Tag do
-    let(:geo)       { Holo::Geo.new(0, 0, 640, 480) }
-    let(:other_geo) { Holo::Geo.new(640, 0, 320, 240) }
-    subject(:tag)   { described_class.new('1', geo) }
+    let(:geo)           { build_geo }
+    let(:other_geo)     { build_geo 640, 0, 320, 240 }
+    let(:client)        { build_client }
+    let(:other_client)  { build_client }
+    subject(:tag)       { described_class.new('1', geo) }
 
     describe '.new' do
       it 'raises error unless id converts to string' do
@@ -14,11 +16,9 @@ class Layout
 
     describe '#clients' do
       it 'returns all clients contained in assigned columns' do
-        some_client = Holo::WM::Client.new(instance_spy Holo::Window)
-        other_client = Holo::WM::Client.new(instance_spy Holo::Window)
         tag.columns << Column.new(tag.geo)
-        tag.current_column << some_client << other_client
-        expect(tag.clients).to eq [some_client, other_client]
+        tag.current_column << client << other_client
+        expect(tag.clients).to eq [client, other_client]
       end
     end
 

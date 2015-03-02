@@ -1,9 +1,9 @@
 require 'layout'
 
 describe Layout do
-  let(:geo)           { Holo::Geo.new(0, 0, 640, 480) }
-  let(:client)        { Holo::WM::Client.new(instance_spy Holo::Window) }
-  let(:other_client)  { Holo::WM::Client.new(instance_spy Holo::Window) }
+  let(:geo)           { build_geo }
+  let(:client)        { build_client }
+  let(:other_client)  { build_client }
   let(:widget)        { double('widget').as_null_object }
   subject(:layout)    { described_class.new }
 

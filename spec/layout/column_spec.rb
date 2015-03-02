@@ -2,9 +2,9 @@ require 'layout'
 
 class Layout
   describe Column do
-    let(:geo)         { Holo::Geo.new(0, 0, 640, 480) }
-    let(:other_geo)   { Holo::Geo.new(640, 0, 320, 240) }
-    let(:client)      { Holo::WM::Client.new(instance_spy Holo::Window) }
+    let(:geo)         { build_geo }
+    let(:other_geo)   { build_geo 640, 0, 320, 240 }
+    let(:client)      { build_client }
     subject(:column)  { described_class.new(geo) }
 
     it 'has a copy to given geo' do
@@ -32,7 +32,7 @@ class Layout
     end
 
     describe '#update_clients_visibility' do
-      let(:other_client) { Holo::WM::Client.new(instance_spy Holo::Window) }
+      let(:other_client) { build_client }
 
       before { column << client.show << other_client.show }
 
