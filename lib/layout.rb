@@ -10,10 +10,10 @@ require_relative 'layout/tag'
 
 class Layout
   extend Forwardable
-  def_delegator   :@screens, :current, :current_screen
-  def_delegator   :current_screen, :==, :current_screen?
-  def_delegators  :current_screen, :current_tag
-  def_delegators  :current_tag, :current_column
+  def_delegator :@screens, :current, :current_screen
+  def_delegator :current_screen, :==, :current_screen?
+  def_delegator :current_screen, :current_tag
+  def_delegator :current_tag, :current_column
 
   attr_reader :screens, :widgets
 
