@@ -52,7 +52,7 @@ class Layout
     current_tag.current_column_or_create << client
     current_column.current_client = client
     current_column.arrange_clients
-    current_column.update_clients_visibility
+    current_column.show_hide_clients
     client.focus
     update_widgets
     self
@@ -64,7 +64,7 @@ class Layout
     column.remove client
     Column::Arranger.new(tag.columns, tag.geo).redraw
     tag.each_column &:arrange_clients
-    column.update_clients_visibility
+    column.show_hide_clients
     current_client.focus if current_client
     update_widgets
   end
@@ -86,7 +86,7 @@ class Layout
     return unless current_tag.id != tag_id
     current_tag.hide
     current_screen.tags.current = find_tag_or_create tag_id
-    current_tag.each_column &:update_clients_visibility
+    current_tag.each_column &:show_hide_clients
     current_client.focus if current_client
     update_widgets
   end
@@ -113,7 +113,7 @@ class Layout
   def handle_client_sel(direction)
     return unless current_client
     current_column.clients.sel direction
-    current_column.update_clients_visibility
+    current_column.show_hide_clients
     current_client.focus
     update_widgets
   end
@@ -128,7 +128,7 @@ class Layout
     return unless current_client
     arranger.move_current_client(direction).update_geos
     current_tag.each_column &:arrange_clients
-    current_tag.each_column &:update_clients_visibility
+    current_tag.each_column &:show_hide_clients
     update_widgets
   end
 

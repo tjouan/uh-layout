@@ -32,7 +32,7 @@ class Layout
       end
     end
 
-    def update_clients_visibility
+    def show_hide_clients
       @clients.each do |client|
         client.hide unless client.hidden? || @clients.current == client
       end

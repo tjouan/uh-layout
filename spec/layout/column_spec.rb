@@ -48,7 +48,7 @@ class Layout
       end
     end
 
-    describe '#update_clients_visibility' do
+    describe '#show_hide_clients' do
       let(:other_client) { build_client }
 
       before { column << client.show << other_client.show }
@@ -56,12 +56,12 @@ class Layout
       it 'hides clients except the current one' do
         expect(other_client).to receive :hide
         expect(client).not_to receive :hide
-        column.update_clients_visibility
+        column.show_hide_clients
       end
 
       it 'shows current client' do
         expect(client).to receive :show
-        column.update_clients_visibility
+        column.show_hide_clients
       end
     end
   end

@@ -312,7 +312,7 @@ describe Layout do
       end
 
       it 'updates column clients visibility' do
-        expect(layout.current_column).to receive :update_clients_visibility
+        expect(layout.current_column).to receive :show_hide_clients
         layout.handle_client_sel :pred
       end
 
@@ -387,7 +387,7 @@ describe Layout do
 
       it 'updates columns clients visibility' do
         layout.current_tag.columns.each do |column|
-          expect(column).to receive :update_clients_visibility
+          expect(column).to receive :show_hide_clients
         end
         layout.handle_client_column_set :succ
       end
