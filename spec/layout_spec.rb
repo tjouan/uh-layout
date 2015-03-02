@@ -112,13 +112,8 @@ describe Layout do
       expect(layout).not_to include client
     end
 
-    it 'assigns a new current client' do
-      layout.remove client
-      expect(layout.current_client).to be
-    end
-
-    it 'shows the new current client' do
-      expect(other_client).to receive :show
+    it 'redraws columns with an arranger' do
+      expect_any_instance_of(Layout::Column::Arranger).to receive :redraw
       layout.remove client
     end
 
