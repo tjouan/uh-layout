@@ -22,5 +22,9 @@ class Layout
       @geo.height = value
       @tags.each { |tag| tag.height = value }
     end
+
+    def include?(client)
+      @tags.any? { |tag| tag.include? client }
+    end
   end
 end

@@ -4,6 +4,7 @@ class Layout
   describe Screen do
     let(:geo)         { build_geo }
     let(:other_geo)   { build_geo 640, 0, 320, 240 }
+    let(:client)      { build_client }
     subject(:screen)  { described_class.new(0, geo) }
 
     it 'has one default tag with id 1 assigned' do
@@ -22,6 +23,17 @@ class Layout
       it 'changes tags height' do
         expect { screen.height = 42 }
           .to change { screen.tags.first.height }.to 42
+      end
+    end
+
+    describe '#include?' do
+      it 'returns false when screen does not include given client' do
+        expect(screen.include? client).to be false
+      end
+
+      it 'returns true when screen includes given client' do
+        screen.current_tag.current_column_or_create << client
+        expect(screen.include? client).to be true
       end
     end
   end

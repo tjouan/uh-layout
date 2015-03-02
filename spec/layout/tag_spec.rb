@@ -22,6 +22,17 @@ class Layout
       end
     end
 
+    describe '#include?' do
+      it 'returns false when tag does not include given client' do
+        expect(tag.include? client).to be false
+      end
+
+      it 'returns true when tag includes given client' do
+        tag.columns << column.tap { |column| column << client }
+        expect(tag.include? client).to be true
+      end
+    end
+
     describe '#current_column_or_create' do
       context 'when tag has no column' do
         it 'creates a new column' do

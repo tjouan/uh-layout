@@ -32,9 +32,7 @@ class Layout
   end
 
   def include?(client)
-    screens.any? do |screen|
-      screen.tags.any? { |tag| tag.include? client }
-    end
+    screens.any? { |screen| screen.include? client }
   end
 
   def arranger_for_current_tag
