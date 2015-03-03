@@ -57,7 +57,7 @@ class Layout
           column.x      = @column_width * i + @geo.x
           column.width  = @column_width
         end
-        @columns.last.width = @geo.width - columns.last.x
+        @columns.last.width = @geo.width - (@columns.last.x - @geo.x)
       end
     end
   end

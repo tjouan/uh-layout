@@ -165,7 +165,7 @@ class Layout
 
         it 'increases last column width to occupy remaining width' do
           arranger.update_geos
-          expect(columns[1].width).to eq 320
+          expect(columns[1].width).to eq 340
         end
 
         context 'without columns' do
