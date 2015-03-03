@@ -45,7 +45,7 @@ class Layout
   end
 
   def suggest_geo
-    (current_column or current_tag).geo
+    (current_column or current_tag).geo.dup
   end
 
   def <<(client)

@@ -48,15 +48,19 @@ describe Layout do
   end
 
   describe '#suggest_geo' do
-    it 'returns current tag geo' do
-      expect(layout.suggest_geo).to eq layout.current_tag.geo
+    it 'returns current tag geo copy' do
+      expect(layout.suggest_geo)
+        .to eq(layout.current_tag.geo)
+        .and not_be layout.current_tag.geo
     end
 
     context 'when current tag has a column' do
-      before { layout.current_tag.columns << Layout::Column.new(Holo::Geo.new) }
+      before { layout.current_tag.columns << Layout::Column.new(build_geo 42) }
 
       it 'returns current column geo' do
-        expect(layout.suggest_geo).to eq layout.current_column.geo
+        expect(layout.suggest_geo)
+          .to eq(layout.current_column.geo)
+          .and not_be layout.current_column.geo
       end
     end
   end
