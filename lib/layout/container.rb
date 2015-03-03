@@ -46,13 +46,13 @@ class Layout
     end
 
     def set(direction)
-      other_index = @current_index.send(direction)
-      if other_index.between? 0, @entries.size - 1
-        swap @current_index, other_index
-        @current_index = other_index
+      new_index = @current_index.send(direction)
+      if new_index.between? 0, @entries.size - 1
+        swap @current_index, new_index
+        @current_index = new_index
       else
         rotate direction
-        @current_index = other_index % @entries.size
+        @current_index = new_index % @entries.size
       end
     end
 
