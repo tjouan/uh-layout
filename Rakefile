@@ -1,4 +1,8 @@
-task default: :run
+require 'rspec/core/rake_task'
+
+task default: :spec
+
+RSpec::Core::RakeTask.new(:spec)
 
 desc 'Execute holowm in a Xephyr X server'
 task :run do
