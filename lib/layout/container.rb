@@ -33,7 +33,7 @@ class Layout
     end
 
     def get(direction, cycle: false)
-      index = @current_index.send(direction)
+      index = @current_index.send direction
       if cycle
         @entries[index % @entries.size]
       else
@@ -46,7 +46,7 @@ class Layout
     end
 
     def set(direction)
-      new_index = @current_index.send(direction)
+      new_index = @current_index.send direction
       if new_index.between? 0, @entries.size - 1
         swap @current_index, new_index
         @current_index = new_index
