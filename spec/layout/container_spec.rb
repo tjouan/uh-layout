@@ -58,19 +58,36 @@ class Layout
     end
 
     describe '#remove' do
+      let(:entries) { %i[foo bar baz] }
+
+      before { container.current = :bar }
+
       it 'removes given argument from entries' do
-        expect(container.remove :foo).not_to include :foo
+        container.remove :foo
+        expect(container).not_to include :foo
       end
 
-      context 'when given entry is the current one' do
-        before { container.remove :foo }
+      it 'preserves the current entry' do
+        container.remove :foo
+        expect(container.current).to be :bar
+      end
 
-        it 'assigns previous entry as the current one' do
-          expect(container.current).to be :bar
+      it 'returns self' do
+        expect(container.remove :foo).to be container
+      end
+
+      it 'raises an ArgumentError when given entry is not included' do
+        expect { container.remove :unknown_entry }.to raise_error ArgumentError
+      end
+
+      context 'when the first and current entry is removed' do
+        before do
+          container.current = :foo
+          container.remove :foo
         end
 
-        it 'prevents having a negative index' do
-          expect(container.index container.current).not_to eq -1
+        it 'assigns next entry as the current one' do
+          expect(container.current).to be :bar
         end
       end
 
@@ -80,12 +97,6 @@ class Layout
         it 'has no more current entry' do
           container.remove :foo
           expect(container.current).to be nil
-        end
-      end
-
-      context 'when given entry is not included' do
-        it 'raises an ArgumentError' do
-          expect { container.remove :unknown_entry }.to raise_error ArgumentError
         end
       end
     end
