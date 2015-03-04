@@ -1,5 +1,5 @@
-require 'holo'
-require 'holo/wm'
+require 'uh'
+require 'uh/wm'
 
 Dir['spec/support/**/*.rb'].map { |e| require e.gsub 'spec/', '' }
 

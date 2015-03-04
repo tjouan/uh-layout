@@ -1,13 +1,13 @@
 require 'forwardable'
 
-require_relative 'layout/geo_accessors'
-require_relative 'layout/bar'
-require_relative 'layout/container'
-require_relative 'layout/column'
-require_relative 'layout/column/arranger'
-require_relative 'layout/dumper'
-require_relative 'layout/screen'
-require_relative 'layout/tag'
+require 'uh/layout/geo_accessors'
+require 'uh/layout/bar'
+require 'uh/layout/container'
+require 'uh/layout/column'
+require 'uh/layout/column/arranger'
+require 'uh/layout/dumper'
+require 'uh/layout/screen'
+require 'uh/layout/tag'
 
 class Layout
   extend Forwardable
