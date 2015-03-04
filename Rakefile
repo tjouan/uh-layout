@@ -10,11 +10,11 @@ task :run do
   xephyr = if ENV.key? 'XINERAMA'
     '%s +xinerama %s %s' % [
       xephyr_base,
-      '-origin 0,0 -screen 960x500',
-      '-origin 960,0 -screen 960x500'
+      '-origin 0,0 -screen 1024x400',
+      '-origin 1024,0 -screen 896x400'
     ]
   else
-    '%s -screen 1600x500' % xephyr_base
+    '%s -screen 1920x400' % xephyr_base
   end
   sh 'xinit ./xinitrc -- %s' % xephyr
 end
