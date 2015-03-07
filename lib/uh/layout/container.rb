@@ -19,7 +19,8 @@ module Uh
       end
 
       def current=(entry)
-        @current_index = @entries.index entry if include? entry
+        fail ArgumentError, 'unknown entry' unless include? entry
+        @current_index = @entries.index entry
       end
 
       def remove(entry)

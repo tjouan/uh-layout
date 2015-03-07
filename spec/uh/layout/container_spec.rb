@@ -42,9 +42,9 @@ module Uh
         end
 
         context 'when given argument is not an entry' do
-          it 'does not change current entry' do
-            expect { container.current = :baz }
-              .not_to change { container.current }
+          it 'raises ArgumentError' do
+            expect { container.current = :unknown_entry }
+              .to raise_error ArgumentError
           end
         end
       end
@@ -91,10 +91,10 @@ module Uh
         end
 
         context 'when given entry is the only one' do
-          let(:entries) { [:foo] }
+          let(:entries) { [:bar] }
 
           it 'has no more current entry' do
-            container.remove :foo
+            container.remove :bar
             expect(container.current).to be nil
           end
         end
