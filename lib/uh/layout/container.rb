@@ -4,8 +4,8 @@ module Uh
       include Enumerable
 
       extend Forwardable
-      def_delegators :@entries, :<<, :[], :each, :empty?, :first, :index, :last,
-        :size, :unshift
+      def_delegators :@entries, :<<, :[], :each, :empty?, :fetch, :first,
+        :index, :last, :size, :unshift
 
       def initialize(entries = [])
         @entries        = entries
