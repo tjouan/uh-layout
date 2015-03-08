@@ -40,7 +40,7 @@ module Uh
           end
 
           it 'returns the new column' do
-            expect(tag.current_column_or_create).to eq tag.columns.current
+            expect(tag.current_column_or_create).to be tag.columns.fetch 0
           end
         end
 
