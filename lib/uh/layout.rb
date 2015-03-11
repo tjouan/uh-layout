@@ -1,6 +1,8 @@
 require 'forwardable'
 
 require 'uh/layout/arrangers/fixed_width'
+require 'uh/layout/arrangers/stack'
+require 'uh/layout/arrangers/vert_tile'
 require 'uh/layout/bar'
 require 'uh/layout/client_column_mover'
 require 'uh/layout/container'
@@ -103,6 +105,13 @@ module Uh
       current_tag.columns.sel direction
       current_client.focus
       update_widgets
+    end
+
+    def handle_column_mode_toggle
+      return unless current_column
+      current_column.mode_toggle
+      current_column.arrange_clients
+      current_column.show_hide_clients
     end
 
     def handle_client_sel(direction)

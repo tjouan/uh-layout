@@ -274,6 +274,33 @@ module Uh
       end
     end
 
+    describe '#handle_column_mode_toggle' do
+      context 'without column' do
+        it 'does not raise any error' do
+          expect { layout.handle_column_mode_toggle }.not_to raise_error
+        end
+      end
+
+      context 'with a column' do
+        before { layout << client }
+
+        it 'toggles current column mode' do
+          expect(layout.current_column).to receive :mode_toggle
+          layout.handle_column_mode_toggle
+        end
+
+        it 'arranges current column clients' do
+          expect(layout.current_column).to receive :arrange_clients
+          layout.handle_column_mode_toggle
+        end
+
+        it 'shows and hides clients in current column' do
+          expect(layout.current_column).to receive :show_hide_clients
+          layout.handle_column_mode_toggle
+        end
+      end
+    end
+
     describe '#handle_client_sel' do
       context 'without client' do
         it 'does not raise any error' do
