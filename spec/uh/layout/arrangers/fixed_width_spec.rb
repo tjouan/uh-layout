@@ -36,6 +36,18 @@ module Uh
             expect(entries[1].width).to eq 340
           end
 
+          it 'copies given geo y' do
+            entries[0].y = nil
+            arranger.arrange
+            expect(entries[0].y).to eq 0
+          end
+
+          it 'copies given geo height' do
+            entries[0].height = nil
+            arranger.arrange
+            expect(entries[0].height).to eq 480
+          end
+
           context 'without entry' do
             let(:entries) { Container.new([]) }
 

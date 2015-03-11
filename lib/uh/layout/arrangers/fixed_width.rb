@@ -14,7 +14,9 @@ module Uh
           return if @entries.empty?
           @entries.each_with_index do |column, i|
             column.x      = @width * i + @geo.x
+            column.y      = @geo.y
             column.width  = @width
+            column.height = @geo.height
           end
           @entries.last.width = @geo.width - (@entries.last.x - @geo.x)
         end
