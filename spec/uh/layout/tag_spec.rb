@@ -57,6 +57,34 @@ module Uh
           end
         end
       end
+
+      describe '#arranger' do
+        it 'returns a fixed width arranger' do
+          expect(tag.arranger).to be_an Arrangers::FixedWidth
+        end
+      end
+
+      describe '#arrange_columns' do
+        before { tag.columns << column }
+
+        it 'purges empty columns' do
+          tag.arrange_columns
+          expect(tag.columns).to be_empty
+        end
+
+        it 'arranges columns' do
+          arranger = instance_spy Arrangers::FixedWidth
+          allow(tag).to receive(:arranger) { arranger }
+          expect(arranger).to receive :arrange
+          tag.arrange_columns
+        end
+
+        it 'arranges columns clients' do
+          column << client
+          expect(column).to receive :arrange_clients
+          tag.arrange_columns
+        end
+      end
     end
   end
 end

@@ -23,17 +23,6 @@ module Uh
       end
     end
 
-    describe '#arranger_for_current_tag' do
-      it 'returns an arranger for current tag columns and geo' do
-        expect(layout.arranger_for_current_tag)
-          .to respond_to(:update_geos)
-          .and have_attributes(
-            columns:  layout.current_tag.columns,
-            geo:      layout.current_tag.geo
-          )
-      end
-    end
-
     describe '#update_widgets' do
       it 'updates widgets' do
         expect(layout.widgets).to all receive :update
@@ -110,13 +99,8 @@ module Uh
         expect(layout).not_to include client
       end
 
-      it 'redraws columns with an arranger' do
-        expect_any_instance_of(Layout::Column::Arranger).to receive :redraw
-        layout.remove client
-      end
-
-      it 'arranges clients in removed client tag columns' do
-        expect(layout.current_tag.columns).to all receive :arrange_clients
+      it 'arranges columns in removed client tag' do
+        expect(layout.current_tag).to receive :arrange_columns
         layout.remove client
       end
 
@@ -245,9 +229,9 @@ module Uh
           expect(dest_tag).to include client
         end
 
-        it 'arranges clients in given tag columns' do
+        it 'arranges columns in given tag' do
           layout.current_screen.tags << tag = Layout::Tag.new('2', geo)
-          expect(tag.current_column_or_create).to receive :arrange_clients
+          expect(tag).to receive :arrange_columns
           layout.handle_tag_set '2'
         end
 
@@ -358,22 +342,17 @@ module Uh
       end
 
       context 'with one column and two clients' do
-        let(:arranger) { instance_spy Layout::Column::Arranger }
+        let(:mover) { instance_spy Layout::ClientColumnMover }
 
         before { layout << other_client << client }
 
-        it 'moves current client with column arranger' do
-          expect(arranger).to receive(:move_current_client).with(:succ)
-          layout.handle_client_column_set :succ, arranger: arranger
+        it 'moves current client with given client column mover' do
+          expect(mover).to receive(:move_current).with(:succ)
+          layout.handle_client_column_set :succ, mover: mover
         end
 
-        it 'updates columns geos with column arranger' do
-          expect(arranger).to receive :update_geos
-          layout.handle_client_column_set :succ, arranger: arranger
-        end
-
-        it 'arranges clients in current tag columns' do
-          expect(layout.current_tag.columns).to all receive :arrange_clients
+        it 'arranges current tag columns' do
+          expect(layout.current_tag).to receive :arrange_columns
           layout.handle_client_column_set :succ
         end
 

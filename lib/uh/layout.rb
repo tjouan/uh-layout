@@ -1,10 +1,11 @@
 require 'forwardable'
 
 require 'uh/layout/geo_accessors'
+require 'uh/layout/arrangers/fixed_width'
 require 'uh/layout/bar'
+require 'uh/layout/client_column_mover'
 require 'uh/layout/container'
 require 'uh/layout/column'
-require 'uh/layout/column/arranger'
 require 'uh/layout/dumper'
 require 'uh/layout/screen'
 require 'uh/layout/tag'
@@ -36,10 +37,6 @@ module Uh
       screens.any? { |screen| screen.include? client }
     end
 
-    def arranger_for_current_tag
-      Column::Arranger.new(current_tag.columns, current_tag.geo)
-    end
-
     def update_widgets
       @widgets.each &:update
       @widgets.each &:redraw
@@ -63,8 +60,7 @@ module Uh
     def remove(client)
       screen, tag, column = find_client client
       column.remove client
-      Column::Arranger.new(tag.columns, tag.geo).redraw
-      tag.each_column &:arrange_clients
+      tag.arrange_columns
       column.show_hide_clients
       current_client.focus if current_client
       update_widgets
@@ -98,8 +94,7 @@ module Uh
       client.hide
       tag = find_tag_or_create tag_id
       tag.current_column_or_create << client
-      Column::Arranger.new(tag.columns, tag.geo).redraw
-      tag.each_column &:arrange_clients
+      tag.arrange_columns
       current_client.focus if current_client
       update_widgets
     end
@@ -125,10 +120,10 @@ module Uh
       update_widgets
     end
 
-    def handle_client_column_set(direction, arranger: arranger_for_current_tag)
+    def handle_client_column_set(direction, mover: client_mover_for_current_tag)
       return unless current_client
-      arranger.move_current_client(direction).update_geos
-      current_tag.each_column &:arrange_clients
+      mover.move_current direction
+      current_tag.arrange_columns
       current_tag.each_column &:show_hide_clients
       update_widgets
     end
@@ -156,6 +151,10 @@ module Uh
       current_screen.tags.find { |e| e.id == tag_id } or Tag.new(tag_id, current_screen.geo).tap do |tag|
         current_screen.tags << tag
       end
+    end
+
+    def client_mover_for_current_tag
+      ClientColumnMover.new(current_tag.columns, current_tag.columns_max_count?)
     end
   end
 end
