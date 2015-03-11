@@ -44,7 +44,7 @@ module Uh
         context 'when given argument is not an entry' do
           it 'raises ArgumentError' do
             expect { container.current = :unknown_entry }
-              .to raise_error ArgumentError
+              .to raise_error Layout::ArgumentError
           end
         end
       end

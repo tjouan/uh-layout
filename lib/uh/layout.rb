@@ -13,6 +13,9 @@ require 'uh/layout/tag'
 
 module Uh
   class Layout
+    Error         = Class.new(StandardError)
+    ArgumentError = Class.new(Error)
+
     extend Forwardable
     def_delegator :@screens, :current, :current_screen
     def_delegator :current_screen, :==, :current_screen?

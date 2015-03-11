@@ -10,7 +10,8 @@ module Uh
 
       describe '.new' do
         it 'raises error unless id converts to string' do
-          expect { described_class.new 1, geo }.to raise_error(ArgumentError)
+          expect { described_class.new 1, geo }
+            .to raise_error(Layout::ArgumentError)
         end
       end
 
