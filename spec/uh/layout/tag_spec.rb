@@ -6,11 +6,11 @@ module Uh
       let(:client)        { build_client }
       let(:other_client)  { build_client }
       let(:column)        { Column.new(geo) }
-      subject(:tag)       { described_class.new('1', geo) }
+      subject(:tag)       { described_class.new '1', geo }
 
       describe '.new' do
         it 'raises error unless id converts to string' do
-          expect { described_class.new(1, geo) }.to raise_error(ArgumentError)
+          expect { described_class.new 1, geo }.to raise_error(ArgumentError)
         end
       end
 

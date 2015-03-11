@@ -5,7 +5,7 @@ module Uh
       let(:column)            { Column.new(build_geo) }
       let(:columns)           { Container.new([column]) }
       let(:columns_max_count) { false }
-      subject(:mover)         { described_class.new(columns, columns_max_count) }
+      subject(:mover)         { described_class.new columns, columns_max_count }
 
       describe '#move_current' do
         shared_examples 'moves current client' do |expected_column_index|

@@ -5,7 +5,7 @@ module Uh
         let(:geo)           { build_geo 20, 0, 640, 480 }
         let(:entry)         { build_entry }
         let(:entries)       { Container.new([entry, build_entry]) }
-        subject(:arranger)  { described_class.new(entries, geo, width: 300) }
+        subject(:arranger)  { described_class.new entries, geo, width: 300 }
 
         describe '#arrange' do
           it 'decreases first entry width as the optimal width' do

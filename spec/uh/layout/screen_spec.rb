@@ -4,7 +4,7 @@ module Uh
       let(:geo)         { build_geo }
       let(:other_geo)   { build_geo 640, 0, 320, 240 }
       let(:client)      { build_client }
-      subject(:screen)  { described_class.new(0, geo) }
+      subject(:screen)  { described_class.new 0, geo }
 
       it 'has one default tag with id 1 assigned' do
         expect(screen.tags).to include an_object_having_attributes id: '1'

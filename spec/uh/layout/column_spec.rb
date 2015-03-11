@@ -5,7 +5,7 @@ module Uh
       let(:other_geo)     { build_geo 640, 0, 320, 240 }
       let(:client)        { build_client }
       let(:other_client)  { build_client }
-      subject(:column)    { described_class.new(geo) }
+      subject(:column)    { described_class.new geo }
 
       it 'has a copy to given geo' do
         expect(column.geo).to eq(geo).and not_be geo
