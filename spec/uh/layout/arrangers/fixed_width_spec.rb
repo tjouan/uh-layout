@@ -2,17 +2,9 @@ module Uh
   class Layout
     module Arrangers
       describe FixedWidth do
-        class Entry
-          include GeoAccessors
-
-          def initialize(geo)
-            @geo = geo
-          end
-        end
-
         let(:geo)           { build_geo 20, 0, 640, 480 }
-        let(:entry)         { Entry.new(build_geo) }
-        let(:entries)       { Container.new([entry, Entry.new(build_geo)]) }
+        let(:entry)         { build_entry }
+        let(:entries)       { Container.new([entry, build_entry]) }
         subject(:arranger)  { described_class.new(entries, geo, width: 300) }
 
         describe '#arrange' do
