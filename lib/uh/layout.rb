@@ -1,6 +1,5 @@
 require 'forwardable'
 
-require 'uh/layout/geo_accessors'
 require 'uh/layout/arrangers/fixed_width'
 require 'uh/layout/bar'
 require 'uh/layout/client_column_mover'
