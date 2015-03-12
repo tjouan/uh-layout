@@ -94,13 +94,11 @@ module Uh
 
     def handle_tag_set(tag_id)
       return unless current_client && current_tag.id != tag_id
+      previous_tag_id = current_tag.id
       remove client = current_client
-      client.hide
-      tag = find_tag_or_create tag_id
-      tag.current_column_or_create << client
-      tag.arrange_columns
-      current_client.focus if current_client
-      update_widgets
+      handle_tag_sel tag_id
+      push client
+      handle_tag_sel previous_tag_id
     end
 
     def handle_column_sel(direction)
