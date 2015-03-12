@@ -213,8 +213,8 @@ module Uh
           expect(origin_tag).not_to include client
         end
 
-        it 'removes current client from layout' do
-          expect(layout).to receive(:remove).with client
+        it 'shows and hides clients in current column' do
+          expect(layout.current_column).to receive :show_hide_clients
           layout.handle_tag_set '2'
         end
 
@@ -229,9 +229,10 @@ module Uh
           expect(dest_tag).to include client
         end
 
-        it 'preserves current tag' do
+        it 'arranges columns in given tag' do
+          layout.current_screen.tags << tag = Layout::Tag.new('2', geo)
+          expect(tag).to receive :arrange_columns
           layout.handle_tag_set '2'
-          expect(layout.current_tag.id).to eq '1'
         end
 
         it 'updates widgets' do
