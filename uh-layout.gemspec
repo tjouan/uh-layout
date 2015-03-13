@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables = s.files.grep(/\Abin\//) { |f| File.basename(f) }
 
 
-  s.add_development_dependency 'uh'
+  s.add_development_dependency 'uh',    '~> 1.0'
   s.add_development_dependency 'rake',  '~> 10.4'
   s.add_development_dependency 'rspec', '~> 3.2'
 end
