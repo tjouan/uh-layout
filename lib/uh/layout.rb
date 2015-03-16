@@ -84,6 +84,7 @@ module Uh
     end
 
     def handle_tag_sel(tag_id)
+      tag_id = tag_id.to_s
       return unless current_tag.id != tag_id
       current_tag.hide
       current_screen.tags.current = find_tag_or_create tag_id

@@ -195,6 +195,11 @@ module Uh
         expect(widget).to receive :update
         layout.handle_tag_sel '2'
       end
+
+      it 'accepts non-string arguments' do
+        layout.handle_tag_sel 2
+        expect(layout.current_tag.id).to eq '2'
+      end
     end
 
     describe 'handle_tag_set' do
