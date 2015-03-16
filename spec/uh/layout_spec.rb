@@ -200,6 +200,12 @@ module Uh
         layout.handle_tag_sel 2
         expect(layout.current_tag.id).to eq '2'
       end
+
+      it 'records previous tag in history' do
+        previous_tag = layout.current_tag
+        layout.handle_tag_sel 2
+        expect(layout.history.tags).to include previous_tag
+      end
     end
 
     describe 'handle_tag_set' do
@@ -401,6 +407,15 @@ module Uh
           expect(widget).to receive :update
           layout.handle_client_column_set :succ
         end
+      end
+    end
+
+    describe '#handle_history_tag_pred' do
+      it 'selects last tag recorded in history' do
+        layout.handle_tag_sel 2
+        expect { layout.handle_history_tag_pred }
+          .to change { layout.current_tag.id }
+          .from(?2).to ?1
       end
     end
 

@@ -8,6 +8,7 @@ require 'uh/layout/client_column_mover'
 require 'uh/layout/container'
 require 'uh/layout/column'
 require 'uh/layout/dumper'
+require 'uh/layout/history'
 require 'uh/layout/screen'
 require 'uh/layout/tag'
 
@@ -22,11 +23,12 @@ module Uh
     def_delegator :current_screen, :current_tag
     def_delegator :current_tag, :current_column
 
-    attr_reader :screens, :widgets
+    attr_reader :screens, :widgets, :history
 
     def initialize
       @screens  = Container.new
       @widgets  = []
+      @history  = History.new
     end
 
     def to_s
@@ -86,6 +88,7 @@ module Uh
     def handle_tag_sel(tag_id)
       tag_id = tag_id.to_s
       return unless current_tag.id != tag_id
+      @history.record_tag current_tag
       current_tag.hide
       current_screen.tags.current = find_tag_or_create tag_id
       current_tag.each_column &:show_hide_clients
@@ -136,6 +139,10 @@ module Uh
       current_tag.arrange_columns
       current_tag.each_column &:show_hide_clients
       update_widgets
+    end
+
+    def handle_history_tag_pred
+      handle_tag_sel @history.last_tag.id
     end
 
     def handle_kill_current
