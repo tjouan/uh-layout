@@ -1,10 +1,10 @@
 module Uh
   class Layout
     class Bar
-      TEXT_PADDING_X    = 1
+      TEXT_PADDING_X    = 3
       TEXT_PADDING_Y    = 1
-      COLUMN_MARGIN_TOP = 0
-      COLUMN_HEIGHT     = 2
+      BORDER_HEIGHT     = 2
+      BORDER_PADDING_Y  = 0
       COLUMN_PADDING_X  = 1
       TAG_PADDING_X     = 5
 
@@ -36,9 +36,10 @@ module Uh
 
       def redraw
         draw_background
-        draw_columns @screen.current_tag.columns,
-          @screen.current_tag.current_column
-        draw_tags @screen.tags, @screen.current_tag
+        draw_columns BORDER_HEIGHT + BORDER_PADDING_Y,
+          @screen.current_tag.columns, @screen.current_tag.current_column
+        draw_tags BORDER_HEIGHT + BORDER_PADDING_Y + text_line_height,
+          @screen.tags, @screen.current_tag
         blit
       end
 
@@ -61,7 +62,7 @@ module Uh
       end
 
       def build_geo(layout_geo)
-        bar_height = text_line_height * 2 + COLUMN_HEIGHT + 1
+        bar_height = text_line_height * 2 + BORDER_HEIGHT + BORDER_PADDING_Y
 
         Uh::Geo.new(
           layout_geo.x,
@@ -77,14 +78,6 @@ module Uh
 
       def text_line_height
         @display.font.height + TEXT_PADDING_Y * 2
-      end
-
-      def column_widget_text_y
-        COLUMN_MARGIN_TOP + COLUMN_HEIGHT
-      end
-
-      def column_widget_height
-        column_widget_text_y + text_line_height + 1
       end
 
       def column_offset_x(column)
@@ -103,28 +96,29 @@ module Uh
       def draw_background
         @pixmap.gc_color @colors[:bg]
         @pixmap.draw_rect 0, 0, width, height
+        @pixmap.gc_color @colors[:sel]
+        @pixmap.draw_rect 0, 0, width, BORDER_HEIGHT
       end
 
-      def draw_columns(columns, current_column)
+      def draw_columns(y_offset, columns, current_column)
         columns.each do |column|
-          draw_column column, column == current_column
+          draw_column y_offset, column, column == current_column
         end
       end
 
-      def draw_column(column, current)
-        @pixmap.gc_color current ? active_color : @colors[:hi]
-        @pixmap.draw_rect column_offset_x(column) + COLUMN_PADDING_X,
-          COLUMN_MARGIN_TOP,
-          column.width - COLUMN_PADDING_X, COLUMN_HEIGHT
-        @pixmap.gc_color @colors[:fg]
-        text_y =
-          column_widget_text_y + @display.font.ascent + TEXT_PADDING_Y
-        @pixmap.draw_string column_offset_x(column) + TEXT_PADDING_Y,
-          text_y, column_text(column)
+      def draw_column(y_offset, column, current)
+        x_offset = column_offset_x(column)
+        if current
+          @pixmap.gc_color @colors[:sel]
+          @pixmap.draw_rect x_offset, y_offset, column.width, text_line_height
+        end
+        text_y = y_offset + @display.font.ascent + TEXT_PADDING_Y
+        draw_text column_text(column), x_offset, y_offset,
+          bg: current ? @colors[:hi] : @colors[:bg]
       end
 
-      def draw_tags(tags, current_tag)
-        tags.sort_by(&:id).inject(0) do |offset, tag|
+      def draw_tags(y_offset, tags, current_tag)
+        tags.sort_by(&:id).inject(0) do |x_offset, tag|
           color = if tag == current_tag
             active_color
           elsif tag.clients.any?
@@ -133,24 +127,22 @@ module Uh
             @colors[:bg]
           end
 
-          offset + draw_text(
-            tag.id, offset, column_widget_height,
-            @colors[:fg], color,
-            TAG_PADDING_X
+          x_offset + draw_text(tag.id, x_offset, y_offset,
+            bg:         color,
+            padding_x:  TAG_PADDING_X
           )
         end
       end
 
-      def draw_text(text, x, y, color_fg = @colors[:fg], color_bg = nil,
-          padding_x = TEXT_PADDING_X)
+      def draw_text(text, x, y, bg: nil, padding_x: TEXT_PADDING_X)
         text        = text.to_s
         text_width  = text.length * @display.font.width + padding_x * 2
         text_y      = y + @display.font.ascent + TEXT_PADDING_Y
-        if color_bg
-          @pixmap.gc_color color_bg
+        if bg
+          @pixmap.gc_color bg
           @pixmap.draw_rect x, y, text_width, text_line_height
         end
-        @pixmap.gc_color color_fg
+        @pixmap.gc_color @colors[:fg]
         @pixmap.draw_string x + padding_x, text_y, text
         text_width
       end
