@@ -28,7 +28,11 @@ module Uh
 
       def <<(client)
         client.geo = @geo.dup
-        @clients << client
+        if @clients.current
+          @clients.insert_after_current client
+        else
+          @clients << client
+        end
         self
       end
 

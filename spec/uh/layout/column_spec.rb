@@ -26,6 +26,13 @@ module Uh
           expect(column.clients).to include client
         end
 
+        it 'adds given client after current one' do
+          column << other_client
+          column.current_client = client
+          column << new_client = build_client
+          expect(column.clients.to_a).to eq [client, new_client, other_client]
+        end
+
         it 'assigns column geo copy to given client' do
           expect(client.geo).to eq(column.geo).and not_be column.geo
         end
