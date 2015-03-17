@@ -130,7 +130,7 @@ module Uh
 
     def handle_client_swap(direction)
       return unless current_client
-      current_column.clients.set direction
+      current_column.client_swap direction
       update_widgets
     end
 

@@ -3,9 +3,10 @@ module Uh
     describe Column do
       let(:geo)           { build_geo }
       let(:other_geo)     { build_geo 640, 0, 320, 240 }
+      let(:mode)          { :stack }
       let(:client)        { build_client }
       let(:other_client)  { build_client }
-      subject(:column)    { described_class.new geo }
+      subject(:column)    { described_class.new geo, mode: mode }
 
       it 'has a copy to given geo' do
         expect(column.geo).to eq(geo).and not_be geo
@@ -67,6 +68,29 @@ module Uh
           it 'returns a vertical tile arranger' do
             column.mode_toggle
             expect(column.arranger).to be_an Arrangers::VertTile
+          end
+        end
+      end
+
+      describe '#client_swap' do
+        before { column << client << other_client }
+
+        it 'sends #set message to clients with given direction' do
+          expect(column.clients).to receive(:set).with :pred
+          column.client_swap :pred
+        end
+
+        context 'when column mode is tile' do
+          let(:mode) { :tile }
+
+          it 'arranges current column clients' do
+            expect(column).to receive :arrange_clients
+            column.client_swap :pred
+          end
+
+          it 'shows and hides clients in current column' do
+            expect(column).to receive :show_hide_clients
+            column.client_swap :pred
           end
         end
       end

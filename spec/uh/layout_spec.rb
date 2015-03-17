@@ -353,15 +353,9 @@ module Uh
       context 'with one column and two clients' do
         before { layout << other_client << client }
 
-        it 'swaps current client with the other client' do
+        it 'sends #client_swap to current column with given direction' do
+          expect(layout.current_column).to receive(:client_swap).with :pred
           layout.handle_client_swap :pred
-          expect(layout.current_column.clients.to_a)
-            .to eq [client, other_client]
-        end
-
-        it 'does not change current client' do
-          expect { layout.handle_client_swap :pred }
-            .not_to change { layout.current_client }
         end
 
         it 'updates widgets' do

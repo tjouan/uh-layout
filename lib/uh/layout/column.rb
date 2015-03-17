@@ -16,10 +16,10 @@ module Uh
 
       attr_reader :geo, :clients, :mode
 
-      def initialize(geo)
+      def initialize(geo, mode: :stack)
         @geo      = geo.dup
         @clients  = Container.new
-        @mode     = :stack
+        @mode     = mode
       end
 
       def to_s
@@ -42,6 +42,14 @@ module Uh
 
       def arranger
         MODES[@mode].new @clients, @geo
+      end
+
+      def client_swap(direction)
+        @clients.set direction
+        if @mode == :tile
+          arrange_clients
+          show_hide_clients
+        end
       end
 
       def arrange_clients
