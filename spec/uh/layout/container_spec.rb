@@ -140,7 +140,7 @@ module Uh
 
         it 'swaps current entry with consecutive one in given direction' do
           container.set :next
-          expect(container.to_a).to eq %i[bar foo baz]
+          expect(container.entries).to eq %i[bar foo baz]
         end
 
         it 'does not change current entry' do
@@ -150,7 +150,7 @@ module Uh
         context 'when direction is out of range' do
           it 'rotates the entries' do
             container.set :pred
-            expect(container.to_a).to eq %i[bar baz foo]
+            expect(container.entries).to eq %i[bar baz foo]
           end
 
           it 'does not change current entry' do
@@ -162,7 +162,7 @@ module Uh
       describe '#swap' do
         it 'swaps entries matched by given indexes' do
           container.swap 0, 1
-          expect(container.to_a).to eq %i[bar foo]
+          expect(container.entries).to eq %i[bar foo]
         end
       end
     end
