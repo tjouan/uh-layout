@@ -22,12 +22,12 @@ module Uh
       describe '#<<' do
         before { column << client }
 
-        it 'assigns column geo copy to given client' do
-          expect(client.geo).to eq(column.geo).and not_be column.geo
-        end
-
         it 'adds given client' do
           expect(column.clients).to include client
+        end
+
+        it 'assigns column geo copy to given client' do
+          expect(client.geo).to eq(column.geo).and not_be column.geo
         end
 
         it 'returns self' do
