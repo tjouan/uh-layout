@@ -23,6 +23,11 @@ module Uh
         @current_index = @entries.index entry
       end
 
+      def insert_after_current(entry)
+        fail RuntimeError, 'no current entry' unless current
+        @entries.insert @current_index + 1, entry
+      end
+
       def remove(entry)
         fail ArgumentError, 'unknown entry' unless include? entry
         @entries.delete_at @entries.index entry

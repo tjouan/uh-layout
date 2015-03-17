@@ -15,6 +15,7 @@ require 'uh/layout/tag'
 module Uh
   class Layout
     Error         = Class.new(StandardError)
+    RuntimeError  = Class.new(RuntimeError)
     ArgumentError = Class.new(Error)
 
     extend Forwardable

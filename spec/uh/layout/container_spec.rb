@@ -56,6 +56,22 @@ module Uh
         end
       end
 
+      describe '#insert_after_current' do
+        it 'inserts given entry after current one' do
+          container.insert_after_current :baz
+          expect(container.entries).to eq %i[foo baz bar]
+        end
+
+        context 'when container has no entry' do
+          let(:entries) { [] }
+
+          it 'raises a RuntimeError' do
+            expect { container.insert_after_current :foo }
+              .to raise_error Layout::RuntimeError
+          end
+        end
+      end
+
       describe '#remove' do
         let(:entries) { %i[foo bar baz] }
 
