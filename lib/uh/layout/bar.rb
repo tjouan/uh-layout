@@ -96,7 +96,7 @@ module Uh
       def draw_background
         @pixmap.gc_color @colors[:bg]
         @pixmap.draw_rect 0, 0, width, height
-        @pixmap.gc_color @colors[:sel]
+        @pixmap.gc_color active_color
         @pixmap.draw_rect 0, 0, width, BORDER_HEIGHT
       end
 
