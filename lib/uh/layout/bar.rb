@@ -108,7 +108,7 @@ module Uh
 
       def draw_column(y_offset, column, current)
         x_offset = column_offset_x(column)
-        if current
+        if current && active?
           @pixmap.gc_color @colors[:sel]
           @pixmap.draw_rect x_offset, y_offset, column.width, text_line_height
         end
