@@ -53,6 +53,7 @@ module Uh
       end
 
       def set(direction)
+        raise RuntimeError unless @entries.size >= 2
         new_index = @current_index.send direction
         if new_index.between? 0, @entries.size - 1
           swap @current_index, new_index

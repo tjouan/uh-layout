@@ -173,6 +173,14 @@ module Uh
             expect { container.set :pred }.not_to change { container.current }
           end
         end
+
+        context 'when entries count is less than 2' do
+          let(:entries) { %i[foo] }
+
+          it 'raises a RuntimeError' do
+            expect { container.set :pred }.to raise_error Layout::RuntimeError
+          end
+        end
       end
 
       describe '#swap' do
