@@ -10,7 +10,7 @@ module Uh
 
       include GeoAccessors
 
-      attr_writer :active
+      attr_writer :active, :status
 
       def initialize(display, screen, colors)
         @display    = display
@@ -40,6 +40,10 @@ module Uh
           @screen.current_tag.columns, @screen.current_tag.current_column
         draw_tags BORDER_HEIGHT + BORDER_PADDING_Y + text_line_height,
           @screen.tags, @screen.current_tag
+        if @status
+          draw_status BORDER_HEIGHT + BORDER_PADDING_Y + text_line_height,
+            @status
+        end
         blit
       end
 
@@ -78,6 +82,10 @@ module Uh
 
       def text_line_height
         @display.font.height + TEXT_PADDING_Y * 2
+      end
+
+      def text_width(text, padding_x: TEXT_PADDING_X)
+        text.length * @display.font.width + padding_x * 2
       end
 
       def column_offset_x(column)
@@ -134,9 +142,13 @@ module Uh
         end
       end
 
+      def draw_status(y_offset, status)
+        draw_text status, width - text_width(status), y_offset
+      end
+
       def draw_text(text, x, y, bg: nil, padding_x: TEXT_PADDING_X)
         text        = text.to_s
-        text_width  = text.length * @display.font.width + padding_x * 2
+        text_width  = text_width text, padding_x: padding_x
         text_y      = y + @display.font.ascent + TEXT_PADDING_Y
         if bg
           @pixmap.gc_color bg
