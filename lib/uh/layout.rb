@@ -129,7 +129,7 @@ module Uh
     end
 
     def handle_client_swap(direction)
-      return unless current_client
+      return unless current_client && current_column.clients.size >= 2
       current_column.client_swap direction
       update_widgets
     end

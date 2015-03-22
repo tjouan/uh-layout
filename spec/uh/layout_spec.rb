@@ -351,6 +351,14 @@ module Uh
       end
 
       context 'with one column and two clients' do
+        before { layout << client }
+
+        it 'does not raise any error' do
+          expect { layout.handle_client_swap :pred }.not_to raise_error
+        end
+      end
+
+      context 'with one column and two clients' do
         before { layout << other_client << client }
 
         it 'sends #client_swap to current column with given direction' do
