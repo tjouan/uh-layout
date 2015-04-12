@@ -12,6 +12,14 @@ module Uh
       layout.widgets << widget
     end
 
+    describe '#register' do
+      it 'uses a registrant to register the layout with given display' do
+        display = double 'display'
+        expect(Layout::Registrant).to receive(:register).with layout, display
+        layout.register display
+      end
+    end
+
     describe '#include?' do
       it 'returns false when layout does not include given client' do
         expect(layout.include? client).to be false

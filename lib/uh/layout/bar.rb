@@ -10,6 +10,7 @@ module Uh
 
       include GeoAccessors
 
+      attr_reader :screen
       attr_writer :active, :status
 
       def initialize(display, screen, colors)

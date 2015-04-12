@@ -9,6 +9,7 @@ require 'uh/layout/container'
 require 'uh/layout/column'
 require 'uh/layout/dumper'
 require 'uh/layout/history'
+require 'uh/layout/registrant'
 require 'uh/layout/screen'
 require 'uh/layout/tag'
 
@@ -18,18 +19,30 @@ module Uh
     RuntimeError  = Class.new(RuntimeError)
     ArgumentError = Class.new(Error)
 
+    COLORS = {
+      fg:   'rgb:d0/d0/d0'.freeze,
+      bg:   'rgb:0c/0c/0c'.freeze,
+      sel:  'rgb:d7/00/5f'.freeze,
+      hi:   'rgb:82/00/3a'.freeze
+    }.freeze
+
     extend Forwardable
     def_delegator :@screens, :current, :current_screen
     def_delegator :current_screen, :==, :current_screen?
     def_delegator :current_screen, :current_tag
     def_delegator :current_tag, :current_column
 
-    attr_reader :screens, :widgets, :history
+    attr_reader :screens, :widgets, :colors, :history
 
     def initialize
       @screens  = Container.new
       @widgets  = []
+      @colors   = COLORS
       @history  = History.new
+    end
+
+    def register(display)
+      Registrant.register self, display
     end
 
     def to_s
