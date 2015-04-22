@@ -5,6 +5,7 @@ Gem::Specification.new do |s|
   s.version = Uh::Layout::VERSION.dup
   s.summary = 'simple tiling and stacking layout for uh-wm'
   s.description = s.name
+  s.license = 'BSD-3-Clause'
   s.homepage = 'https://rubygems.org/gems/uh-layout'
 
   s.authors = 'Thibault Jouan'
