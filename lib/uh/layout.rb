@@ -90,6 +90,10 @@ module Uh
       update_widgets unless client.hidden?
     end
 
+    def expose window
+      update_widgets
+    end
+
     def handle_screen_sel(direction)
       screens.sel direction
       current_client.focus if current_client

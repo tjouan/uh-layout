@@ -148,6 +148,13 @@ module Uh
       end
     end
 
+    describe '#expose' do
+      it 'updates the widgets' do
+        expect(layout).to receive :update_widgets
+        layout.expose :window
+      end
+    end
+
     describe '#handle_screen_sel' do
       it 'selects consecutive screen in given direction' do
         expect { layout.handle_screen_sel :succ }
