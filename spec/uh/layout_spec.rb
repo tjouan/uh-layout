@@ -128,6 +128,26 @@ module Uh
       end
     end
 
+    describe '#update' do
+      context 'when given client is visible' do
+        before { client.show }
+
+        it 'updates the widgets' do
+          expect(layout).to receive :update_widgets
+          layout.update client
+        end
+      end
+
+      context 'when client is hidden' do
+        before { client.hide }
+
+        it 'does not update the widget' do
+          expect(layout).not_to receive :update_widgets
+          layout.update client
+        end
+      end
+    end
+
     describe '#handle_screen_sel' do
       it 'selects consecutive screen in given direction' do
         expect { layout.handle_screen_sel :succ }
