@@ -128,7 +128,7 @@ module Uh
       end
     end
 
-    describe 'handle_screen_sel' do
+    describe '#handle_screen_sel' do
       it 'selects consecutive screen in given direction' do
         expect { layout.handle_screen_sel :succ }
           .to change { layout.current_screen.id }.from(0).to(1)
@@ -146,7 +146,7 @@ module Uh
       end
     end
 
-    describe 'handle_screen_set' do
+    describe '#handle_screen_set' do
       before { layout << client }
 
       it 'removes current client from origin screen' do
@@ -173,7 +173,7 @@ module Uh
       end
     end
 
-    describe 'handle_tag_sel' do
+    describe '#handle_tag_sel' do
       before { layout << client }
 
       it 'hides clients on previously selected tag' do
@@ -216,7 +216,7 @@ module Uh
       end
     end
 
-    describe 'handle_tag_set' do
+    describe '#handle_tag_set' do
       context 'without client' do
         it 'does not raise any error' do
           expect { layout.handle_tag_set '2' }.not_to raise_error
