@@ -86,11 +86,11 @@ module Uh
       update_widgets
     end
 
-    def update client
+    def update(client)
       update_widgets unless client.hidden?
     end
 
-    def expose window
+    def expose(window)
       update_widgets
     end
 
