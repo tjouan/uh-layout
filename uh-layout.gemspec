@@ -3,7 +3,7 @@ require File.expand_path('../lib/uh/layout/version', __FILE__)
 Gem::Specification.new do |s|
   s.name    = 'uh-layout'
   s.version = Uh::Layout::VERSION.dup
-  s.summary = 'Simple layout for uh'
+  s.summary = 'simple tiling and stacking layout for uh-wm'
   s.description = s.name
   s.homepage = 'https://rubygems.org/gems/uh-layout'
 
