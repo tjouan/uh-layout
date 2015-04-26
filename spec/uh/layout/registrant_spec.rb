@@ -1,6 +1,6 @@
 module Uh
   class Layout
-    describe Registrant do
+    RSpec.describe Registrant do
       let(:layout)  { Layout.new }
       let(:geo)     { build_geo }
       let(:screen)  { double 'screen', id: 0, geo: geo, height: geo.height }

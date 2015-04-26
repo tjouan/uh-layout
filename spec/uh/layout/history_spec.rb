@@ -1,6 +1,6 @@
 module Uh
   class Layout
-    describe History do
+    RSpec.describe History do
       subject(:history) { described_class.new }
 
       it 'has an empty tag history' do

@@ -1,7 +1,7 @@
 module Uh
   class Layout
     module Arrangers
-      describe FixedWidth do
+      RSpec.describe FixedWidth do
         let(:geo)           { build_geo 20, 0, 640, 480 }
         let(:entry)         { build_entry }
         let(:entries)       { Container.new([entry, build_entry]) }

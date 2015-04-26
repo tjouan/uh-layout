@@ -1,6 +1,6 @@
 module Uh
   class Layout
-    describe Screen do
+    RSpec.describe Screen do
       let(:geo)         { build_geo }
       let(:other_geo)   { build_geo 640, 0, 320, 240 }
       let(:client)      { build_client }

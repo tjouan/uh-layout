@@ -1,6 +1,6 @@
 module Uh
   class Layout
-    describe Container do
+    RSpec.describe Container do
       let(:entries)       { %i[foo bar] }
       subject(:container) { described_class.new entries }
 

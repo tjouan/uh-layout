@@ -1,6 +1,6 @@
 module Uh
   class Layout
-    describe ClientColumnMover do
+    RSpec.describe ClientColumnMover do
       let(:client)            { build_client }
       let(:column)            { Column.new(build_geo) }
       let(:columns)           { Container.new([column]) }

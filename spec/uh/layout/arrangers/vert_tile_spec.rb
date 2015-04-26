@@ -1,7 +1,7 @@
 module Uh
   class Layout
     module Arrangers
-      describe VertTile do
+      RSpec.describe VertTile do
         let(:entry)         { build_entry }
         let(:other_entry)   { build_entry }
         let(:entries)       { Container.new([entry, other_entry]) }

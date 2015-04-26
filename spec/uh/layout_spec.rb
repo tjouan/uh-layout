@@ -1,5 +1,5 @@
 module Uh
-  describe Layout do
+  RSpec.describe Layout do
     let(:geo)           { build_geo }
     let(:client)        { build_client }
     let(:other_client)  { build_client }
