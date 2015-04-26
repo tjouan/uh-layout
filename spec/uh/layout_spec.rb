@@ -4,12 +4,21 @@ module Uh
     let(:client)        { build_client }
     let(:other_client)  { build_client }
     let(:widget)        { double('widget').as_null_object }
-    subject(:layout)    { described_class.new }
+    let(:options)       { { } }
+    subject(:layout)    { described_class.new options }
 
     before do
       layout.screens << Layout::Screen.new(0, geo)
       layout.screens << Layout::Screen.new(1, geo)
       layout.widgets << widget
+    end
+
+    context 'when given colors option' do
+      let(:options) { { colors: { fg: 'rgb:42/42/42' } } }
+
+      it 'merges given colors with default ones' do
+        expect(layout.colors).to include fg: 'rgb:42/42/42', bg: 'rgb:0c/0c/0c'
+      end
     end
 
     describe '#register' do

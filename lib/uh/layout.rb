@@ -34,11 +34,13 @@ module Uh
 
     attr_reader :screens, :widgets, :colors, :history
 
-    def initialize
+    def initialize **options
       @screens  = Container.new
       @widgets  = []
       @colors   = COLORS
       @history  = History.new
+
+      @colors = @colors.merge options[:colors] if options.key? :colors
     end
 
     def register(display)
