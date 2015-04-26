@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.email       = 'tj@a13.fr'
 
   s.files       = `git ls-files lib`.split $/
+  s.extra_rdoc_files = %w[README.md]
 
 
   s.add_development_dependency 'uh',    '~> 1.0'
