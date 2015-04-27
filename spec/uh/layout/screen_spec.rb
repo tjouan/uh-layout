@@ -6,12 +6,12 @@ module Uh
       let(:client)      { build_client }
       subject(:screen)  { described_class.new 0, geo }
 
-      it 'has one default tag with id 1 assigned' do
-        expect(screen.tags).to include an_object_having_attributes id: '1'
+      it 'has one default view with id 1 assigned' do
+        expect(screen.views).to include an_object_having_attributes id: '1'
       end
 
-      it 'has one default tag with screen geo copy assigned' do
-        expect(screen.tags.first.geo).to eq(screen.geo).and not_be screen.geo
+      it 'has one default view with screen geo copy assigned' do
+        expect(screen.views.first.geo).to eq(screen.geo).and not_be screen.geo
       end
 
       describe '#height=' do
@@ -19,9 +19,9 @@ module Uh
           expect { screen.height = 42 }.to change { screen.height }.to 42
         end
 
-        it 'changes tags height' do
+        it 'changes views height' do
           expect { screen.height = 42 }
-            .to change { screen.tags.first.height }.to 42
+            .to change { screen.views.first.height }.to 42
         end
       end
 
@@ -31,7 +31,7 @@ module Uh
         end
 
         it 'returns true when screen includes given client' do
-          screen.current_tag.current_column_or_create << client
+          screen.current_view.current_column_or_create << client
           expect(screen.include? client).to be true
         end
       end

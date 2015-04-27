@@ -1,6 +1,6 @@
 module Uh
   class Layout
-    class Tag
+    class View
       include GeoAccessors
 
       extend Forwardable
@@ -23,7 +23,7 @@ module Uh
       end
 
       def to_s
-        "TAG ##{@id}, geo: #{@geo}"
+        "VIEW ##{@id}, geo: #{@geo}"
       end
 
       def clients

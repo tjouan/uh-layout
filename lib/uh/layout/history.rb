@@ -1,24 +1,24 @@
 module Uh
   class Layout
     class History
-      TAGS_SIZE_MAX = 8
+      VIEWS_SIZE_MAX = 8
 
-      attr_reader :tags, :tags_size_max
+      attr_reader :views, :views_size_max
 
-      def initialize(tags = [], tags_size_max: TAGS_SIZE_MAX)
-        @tags           = tags
-        @tags_size_max  = tags_size_max
+      def initialize(views = [], views_size_max: VIEWS_SIZE_MAX)
+        @views           = views
+        @views_size_max  = views_size_max
       end
 
-      def record_tag(tag)
-        @tags << tag
-        if @tags.size > @tags_size_max
-          @tags = @tags.drop @tags.size - @tags_size_max
+      def record_view(view)
+        @views << view
+        if @views.size > @views_size_max
+          @views = @views.drop @views.size - @views_size_max
         end
       end
 
-      def last_tag
-        @tags.last
+      def last_view
+        @views.last
       end
     end
   end

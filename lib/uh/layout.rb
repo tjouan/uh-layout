@@ -11,7 +11,7 @@ require 'uh/layout/dumper'
 require 'uh/layout/history'
 require 'uh/layout/registrant'
 require 'uh/layout/screen'
-require 'uh/layout/tag'
+require 'uh/layout/view'
 
 module Uh
   class Layout
@@ -29,8 +29,8 @@ module Uh
     extend Forwardable
     def_delegator :@screens, :current, :current_screen
     def_delegator :current_screen, :==, :current_screen?
-    def_delegator :current_screen, :current_tag
-    def_delegator :current_tag, :current_column
+    def_delegator :current_screen, :current_view
+    def_delegator :current_view, :current_column
 
     attr_reader :screens, :widgets, :colors, :history
 
@@ -65,11 +65,11 @@ module Uh
     end
 
     def suggest_geo
-      (current_column or current_tag).geo.dup
+      (current_column or current_view).geo.dup
     end
 
     def <<(client)
-      current_tag.current_column_or_create << client
+      current_view.current_column_or_create << client
       current_column.current_client = client
       current_column.arrange_clients
       current_column.show_hide_clients
@@ -80,9 +80,9 @@ module Uh
     alias push <<
 
     def remove(client)
-      screen, tag, column = find_client client
+      screen, view, column = find_client client
       column.remove client
-      tag.arrange_columns
+      view.arrange_columns
       column.show_hide_clients
       current_client.focus if current_client
       update_widgets
@@ -109,29 +109,29 @@ module Uh
       push client
     end
 
-    def handle_tag_sel(tag_id)
-      tag_id = tag_id.to_s
-      return unless current_tag.id != tag_id
-      @history.record_tag current_tag
-      current_tag.hide
-      current_screen.tags.current = find_tag_or_create tag_id
-      current_tag.each_column &:show_hide_clients
+    def handle_view_sel(view_id)
+      view_id = view_id.to_s
+      return unless current_view.id != view_id
+      @history.record_view current_view
+      current_view.hide
+      current_screen.views.current = find_view_or_create view_id
+      current_view.each_column &:show_hide_clients
       current_client.focus if current_client
       update_widgets
     end
 
-    def handle_tag_set(tag_id)
-      return unless current_client && current_tag.id != tag_id
-      previous_tag_id = current_tag.id
+    def handle_view_set(view_id)
+      return unless current_client && current_view.id != view_id
+      previous_view_id = current_view.id
       remove client = current_client
-      handle_tag_sel tag_id
+      handle_view_sel view_id
       push client
-      handle_tag_sel previous_tag_id
+      handle_view_sel previous_view_id
     end
 
     def handle_column_sel(direction)
-      return unless current_tag.columns.any?
-      current_tag.columns.sel direction
+      return unless current_view.columns.any?
+      current_view.columns.sel direction
       current_client.focus
       update_widgets
     end
@@ -157,16 +157,16 @@ module Uh
       update_widgets
     end
 
-    def handle_client_column_set(direction, mover: client_mover_for_current_tag)
+    def handle_client_column_set(direction, mover: client_mover_for_current_view)
       return unless current_client
       mover.move_current direction
-      current_tag.arrange_columns
-      current_tag.each_column &:show_hide_clients
+      current_view.arrange_columns
+      current_view.each_column &:show_hide_clients
       update_widgets
     end
 
-    def handle_history_tag_pred
-      handle_tag_sel @history.last_tag.id
+    def handle_history_view_pred
+      handle_view_sel @history.last_view.id
     end
 
     def handle_kill_current
@@ -178,24 +178,24 @@ module Uh
 
     def find_client(client)
       screens.each do |screen|
-        screen.tags.each do |tag|
-          tag.each_column do |column|
+        screen.views.each do |view|
+          view.each_column do |column|
             if column.include? client
-              return screen, tag, column
+              return screen, view, column
             end
           end
         end
       end
     end
 
-    def find_tag_or_create(tag_id)
-      current_screen.tags.find { |e| e.id == tag_id } or Tag.new(tag_id, current_screen.geo).tap do |tag|
-        current_screen.tags << tag
+    def find_view_or_create(view_id)
+      current_screen.views.find { |e| e.id == view_id } or View.new(view_id, current_screen.geo).tap do |view|
+        current_screen.views << view
       end
     end
 
-    def client_mover_for_current_tag
-      ClientColumnMover.new(current_tag.columns, current_tag.columns_max_count?)
+    def client_mover_for_current_view
+      ClientColumnMover.new(current_view.columns, current_view.columns_max_count?)
     end
   end
 end

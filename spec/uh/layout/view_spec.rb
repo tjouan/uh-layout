@@ -1,12 +1,12 @@
 module Uh
   class Layout
-    RSpec.describe Tag do
+    RSpec.describe View do
       let(:geo)           { build_geo }
       let(:other_geo)     { build_geo 640, 0, 320, 240 }
       let(:client)        { build_client }
       let(:other_client)  { build_client }
       let(:column)        { Column.new(geo) }
-      subject(:tag)       { described_class.new '1', geo }
+      subject(:view)       { described_class.new '1', geo }
 
       describe '.new' do
         it 'raises error unless id converts to string' do
@@ -17,73 +17,73 @@ module Uh
 
       describe '#clients' do
         it 'returns all clients contained in assigned columns' do
-          tag.columns << column.tap { |column| column << client << other_client }
-          expect(tag.clients).to eq [client, other_client]
+          view.columns << column.tap { |column| column << client << other_client }
+          expect(view.clients).to eq [client, other_client]
         end
       end
 
       describe '#include?' do
-        it 'returns false when tag does not include given client' do
-          expect(tag.include? client).to be false
+        it 'returns false when view does not include given client' do
+          expect(view.include? client).to be false
         end
 
-        it 'returns true when tag includes given client' do
-          tag.columns << column.tap { |column| column << client }
-          expect(tag.include? client).to be true
+        it 'returns true when view includes given client' do
+          view.columns << column.tap { |column| column << client }
+          expect(view.include? client).to be true
         end
       end
 
       describe '#current_column_or_create' do
-        context 'when tag has no column' do
+        context 'when view has no column' do
           it 'creates a new column' do
-            expect { tag.current_column_or_create }
-              .to change { tag.columns.size }.from(0).to(1)
+            expect { view.current_column_or_create }
+              .to change { view.columns.size }.from(0).to(1)
           end
 
           it 'returns the new column' do
-            expect(tag.current_column_or_create).to be tag.columns.fetch 0
+            expect(view.current_column_or_create).to be view.columns.fetch 0
           end
         end
 
-        context 'when tag has a column' do
-          before { tag.columns << column }
+        context 'when view has a column' do
+          before { view.columns << column }
 
           it 'does not create any column' do
-            expect { tag.current_column_or_create }
-              .not_to change { tag.columns.size }
+            expect { view.current_column_or_create }
+              .not_to change { view.columns.size }
           end
 
           it 'returns the current column' do
-            expect(tag.current_column_or_create).to be column
+            expect(view.current_column_or_create).to be column
           end
         end
       end
 
       describe '#arranger' do
         it 'returns a fixed width arranger' do
-          expect(tag.arranger).to be_an Arrangers::FixedWidth
+          expect(view.arranger).to be_an Arrangers::FixedWidth
         end
       end
 
       describe '#arrange_columns' do
-        before { tag.columns << column }
+        before { view.columns << column }
 
         it 'purges empty columns' do
-          tag.arrange_columns
-          expect(tag.columns).to be_empty
+          view.arrange_columns
+          expect(view.columns).to be_empty
         end
 
         it 'arranges columns' do
           arranger = instance_spy Arrangers::FixedWidth
-          allow(tag).to receive(:arranger) { arranger }
+          allow(view).to receive(:arranger) { arranger }
           expect(arranger).to receive :arrange
-          tag.arrange_columns
+          view.arrange_columns
         end
 
         it 'arranges columns clients' do
           column << client
           expect(column).to receive :arrange_clients
-          tag.arrange_columns
+          view.arrange_columns
         end
       end
     end

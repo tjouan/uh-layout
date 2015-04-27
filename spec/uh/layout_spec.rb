@@ -53,14 +53,14 @@ module Uh
     end
 
     describe '#suggest_geo' do
-      it 'returns current tag geo copy' do
+      it 'returns current view geo copy' do
         expect(layout.suggest_geo)
-          .to eq(layout.current_tag.geo)
-          .and not_be layout.current_tag.geo
+          .to eq(layout.current_view.geo)
+          .and not_be layout.current_view.geo
       end
 
-      context 'when current tag has a column' do
-        before { layout.current_tag.columns << Layout::Column.new(build_geo 42) }
+      context 'when current view has a column' do
+        before { layout.current_view.columns << Layout::Column.new(build_geo 42) }
 
         it 'returns current column geo' do
           expect(layout.suggest_geo)
@@ -116,8 +116,8 @@ module Uh
         expect(layout).not_to include client
       end
 
-      it 'arranges columns in removed client tag' do
-        expect(layout.current_tag).to receive :arrange_columns
+      it 'arranges columns in removed client view' do
+        expect(layout.current_view).to receive :arrange_columns
         layout.remove client
       end
 
@@ -187,12 +187,12 @@ module Uh
 
       it 'removes current client from origin screen' do
         layout.handle_screen_set :succ
-        expect(layout.screens[0].tags.flat_map(&:clients)).not_to include client
+        expect(layout.screens[0].views.flat_map(&:clients)).not_to include client
       end
 
       it 'adds current client to consecutive screen in given direction' do
         layout.handle_screen_set :succ
-        expect(layout.screens[1].tags.flat_map(&:clients)).to include client
+        expect(layout.screens[1].views.flat_map(&:clients)).to include client
       end
 
       it 'selects consecutive screen in given direction' do
@@ -209,89 +209,89 @@ module Uh
       end
     end
 
-    describe '#handle_tag_sel' do
+    describe '#handle_view_sel' do
       before { layout << client }
 
-      it 'hides clients on previously selected tag' do
-        layout.handle_tag_sel '2'
+      it 'hides clients on previously selected view' do
+        layout.handle_view_sel '2'
         expect(client).to be_hidden
       end
 
-      it 'sets the selected tag as the current one' do
-        layout.handle_tag_sel '2'
-        expect(layout.current_tag.id).to eq '2'
+      it 'sets the selected view as the current one' do
+        layout.handle_view_sel '2'
+        expect(layout.current_view.id).to eq '2'
       end
 
-      it 'shows and hides clients in selected tag columns' do
-        layout.handle_tag_sel '2'
-        expect(layout.current_screen.tags[0].columns)
+      it 'shows and hides clients in selected view columns' do
+        layout.handle_view_sel '2'
+        expect(layout.current_screen.views[0].columns)
           .to all receive :show_hide_clients
-        layout.handle_tag_sel '1'
+        layout.handle_view_sel '1'
       end
 
-      it 'focuses selected tag current client' do
-        layout.handle_tag_sel '2'
+      it 'focuses selected view current client' do
+        layout.handle_view_sel '2'
         expect(client).to receive :focus
-        layout.handle_tag_sel '1'
+        layout.handle_view_sel '1'
       end
 
       it 'updates widgets' do
         expect(widget).to receive :update
-        layout.handle_tag_sel '2'
+        layout.handle_view_sel '2'
       end
 
       it 'accepts non-string arguments' do
-        layout.handle_tag_sel 2
-        expect(layout.current_tag.id).to eq '2'
+        layout.handle_view_sel 2
+        expect(layout.current_view.id).to eq '2'
       end
 
-      it 'records previous tag in history' do
-        previous_tag = layout.current_tag
-        layout.handle_tag_sel 2
-        expect(layout.history.tags).to include previous_tag
+      it 'records previous view in history' do
+        previous_view = layout.current_view
+        layout.handle_view_sel 2
+        expect(layout.history.views).to include previous_view
       end
     end
 
-    describe '#handle_tag_set' do
+    describe '#handle_view_set' do
       context 'without client' do
         it 'does not raise any error' do
-          expect { layout.handle_tag_set '2' }.not_to raise_error
+          expect { layout.handle_view_set '2' }.not_to raise_error
         end
       end
 
       context 'with a client' do
         before { layout << other_client << client }
 
-        it 'removes current client from origin tag' do
-          origin_tag = layout.current_tag
-          layout.handle_tag_set '2'
-          expect(origin_tag).not_to include client
+        it 'removes current client from origin view' do
+          origin_view = layout.current_view
+          layout.handle_view_set '2'
+          expect(origin_view).not_to include client
         end
 
         it 'removes current client from layout' do
           expect(layout).to receive(:remove).with client
-          layout.handle_tag_set '2'
+          layout.handle_view_set '2'
         end
 
         it 'hides current client' do
           expect(client).to receive :hide
-          layout.handle_tag_set '2'
+          layout.handle_view_set '2'
         end
 
-        it 'adds current client to given tag' do
-          layout.handle_tag_set '2'
-          dest_tag = layout.current_screen.tags.find { |e| e.id == '2' }
-          expect(dest_tag).to include client
+        it 'adds current client to given view' do
+          layout.handle_view_set '2'
+          dest_view = layout.current_screen.views.find { |e| e.id == '2' }
+          expect(dest_view).to include client
         end
 
-        it 'preserves current tag' do
-          layout.handle_tag_set '2'
-          expect(layout.current_tag.id).to eq '1'
+        it 'preserves current view' do
+          layout.handle_view_set '2'
+          expect(layout.current_view.id).to eq '1'
         end
 
         it 'updates widgets' do
           expect(widget).to receive :update
-          layout.handle_tag_set '2'
+          layout.handle_view_set '2'
         end
       end
     end
@@ -306,14 +306,14 @@ module Uh
       context 'with two clients in two columns' do
         before do
           layout << client
-          layout.current_tag.columns << Layout::Column.new(geo).tap do |o|
+          layout.current_view.columns << Layout::Column.new(geo).tap do |o|
             o << other_client
           end
         end
 
         it 'selects the column consecutive to current one in given direction' do
           layout.handle_column_sel :succ
-          expect(layout.current_column).to be layout.current_tag.columns[1]
+          expect(layout.current_column).to be layout.current_view.columns[1]
         end
 
         it 'focuses the current client of selected column' do
@@ -434,13 +434,13 @@ module Uh
           layout.handle_client_column_set :succ, mover: mover
         end
 
-        it 'arranges current tag columns' do
-          expect(layout.current_tag).to receive :arrange_columns
+        it 'arranges current view columns' do
+          expect(layout.current_view).to receive :arrange_columns
           layout.handle_client_column_set :succ
         end
 
-        it 'shows and hides clients in selected tag columns' do
-          expect(layout.current_tag.columns).to all receive :show_hide_clients
+        it 'shows and hides clients in selected view columns' do
+          expect(layout.current_view.columns).to all receive :show_hide_clients
           layout.handle_client_column_set :succ
         end
 
@@ -456,11 +456,11 @@ module Uh
       end
     end
 
-    describe '#handle_history_tag_pred' do
-      it 'selects last tag recorded in history' do
-        layout.handle_tag_sel 2
-        expect { layout.handle_history_tag_pred }
-          .to change { layout.current_tag.id }
+    describe '#handle_history_view_pred' do
+      it 'selects last view recorded in history' do
+        layout.handle_view_sel 2
+        expect { layout.handle_history_view_pred }
+          .to change { layout.current_view.id }
           .from(?2).to ?1
       end
     end

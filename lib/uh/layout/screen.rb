@@ -4,15 +4,15 @@ module Uh
       include GeoAccessors
 
       extend Forwardable
-      def_delegator :@tags, :current, :current_tag
-      def_delegator :current_tag, :==, :current_tag?
+      def_delegator :@views, :current, :current_view
+      def_delegator :current_view, :==, :current_view?
 
-      attr_reader :id, :tags, :geo
+      attr_reader :id, :views, :geo
 
       def initialize(id, geo)
         @id   = id
         @geo  = geo.dup
-        @tags = Container.new([Tag.new('1', @geo)])
+        @views = Container.new([View.new('1', @geo)])
       end
 
       def to_s
@@ -21,11 +21,11 @@ module Uh
 
       def height=(value)
         @geo.height = value
-        @tags.each { |tag| tag.height = value }
+        @views.each { |view| view.height = value }
       end
 
       def include?(client)
-        @tags.any? { |tag| tag.include? client }
+        @views.any? { |view| view.include? client }
       end
     end
   end

@@ -6,7 +6,7 @@ module Uh
       BORDER_HEIGHT     = 2
       BORDER_PADDING_Y  = 0
       COLUMN_PADDING_X  = 1
-      TAG_PADDING_X     = 5
+      VIEW_PADDING_X    = 5
 
       include GeoAccessors
 
@@ -38,9 +38,9 @@ module Uh
       def redraw
         draw_background
         draw_columns BORDER_HEIGHT + BORDER_PADDING_Y,
-          @screen.current_tag.columns, @screen.current_tag.current_column
-        draw_tags BORDER_HEIGHT + BORDER_PADDING_Y + text_line_height,
-          @screen.tags, @screen.current_tag
+          @screen.current_view.columns, @screen.current_view.current_column
+        draw_views BORDER_HEIGHT + BORDER_PADDING_Y + text_line_height,
+          @screen.views, @screen.current_view
         if @status
           draw_status BORDER_HEIGHT + BORDER_PADDING_Y + text_line_height,
             @status
@@ -126,19 +126,19 @@ module Uh
           bg: current ? @colors[:hi] : @colors[:bg]
       end
 
-      def draw_tags(y_offset, tags, current_tag)
-        tags.sort_by(&:id).inject(0) do |x_offset, tag|
-          color = if tag == current_tag
+      def draw_views(y_offset, views, current_view)
+        views.sort_by(&:id).inject(0) do |x_offset, view|
+          color = if view == current_view
             active_color
-          elsif tag.clients.any?
+          elsif view.clients.any?
             @colors[:hi]
           else
             @colors[:bg]
           end
 
-          x_offset + draw_text(tag.id, x_offset, y_offset,
+          x_offset + draw_text(view.id, x_offset, y_offset,
             bg:         color,
-            padding_x:  TAG_PADDING_X
+            padding_x:  VIEW_PADDING_X
           )
         end
       end
