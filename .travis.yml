@@ -9,9 +9,8 @@ rvm:
 matrix:
   fast_finish: true
   allow_failures:
-    - rvm:
-      - ruby-head
-      - rbx-2
+    - rvm: ruby-head
+    - rvm: rbx-2
 notifications:
   email:
     - tj+travis_uh_layout@a13.fr
