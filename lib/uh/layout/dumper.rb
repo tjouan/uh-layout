@@ -11,7 +11,9 @@ module Uh
           screen.views.each do |view|
             m << "  %s%s\n" % [screen.current_view?(view) ? '*' : ' ', view]
             view.columns.each do |column|
-              m << "    %s%s\n" % [view.current_column?(column) ? '*' : ' ', column]
+              m << "    %s%s\n" % [
+                view.current_column?(column) ? '*' : ' ', column
+              ]
               column.clients.each do |client|
                 m << "      %s%s\n" % [
                   column.current_client?(client) ? '*' : ' ',

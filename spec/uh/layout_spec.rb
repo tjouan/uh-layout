@@ -60,7 +60,9 @@ module Uh
       end
 
       context 'when current view has a column' do
-        before { layout.current_view.columns << Layout::Column.new(build_geo 42) }
+        before do
+          layout.current_view.columns << Layout::Column.new(build_geo 42)
+        end
 
         it 'returns current column geo' do
           expect(layout.suggest_geo)
@@ -187,7 +189,8 @@ module Uh
 
       it 'removes current client from origin screen' do
         layout.handle_screen_set :succ
-        expect(layout.screens[0].views.flat_map(&:clients)).not_to include client
+        expect(layout.screens[0].views.flat_map(&:clients))
+          .not_to include client
       end
 
       it 'adds current client to consecutive screen in given direction' do

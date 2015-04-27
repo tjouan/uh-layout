@@ -92,7 +92,8 @@ module Uh
         end
 
         it 'raises an ArgumentError when given entry is not included' do
-          expect { container.remove :unknown_entry }.to raise_error ArgumentError
+          expect { container.remove :unknown_entry }
+            .to raise_error ArgumentError
         end
 
         context 'when the first and current entry is removed' do

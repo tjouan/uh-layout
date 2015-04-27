@@ -112,7 +112,9 @@ module Uh
       end
 
       describe '#show_hide_clients' do
-        let(:arranger) { double 'arranger', each_visible: nil, each_hidden: nil }
+        let(:arranger) do
+          double 'arranger', each_visible: nil, each_hidden: nil
+        end
 
         it 'shows visible clients when they are hidden' do
           allow(arranger).to receive(:each_visible)

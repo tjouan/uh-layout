@@ -6,7 +6,7 @@ module Uh
       let(:client)        { build_client }
       let(:other_client)  { build_client }
       let(:column)        { Column.new(geo) }
-      subject(:view)       { described_class.new '1', geo }
+      subject(:view)      { described_class.new '1', geo }
 
       describe '.new' do
         it 'raises error unless id converts to string' do
@@ -17,7 +17,9 @@ module Uh
 
       describe '#clients' do
         it 'returns all clients contained in assigned columns' do
-          view.columns << column.tap { |column| column << client << other_client }
+          view.columns << column.tap do |column|
+            column << client << other_client
+          end
           expect(view.clients).to eq [client, other_client]
         end
       end

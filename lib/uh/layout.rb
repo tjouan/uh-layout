@@ -189,13 +189,18 @@ module Uh
     end
 
     def find_view_or_create(view_id)
-      current_screen.views.find { |e| e.id == view_id } or View.new(view_id, current_screen.geo).tap do |view|
+      current_screen.views.find do
+        |e| e.id == view_id
+      end or View.new(view_id, current_screen.geo).tap do |view|
         current_screen.views << view
       end
     end
 
     def client_mover_for_current_view
-      ClientColumnMover.new(current_view.columns, current_view.columns_max_count?)
+      ClientColumnMover.new(
+        current_view.columns,
+        current_view.columns_max_count?
+      )
     end
   end
 end

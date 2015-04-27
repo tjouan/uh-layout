@@ -10,9 +10,9 @@ module Uh
       attr_reader :id, :views, :geo
 
       def initialize(id, geo)
-        @id   = id
-        @geo  = geo.dup
-        @views = Container.new([View.new('1', @geo)])
+        @id     = id
+        @geo    = geo.dup
+        @views  = Container.new([View.new('1', @geo)])
       end
 
       def to_s
