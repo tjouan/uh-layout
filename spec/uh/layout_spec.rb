@@ -467,22 +467,5 @@ module Uh
           .from(?2).to ?1
       end
     end
-
-    describe '#handle_kill_current' do
-      context 'without client' do
-        it 'does not raise any error' do
-          expect { layout.handle_kill_current }.not_to raise_error
-        end
-      end
-
-      context 'with a client' do
-        before { layout << client }
-
-        it 'kills current client' do
-          expect(client).to receive :kill
-          layout.handle_kill_current
-        end
-      end
-    end
   end
 end

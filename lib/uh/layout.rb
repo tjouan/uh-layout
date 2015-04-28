@@ -169,10 +169,6 @@ module Uh
       handle_view_sel @history.last_view.id
     end
 
-    def handle_kill_current
-      current_client and current_client.kill
-    end
-
 
     private
 
