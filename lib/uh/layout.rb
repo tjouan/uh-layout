@@ -32,13 +32,14 @@ module Uh
     def_delegator :current_screen, :current_view
     def_delegator :current_view, :current_column
 
-    attr_reader :screens, :widgets, :colors, :history
+    attr_reader :screens, :widgets, :colors, :history, :bar_status
 
     def initialize **options
-      @screens  = Container.new
-      @widgets  = []
-      @colors   = COLORS
-      @history  = History.new
+      @screens    = Container.new
+      @widgets    = []
+      @colors     = COLORS
+      @history    = History.new
+      @bar_status = options[:bar_status]
 
       @colors = @colors.merge options[:colors] if options.key? :colors
     end
