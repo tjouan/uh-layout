@@ -1,3 +1,5 @@
+require 'uh/wm/client'
+
 module Factories
   class Entry
     include Uh::GeoAccessors

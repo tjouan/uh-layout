@@ -1,5 +1,4 @@
 require 'uh'
-require 'uh/wm'
 require 'uh/layout'
 
 Dir['spec/support/**/*.rb'].map { |e| require e.gsub 'spec/', '' }
