@@ -157,6 +157,13 @@ module Uh
           layout.update client
         end
       end
+
+      context 'when given no client' do
+        it 'updates the widgets' do
+          expect(layout).to receive :update_widgets
+          layout.update
+        end
+      end
     end
 
     describe '#expose' do

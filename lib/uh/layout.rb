@@ -88,8 +88,9 @@ module Uh
       update_widgets
     end
 
-    def update(client)
-      update_widgets unless client.hidden?
+    def update(client = nil)
+      return if client && client.hidden?
+      update_widgets
     end
 
     def expose(window)
