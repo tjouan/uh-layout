@@ -1,6 +1,6 @@
 directories %w[lib spec]
 
-guard :rspec, cmd: 'bundle exec rspec' do
+guard :rspec, cmd: 'rspec -f doc' do
   watch(%r{\Aspec/.+_spec\.rb\z})
   watch(%r{\Alib/(.+)\.rb\z})         { |m| "spec/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')        { 'spec' }
