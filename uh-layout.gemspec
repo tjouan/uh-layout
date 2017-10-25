@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
 
   s.add_development_dependency 'uh',    '~> 2.0'
-  s.add_development_dependency 'uh-wm', '~> 0.0.9'
-  s.add_development_dependency 'rake',  '~> 10.4'
+  s.add_development_dependency 'uh-wm', '~> 0.0', '>= 0.0.9'
+  s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3.2'
 end
