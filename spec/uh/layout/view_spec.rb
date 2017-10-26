@@ -5,13 +5,13 @@ module Uh
       let(:other_geo)     { build_geo 640, 0, 320, 240 }
       let(:client)        { build_client }
       let(:other_client)  { build_client }
-      let(:column)        { Column.new(geo) }
-      subject(:view)      { described_class.new '1', geo }
+      let(:column)        { Column.new geo }
+      subject(:view)      { described_class.new ?1, geo }
 
       describe '.new' do
         it 'raises error unless id converts to string' do
           expect { described_class.new 1, geo }
-            .to raise_error(Layout::ArgumentError)
+            .to raise_error Layout::ArgumentError
         end
       end
 
@@ -39,7 +39,9 @@ module Uh
         context 'when view has no column' do
           it 'creates a new column' do
             expect { view.current_column_or_create }
-              .to change { view.columns.size }.from(0).to(1)
+              .to change { view.columns.size }
+              .from(0)
+              .to 1
           end
 
           it 'returns the new column' do

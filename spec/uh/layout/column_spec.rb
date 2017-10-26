@@ -9,7 +9,9 @@ module Uh
       subject(:column)    { described_class.new geo, mode: mode }
 
       it 'has a copy to given geo' do
-        expect(column.geo).to eq(geo).and not_be geo
+        expect(column.geo)
+          .to eq(geo)
+          .and not_be geo
       end
 
       it 'has no client assigned' do
@@ -35,7 +37,9 @@ module Uh
         end
 
         it 'assigns column geo copy to given client' do
-          expect(client.geo).to eq(column.geo).and not_be column.geo
+          expect(client.geo)
+            .to eq(column.geo)
+            .and not_be column.geo
         end
 
         it 'returns self' do
@@ -46,13 +50,17 @@ module Uh
       describe '#mode_toggle' do
         it 'toggles mode from stack to tile' do
           expect { column.mode_toggle }
-            .to change { column.mode }.from(:stack).to(:tile)
+            .to change { column.mode }
+            .from(:stack)
+            .to :tile
         end
 
         it 'toggles mode from tile to stack' do
           column.mode_toggle
           expect { column.mode_toggle }
-            .to change { column.mode }.from(:tile).to(:stack)
+            .to change { column.mode }
+            .from(:tile)
+            .to :stack
         end
 
       end
@@ -112,23 +120,25 @@ module Uh
       end
 
       describe '#show_hide_clients' do
-        let(:arranger) do
+        let :arranger do
           double 'arranger', each_visible: nil, each_hidden: nil
         end
 
         it 'shows visible clients when they are hidden' do
-          allow(arranger).to receive(:each_visible)
+          allow(arranger)
+            .to receive(:each_visible)
             .and_yield(client.hide)
-            .and_yield(other_client.show)
+            .and_yield other_client.show
           expect(client).to receive :show
           expect(other_client).not_to receive :show
           column.show_hide_clients arranger: arranger
         end
 
         it 'hides hidden clients except those already hidden' do
-          allow(arranger).to receive(:each_hidden)
+          allow(arranger)
+            .to receive(:each_hidden)
             .and_yield(client.show)
-            .and_yield(other_client.hide)
+            .and_yield other_client.hide
           expect(client).to receive :hide
           expect(other_client).not_to receive :hide
           column.show_hide_clients arranger: arranger

@@ -2,7 +2,7 @@ module Uh
   class Layout
     module Registrant
       class << self
-        def register(layout, display)
+        def register layout, display
           display.screens.each do |screen|
             layout.screens << scr = Screen.new(screen.id, screen.geo)
             bar = Bar.new(display, scr, layout.colors).tap do |b|

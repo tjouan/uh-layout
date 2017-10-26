@@ -1,12 +1,12 @@
 module Uh
   class Layout
     class ClientColumnMover
-      def initialize(columns, columns_max_count)
+      def initialize columns, columns_max_count
         @columns            = columns
         @columns_max_count  = columns_max_count
       end
 
-      def move_current(direction)
+      def move_current direction
         @columns.current.remove client = @columns.current.current_client
         dest_column = get_or_create_column direction
         dest_column << client
@@ -14,7 +14,7 @@ module Uh
         @columns.current = dest_column
       end
 
-      def get_or_create_column(direction)
+      def get_or_create_column direction
         if candidate = @columns.get(direction)
           candidate
         elsif @columns_max_count
@@ -22,8 +22,8 @@ module Uh
         else
           Column.new(Geo.new).tap do |o|
             case direction
-            when :pred then @columns.unshift o
-            when :succ then @columns << o
+              when :pred then @columns.unshift o
+              when :succ then @columns << o
             end
           end
         end

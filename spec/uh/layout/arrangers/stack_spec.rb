@@ -4,14 +4,14 @@ module Uh
       RSpec.describe Stack do
         let(:entry)         { build_entry }
         let(:other_entry)   { build_entry }
-        let(:entries)       { Container.new([entry, other_entry]) }
+        let(:entries)       { Container.new [entry, other_entry] }
         let(:geo)           { build_geo 0, 0, 300, 480 }
         subject(:arranger)  { described_class.new entries, geo }
 
         describe '#arrange' do
           it 'sets given geo on all entries' do
             arranger.arrange
-            expect(entries.map(&:geo)).to all eq geo
+            expect(entries.map &:geo).to all eq geo
           end
         end
 
@@ -22,10 +22,11 @@ module Uh
           end
 
           context 'with no current entry' do
-            let(:entries) { Container.new([]) }
+            let(:entries) { Container.new [] }
 
             it 'does not yield' do
-              expect { |b| arranger.each_visible &b }.not_to yield_control
+              expect { |b| arranger.each_visible &b }
+                .not_to yield_control
             end
           end
         end

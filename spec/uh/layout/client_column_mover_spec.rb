@@ -2,8 +2,8 @@ module Uh
   class Layout
     RSpec.describe ClientColumnMover do
       let(:client)            { build_client }
-      let(:column)            { Column.new(build_geo) }
-      let(:columns)           { Container.new([column]) }
+      let(:column)            { Column.new build_geo }
+      let(:columns)           { Container.new [column] }
       let(:columns_max_count) { false }
       subject(:mover)         { described_class.new columns, columns_max_count }
 
@@ -43,7 +43,7 @@ module Uh
         end
 
         context 'given two columns' do
-          let(:columns) { Container.new([column, Column.new(build_geo)]) }
+          let(:columns) { Container.new [column, Column.new(build_geo)] }
 
           before { columns[1] << client.dup }
 
@@ -62,7 +62,7 @@ module Uh
       end
 
       describe '#get_or_create_column' do
-        let(:columns) { Container.new([column, Column.new(build_geo)]) }
+        let(:columns) { Container.new [column, Column.new(build_geo)] }
 
         it 'returns the consecutive column in given direction' do
           expect(mover.get_or_create_column :succ).to be columns[1]

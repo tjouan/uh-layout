@@ -7,7 +7,7 @@ module Uh
       def_delegators :@entries, :<<, :[], :each, :empty?, :fetch, :first,
         :index, :last, :size, :unshift
 
-      def initialize(entries = [])
+      def initialize entries = []
         @entries        = entries
         @current_index  = 0
       end
@@ -18,17 +18,17 @@ module Uh
         @entries[@current_index]
       end
 
-      def current=(entry)
+      def current= entry
         fail ArgumentError, 'unknown entry' unless include? entry
         @current_index = @entries.index entry
       end
 
-      def insert_after_current(entry)
+      def insert_after_current entry
         fail RuntimeError, 'no current entry' unless current
         @entries.insert @current_index + 1, entry
       end
 
-      def remove(entry)
+      def remove entry
         fail ArgumentError, 'unknown entry' unless include? entry
         @entries.delete_at @entries.index entry
         @current_index -= 1 unless @current_index == 0
@@ -39,7 +39,7 @@ module Uh
         @entries.each { |e| remove e if yield e }
       end
 
-      def get(direction, cycle: false)
+      def get direction, cycle: false
         index = @current_index.send direction
         if cycle
           @entries[index % @entries.size]
@@ -48,12 +48,12 @@ module Uh
         end
       end
 
-      def sel(direction)
+      def sel direction
         @current_index = @current_index.send(direction) % @entries.size
       end
 
-      def set(direction)
-        raise RuntimeError unless @entries.size >= 2
+      def set direction
+        fail RuntimeError unless @entries.size >= 2
         new_index = @current_index.send direction
         if new_index.between? 0, @entries.size - 1
           swap @current_index, new_index
@@ -64,17 +64,16 @@ module Uh
         end
       end
 
-      def swap(a, b)
+      def swap a, b
         @entries[a], @entries[b] = @entries[b], @entries[a]
       end
 
+    private
 
-      private
-
-      def rotate(direction)
+      def rotate direction
         case direction
-        when :pred then @entries = @entries.push    @entries.shift
-        when :succ then @entries = @entries.unshift @entries.pop
+          when :pred then @entries = @entries.push    @entries.shift
+          when :succ then @entries = @entries.unshift @entries.pop
         end
       end
     end

@@ -16,7 +16,7 @@ module Uh
           described_class.register layout, display
           expect(layout.screens[0])
             .to be_a(Screen)
-            .and have_attributes(id: 0)
+            .and have_attributes id: 0
         end
 
         it 'builds a new bar widget' do

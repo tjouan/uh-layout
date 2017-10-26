@@ -13,7 +13,7 @@ module Uh
 
       attr_reader :id, :geo, :columns
 
-      def initialize(id, geo)
+      def initialize id, geo
         unless id.kind_of? String
           fail ArgumentError, "expect `id' to be a String, #{id.class} given"
         end
@@ -30,7 +30,7 @@ module Uh
         @columns.inject([]) { |m, column| m + column.clients }
       end
 
-      def include?(client)
+      def include? client
         @columns.any? { |column| column.include? client }
       end
 
@@ -41,7 +41,7 @@ module Uh
       end
 
       def arranger
-        Arrangers::FixedWidth.new(@columns, @geo)
+        Arrangers::FixedWidth.new @columns, @geo
       end
 
       def arrange_columns

@@ -4,7 +4,7 @@ module Uh
       RSpec.describe FixedWidth do
         let(:geo)           { build_geo 20, 0, 640, 480 }
         let(:entry)         { build_entry }
-        let(:entries)       { Container.new([entry, build_entry]) }
+        let(:entries)       { Container.new [entry, build_entry] }
         subject(:arranger)  { described_class.new entries, geo, width: 300 }
 
         describe '#arrange' do
@@ -41,7 +41,7 @@ module Uh
           end
 
           context 'without entry' do
-            let(:entries) { Container.new([]) }
+            let(:entries) { Container.new [] }
 
             it 'does not raise any error' do
               expect { arranger.arrange }.not_to raise_error
@@ -51,7 +51,7 @@ module Uh
 
         describe '#max_count?' do
           context 'when a new entry fits in current geo' do
-            let(:entries) { Container.new([entry]) }
+            let(:entries) { Container.new [entry] }
 
             it 'returns false' do
               expect(arranger.max_count?).to be false
@@ -59,7 +59,7 @@ module Uh
           end
 
           context 'when current geo can not contain more entry' do
-            let(:entries) { Container.new([entry, entry.dup]) }
+            let(:entries) { Container.new [entry, entry.dup] }
 
             it 'returns true' do
               expect(arranger.max_count?).to be true

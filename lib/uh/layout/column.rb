@@ -16,7 +16,7 @@ module Uh
 
       attr_reader :geo, :clients, :mode
 
-      def initialize(geo, mode: :stack)
+      def initialize geo, mode: :stack
         @geo      = geo.dup
         @clients  = Container.new
         @mode     = mode
@@ -26,7 +26,7 @@ module Uh
         "COL geo: #{@geo}"
       end
 
-      def <<(client)
+      def << client
         client.geo = @geo.dup
         if @clients.current
           @clients.insert_after_current client
@@ -44,7 +44,7 @@ module Uh
         MODES[@mode].new @clients, @geo
       end
 
-      def client_swap(direction)
+      def client_swap direction
         @clients.set direction
         if @mode == :tile
           arrange_clients
@@ -57,7 +57,7 @@ module Uh
         clients.each &:moveresize
       end
 
-      def show_hide_clients(arranger: self.arranger)
+      def show_hide_clients arranger: self.arranger
         arranger.each_visible { |client| client.show if client.hidden? }
         arranger.each_hidden  { |client| client.hide unless client.hidden? }
       end

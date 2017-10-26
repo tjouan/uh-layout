@@ -4,7 +4,7 @@ module Uh
     let(:client)        { build_client }
     let(:other_client)  { build_client }
     let(:widget)        { double('widget').as_null_object }
-    let(:options)       { { } }
+    let(:options)       { {} }
     subject(:layout)    { described_class.new options }
 
     before do
@@ -176,7 +176,9 @@ module Uh
     describe '#handle_screen_sel' do
       it 'selects consecutive screen in given direction' do
         expect { layout.handle_screen_sel :succ }
-          .to change { layout.current_screen.id }.from(0).to(1)
+          .to change { layout.current_screen.id }
+          .from(0)
+          .to 1
       end
 
       it 'focus selected screen current client' do
@@ -196,18 +198,20 @@ module Uh
 
       it 'removes current client from origin screen' do
         layout.handle_screen_set :succ
-        expect(layout.screens[0].views.flat_map(&:clients))
+        expect(layout.screens[0].views.flat_map &:clients)
           .not_to include client
       end
 
       it 'adds current client to consecutive screen in given direction' do
         layout.handle_screen_set :succ
-        expect(layout.screens[1].views.flat_map(&:clients)).to include client
+        expect(layout.screens[1].views.flat_map &:clients).to include client
       end
 
       it 'selects consecutive screen in given direction' do
         expect { layout.handle_screen_set :succ }
-          .to change { layout.current_screen.id }.from(0).to(1)
+          .to change { layout.current_screen.id }
+          .from(0)
+          .to 1
       end
 
       context 'without client' do
@@ -223,36 +227,36 @@ module Uh
       before { layout << client }
 
       it 'hides clients on previously selected view' do
-        layout.handle_view_sel '2'
+        layout.handle_view_sel ?2
         expect(client).to be_hidden
       end
 
       it 'sets the selected view as the current one' do
-        layout.handle_view_sel '2'
-        expect(layout.current_view.id).to eq '2'
+        layout.handle_view_sel ?2
+        expect(layout.current_view.id).to eq ?2
       end
 
       it 'shows and hides clients in selected view columns' do
-        layout.handle_view_sel '2'
+        layout.handle_view_sel ?2
         expect(layout.current_screen.views[0].columns)
           .to all receive :show_hide_clients
-        layout.handle_view_sel '1'
+        layout.handle_view_sel ?1
       end
 
       it 'focuses selected view current client' do
-        layout.handle_view_sel '2'
+        layout.handle_view_sel ?2
         expect(client).to receive :focus
-        layout.handle_view_sel '1'
+        layout.handle_view_sel ?1
       end
 
       it 'updates widgets' do
         expect(widget).to receive :update
-        layout.handle_view_sel '2'
+        layout.handle_view_sel ?2
       end
 
       it 'accepts non-string arguments' do
         layout.handle_view_sel 2
-        expect(layout.current_view.id).to eq '2'
+        expect(layout.current_view.id).to eq ?2
       end
 
       it 'records previous view in history' do
@@ -265,7 +269,7 @@ module Uh
     describe '#handle_view_set' do
       context 'without client' do
         it 'does not raise any error' do
-          expect { layout.handle_view_set '2' }.not_to raise_error
+          expect { layout.handle_view_set ?2 }.not_to raise_error
         end
       end
 
@@ -274,34 +278,34 @@ module Uh
 
         it 'removes current client from origin view' do
           origin_view = layout.current_view
-          layout.handle_view_set '2'
+          layout.handle_view_set ?2
           expect(origin_view).not_to include client
         end
 
         it 'removes current client from layout' do
           expect(layout).to receive(:remove).with client
-          layout.handle_view_set '2'
+          layout.handle_view_set ?2
         end
 
         it 'hides current client' do
           expect(client).to receive :hide
-          layout.handle_view_set '2'
+          layout.handle_view_set ?2
         end
 
         it 'adds current client to given view' do
-          layout.handle_view_set '2'
-          dest_view = layout.current_screen.views.find { |e| e.id == '2' }
+          layout.handle_view_set ?2
+          dest_view = layout.current_screen.views.find { |e| e.id == ?2 }
           expect(dest_view).to include client
         end
 
         it 'preserves current view' do
-          layout.handle_view_set '2'
-          expect(layout.current_view.id).to eq '1'
+          layout.handle_view_set ?2
+          expect(layout.current_view.id).to eq ?1
         end
 
         it 'updates widgets' do
           expect(widget).to receive :update
-          layout.handle_view_set '2'
+          layout.handle_view_set ?2
         end
       end
     end
@@ -309,7 +313,8 @@ module Uh
     describe '#handle_column_sel' do
       context 'without client' do
         it 'does not raise any error' do
-          expect { layout.handle_column_sel :succ }.not_to raise_error
+          expect { layout.handle_column_sel :succ }
+            .not_to raise_error
         end
       end
 
@@ -377,7 +382,9 @@ module Uh
 
         it 'selects current column consecutive client in given direction' do
           expect { layout.handle_client_sel :pred }
-            .to change { layout.current_client }.from(other_client).to(client)
+            .to change { layout.current_client }
+            .from(other_client)
+            .to client
         end
 
         it 'focuses current client' do
@@ -440,7 +447,7 @@ module Uh
         before { layout << other_client << client }
 
         it 'moves current client with given client column mover' do
-          expect(mover).to receive(:move_current).with(:succ)
+          expect(mover).to receive(:move_current).with :succ
           layout.handle_client_column_set :succ, mover: mover
         end
 
@@ -471,7 +478,8 @@ module Uh
         layout.handle_view_sel 2
         expect { layout.handle_history_view_pred }
           .to change { layout.current_view.id }
-          .from(?2).to ?1
+          .from(?2)
+          .to ?1
       end
     end
   end

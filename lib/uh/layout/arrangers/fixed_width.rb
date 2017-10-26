@@ -4,7 +4,7 @@ module Uh
       class FixedWidth
         DEFAULT_WIDTH = 484
 
-        def initialize(entries, geo, width: DEFAULT_WIDTH)
+        def initialize entries, geo, width: DEFAULT_WIDTH
           @entries  = entries
           @geo      = geo
           @width    = width

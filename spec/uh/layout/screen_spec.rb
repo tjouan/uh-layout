@@ -7,21 +7,26 @@ module Uh
       subject(:screen)  { described_class.new 0, geo }
 
       it 'has one default view with id 1 assigned' do
-        expect(screen.views).to include an_object_having_attributes id: '1'
+        expect(screen.views).to include an_object_having_attributes id: ?1
       end
 
       it 'has one default view with screen geo copy assigned' do
-        expect(screen.views.first.geo).to eq(screen.geo).and not_be screen.geo
+        expect(screen.views.first.geo)
+          .to eq(screen.geo)
+          .and not_be screen.geo
       end
 
       describe '#height=' do
         it 'changes screen height' do
-          expect { screen.height = 42 }.to change { screen.height }.to 42
+          expect { screen.height = 42 }
+            .to change { screen.height }
+            .to 42
         end
 
         it 'changes views height' do
           expect { screen.height = 42 }
-            .to change { screen.views.first.height }.to 42
+            .to change { screen.views.first.height }
+            .to 42
         end
       end
 

@@ -2,7 +2,7 @@ module Uh
   class Layout
     module Arrangers
       class VertTile
-        def initialize(entries, geo)
+        def initialize entries, geo
           @entries  = entries
           @geo      = geo
         end
