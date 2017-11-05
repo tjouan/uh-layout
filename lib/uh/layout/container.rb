@@ -28,17 +28,10 @@ module Uh
         @entries.insert @current_index + 1, entry
       end
 
-      def remove entry
-        fail ArgumentError, 'unknown entry' unless include? entry
-        @entries.delete_at (index = @entries.index(entry))
-        if @current_index != 0 && @current_index > index
-          @current_index -= 1
-        end
+      def remove *entries
+        entries.each { |e| remove_entry e }
+        @entries.each { |e| remove_entry e if yield e } if block_given?
         self
-      end
-
-      def remove_if
-        @entries.each { |e| remove e if yield e }
       end
 
       def get direction, cycle: false
@@ -71,6 +64,14 @@ module Uh
       end
 
     private
+
+      def remove_entry entry
+        fail ArgumentError, 'unknown entry' unless include? entry
+        @entries.delete_at (index = @entries.index(entry))
+        if @current_index != 0 && @current_index > index
+          @current_index -= 1
+        end
+      end
 
       def rotate direction
         case direction
