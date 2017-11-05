@@ -83,8 +83,8 @@ module Uh
         end
 
         it 'preserves the current entry' do
-          container.remove :foo
-          expect(container.current).to be :bar
+          expect { container.remove :foo }
+            .not_to change { container.current }
         end
 
         it 'returns self' do
