@@ -1,5 +1,3 @@
-require 'uh/wm/client'
-
 module Factories
   class Entry
     include Uh::GeoAccessors
@@ -11,8 +9,36 @@ module Factories
     end
   end
 
+  class ClientMock
+    include Uh::GeoAccessors
+
+    attr_accessor :geo
+
+    def hidden?
+      !@visible
+    end
+
+    def moveresize
+      self
+    end
+
+    def show
+      @visible = true
+      self
+    end
+
+    def hide
+      @visible = false
+      self
+    end
+
+    def focus
+      self
+    end
+  end
+
   def build_client
-    Uh::WM::Client.new instance_spy Uh::Window
+    ClientMock.new
   end
 
   def build_entry geo = build_geo
