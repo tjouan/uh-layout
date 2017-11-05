@@ -45,7 +45,7 @@ module Uh
       end
 
       def arrange_columns
-        @columns.remove_if &:empty?
+        @columns.remove &:empty?
         arranger.arrange
         @columns.each &:arrange_clients
       end

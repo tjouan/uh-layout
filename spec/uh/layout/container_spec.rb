@@ -82,6 +82,16 @@ module Uh
           expect(container).not_to include :foo
         end
 
+        it 'removes entries for which given block returns true' do
+          container.remove { |e| e == :foo }
+          expect(container).not_to include :foo
+        end
+
+        it 'removes multiple entries' do
+          container.remove :foo, :bar
+          expect(container).not_to include :foo, :bar
+        end
+
         it 'preserves the current entry' do
           expect { container.remove :foo }
             .not_to change { container.current }
@@ -121,13 +131,6 @@ module Uh
             container.remove :bar
             expect(container.current).to be nil
           end
-        end
-      end
-
-      describe '#remove_if' do
-        it 'removes entries for which given block returns true' do
-          container.remove_if { |e| e == :foo }
-          expect(container).not_to include :foo
         end
       end
 
