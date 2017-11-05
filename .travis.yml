@@ -22,8 +22,6 @@ cache:
 before_install:
   - . <(curl -ksS https://vault.a13.fr/dev/travis-utils/install-before.sh)
 install:
-  - sed -i /development_dependency.\*uh-wm/d uh-layout.gemspec
   - . <(curl -ksS https://vault.a13.fr/dev/travis-utils/install.sh)
-  - gem install uh-wm
 script:
   - env -i sh <(curl -ksS https://vault.a13.fr/dev/travis-utils/build.sh)
