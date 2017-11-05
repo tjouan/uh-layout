@@ -83,8 +83,8 @@ module Uh
         end
 
         it 'preserves the current entry' do
-          container.remove :foo
-          expect(container.current).to be :bar
+          expect { container.remove :foo }
+            .not_to change { container.current }
         end
 
         it 'returns self' do
@@ -94,6 +94,13 @@ module Uh
         it 'raises an ArgumentError when given entry is not included' do
           expect { container.remove :unknown_entry }
             .to raise_error ArgumentError
+        end
+
+        context 'when given entry is after the current one' do
+          it 'preserves the current entry' do
+            expect { container.remove :baz }
+              .not_to change { container.current }
+          end
         end
 
         context 'when the first and current entry is removed' do
