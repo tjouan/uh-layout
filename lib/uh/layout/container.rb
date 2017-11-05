@@ -30,8 +30,10 @@ module Uh
 
       def remove entry
         fail ArgumentError, 'unknown entry' unless include? entry
-        @entries.delete_at @entries.index entry
-        @current_index -= 1 unless @current_index == 0
+        @entries.delete_at (index = @entries.index(entry))
+        if @current_index != 0 && @current_index > index
+          @current_index -= 1
+        end
         self
       end
 

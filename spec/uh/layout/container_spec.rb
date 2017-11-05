@@ -96,6 +96,13 @@ module Uh
             .to raise_error ArgumentError
         end
 
+        context 'when given entry is after the current one' do
+          it 'preserves the current entry' do
+            expect { container.remove :baz }
+              .not_to change { container.current }
+          end
+        end
+
         context 'when the first and current entry is removed' do
           before do
             container.current = :foo
