@@ -8,6 +8,7 @@ addons:
 notifications:
   email:
     - tj+travis_uh_layout@a13.fr
+  on_success: never
 
 env:
   - RUBYVER=2.4-stable
