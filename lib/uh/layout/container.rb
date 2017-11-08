@@ -74,9 +74,9 @@ module Uh
       end
 
       def rotate direction
-        case direction
-          when :pred then @entries = @entries.push    @entries.shift
-          when :succ then @entries = @entries.unshift @entries.pop
+        @entries = @entries.rotate case direction
+          when :pred then 1
+          when :succ then -1
         end
       end
     end
