@@ -174,14 +174,29 @@ module Uh
           expect { container.set :succ }.not_to change { container.current }
         end
 
-        context 'when direction is out of range' do
-          it 'rotates the entries' do
+        context 'when direction is out of range ("before")' do
+          it 'rotates the entries "backward"' do
             container.set :pred
             expect(container.entries).to eq %i[bar baz foo]
           end
 
           it 'does not change current entry' do
             expect { container.set :pred }.not_to change { container.current }
+          end
+        end
+
+        context 'when direction is out of range ("after")' do
+          before do
+            container.current = :baz
+          end
+
+          it 'rotates the entries "forward"' do
+            container.set :succ
+            expect(container.entries).to eq %i[baz foo bar]
+          end
+
+          it 'does not change current entry' do
+            expect { container.set :succ }.not_to change { container.current }
           end
         end
 
