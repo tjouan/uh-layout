@@ -157,7 +157,7 @@ module Uh
 
       describe '#sel' do
         it 'sets consecutive entry in given direction as the current one' do
-          container.sel :next
+          container.sel :succ
           expect(container.current).to be :bar
         end
       end
@@ -166,22 +166,37 @@ module Uh
         let(:entries) { %i[foo bar baz] }
 
         it 'swaps current entry with consecutive one in given direction' do
-          container.set :next
+          container.set :succ
           expect(container.entries).to eq %i[bar foo baz]
         end
 
         it 'does not change current entry' do
-          expect { container.set :next }.not_to change { container.current }
+          expect { container.set :succ }.not_to change { container.current }
         end
 
-        context 'when direction is out of range' do
-          it 'rotates the entries' do
+        context 'when direction is out of range ("before")' do
+          it 'rotates the entries "backward"' do
             container.set :pred
             expect(container.entries).to eq %i[bar baz foo]
           end
 
           it 'does not change current entry' do
             expect { container.set :pred }.not_to change { container.current }
+          end
+        end
+
+        context 'when direction is out of range ("after")' do
+          before do
+            container.current = :baz
+          end
+
+          it 'rotates the entries "forward"' do
+            container.set :succ
+            expect(container.entries).to eq %i[baz foo bar]
+          end
+
+          it 'does not change current entry' do
+            expect { container.set :succ }.not_to change { container.current }
           end
         end
 
