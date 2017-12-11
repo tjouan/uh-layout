@@ -97,6 +97,11 @@ module Uh
             .not_to change { container.current }
         end
 
+        it 'assigns previous entry as current when given current one' do
+          container.remove :bar
+          expect(container.current).to be :foo
+        end
+
         it 'returns self' do
           expect(container.remove :foo).to be container
         end
